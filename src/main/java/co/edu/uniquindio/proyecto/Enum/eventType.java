@@ -1,4 +1,4 @@
-package co.edu.uniquindio.proyecto.model;
+package co.edu.uniquindio.proyecto.Enum;
 
 public enum eventType {
     DEPORTE,CONCIERTO,CULTURAL,BELLEZA
