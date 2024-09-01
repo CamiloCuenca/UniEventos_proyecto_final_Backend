@@ -1,10 +1,10 @@
 package co.edu.uniquindio.proyecto.dto.Eventos;
 
-import co.edu.uniquindio.proyecto.Enum.eventType;
+import co.edu.uniquindio.proyecto.Enum.EventType;
 
 public record FiltroEventoDTO(
         String nombre,
-        eventType tipo,
+        EventType tipo,
         String ciudad
 ) {
 }
