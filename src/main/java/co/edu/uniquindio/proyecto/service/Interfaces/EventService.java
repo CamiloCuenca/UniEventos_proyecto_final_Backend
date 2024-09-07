@@ -1,10 +1,10 @@
-package co.edu.uniquindio.proyecto.service;
+package co.edu.uniquindio.proyecto.service.Interfaces;
 
 import co.edu.uniquindio.proyecto.dto.Event.*;
 
 import java.util.List;
 
-public interface EventoServicio {
+public interface EventService {
 
     String crearEvento(CrearEventoDTO crearEventoDTO) throws Exception;
 
