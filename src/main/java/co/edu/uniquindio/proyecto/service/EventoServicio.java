@@ -1,6 +1,6 @@
 package co.edu.uniquindio.proyecto.service;
 
-import co.edu.uniquindio.proyecto.dto.Eventos.*;
+import co.edu.uniquindio.proyecto.dto.Event.*;
 
 import java.util.List;
 

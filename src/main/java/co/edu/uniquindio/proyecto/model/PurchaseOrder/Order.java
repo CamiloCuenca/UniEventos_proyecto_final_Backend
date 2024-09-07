@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @Document ("Orden")
-public class order {
+public class Order {
 
     @Id
     private String id;
