@@ -1,22 +1,24 @@
 package co.edu.uniquindio.proyecto.dto.Event;
-
 import co.edu.uniquindio.proyecto.Enum.EventStatus;
-import co.edu.uniquindio.proyecto.Enum.eventType;
+import co.edu.uniquindio.proyecto.Enum.EventType;
 import co.edu.uniquindio.proyecto.model.Events.Locality;
+import jakarta.validation.constraints.*;
+import org.hibernate.validator.constraints.Length;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public record CrearEventoDTO(
-         String coverImage,
-         String name,
-         EventStatus status,
-         String description,
-         String imageLocalities,
-         eventType type,
-         LocalDateTime date,
-         String city,
-         List<Locality>localities
+        @NotBlank String coverImage,
+        @NotBlank @Length(max = 100) String name,
+        EventStatus status,
+        @NotBlank @Length(max = 1000) String description,
+        @NotBlank String imageLocalities,
+        EventType type,
+        @NotBlank  @Future() LocalDateTime date,
+        @NotBlank @Pattern(regexp = "^[a-zA-Z\\s]+$") String city,
+        @NotNull @Size(min = 1) List<Locality>localities
 ) {
 
 }
