@@ -1,6 +1,6 @@
 package co.edu.uniquindio.proyecto.service;
 
-import co.edu.uniquindio.proyecto.dto.Cuenta.*;
+import co.edu.uniquindio.proyecto.dto.Account.*;
 
 public interface CuentaServicio {
 

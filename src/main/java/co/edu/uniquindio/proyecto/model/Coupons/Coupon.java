@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @ToString
 @Document("Cupon")
-public class coupon {
+public class Coupon {
 
     @Id
     private String id;
