@@ -1,7 +1,7 @@
-package co.edu.uniquindio.proyecto.model;
+package co.edu.uniquindio.proyecto.model.Events;
 
 import co.edu.uniquindio.proyecto.Enum.EventStatus;
-import co.edu.uniquindio.proyecto.Enum.eventType;
+import co.edu.uniquindio.proyecto.Enum.EventType;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -18,9 +18,9 @@ public class Event {
     private EventStatus status;
     private String description;
     private String imageLocalities;
-    private eventType type;
+    private EventType type;
     private LocalDateTime date;
     private String city;
-    private List<locality> localities;
+    private List<Locality> localities;
 
 }

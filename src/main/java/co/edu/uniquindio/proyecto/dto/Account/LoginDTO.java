@@ -1,7 +1,10 @@
 package co.edu.uniquindio.proyecto.dto.Account;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+
 public record LoginDTO(
-        String correo,
-        String password
+        @NotNull @Email String correo,
+        @NotNull String password
 ) {
 }

@@ -1,6 +1,6 @@
 package co.edu.uniquindio.proyecto.model.Carts;
 
-import co.edu.uniquindio.proyecto.Enum.eventType;
+import co.edu.uniquindio.proyecto.Enum.EventType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,7 +15,7 @@ public class CartDetail {
 
     private int amount;
     private int capacity;
-    private eventType type;
+    private EventType type;
     private String address;
     private String city;
     private String site;
