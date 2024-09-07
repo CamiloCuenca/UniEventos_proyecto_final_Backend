@@ -1,8 +1,8 @@
-package co.edu.uniquindio.proyecto.service;
+package co.edu.uniquindio.proyecto.service.Interfaces;
 
 import co.edu.uniquindio.proyecto.dto.Account.*;
 
-public interface CuentaServicio {
+public interface AccountService {
 
     String crearCuenta(CrearCuentaDTO cuenta) throws Exception;
 
