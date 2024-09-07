@@ -1,7 +1,7 @@
 package co.edu.uniquindio.proyecto.dto.Eventos;
 
 import co.edu.uniquindio.proyecto.Enum.EventStatus;
-import co.edu.uniquindio.proyecto.Enum.EventType;
+import co.edu.uniquindio.proyecto.Enum.eventType;
 import co.edu.uniquindio.proyecto.model.locality;
 
 import java.time.LocalDateTime;
@@ -12,12 +12,9 @@ public record InformacionEventoDTO(
         String name,
         String description,
         String imageLocalities,
-        EventType type,
-        EventStatus status,
+        eventType type,
         LocalDateTime date,
         String city,
         List<locality> localities
-
-
 ) {
 }

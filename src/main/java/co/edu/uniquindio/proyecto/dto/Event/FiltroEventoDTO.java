@@ -1,4 +1,4 @@
-package co.edu.uniquindio.proyecto.dto.Eventos;
+package co.edu.uniquindio.proyecto.dto.Event;
 
 import co.edu.uniquindio.proyecto.Enum.EventType;
 
