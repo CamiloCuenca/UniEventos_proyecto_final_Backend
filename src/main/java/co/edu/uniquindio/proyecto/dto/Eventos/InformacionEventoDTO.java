@@ -1,8 +1,7 @@
 package co.edu.uniquindio.proyecto.dto.Eventos;
 
-import co.edu.uniquindio.proyecto.Enum.EventStatus;
 import co.edu.uniquindio.proyecto.Enum.eventType;
-import co.edu.uniquindio.proyecto.model.locality;
+import co.edu.uniquindio.proyecto.model.Events.Locality;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,6 +14,6 @@ public record InformacionEventoDTO(
         eventType type,
         LocalDateTime date,
         String city,
-        List<locality> localities
+        List<Locality> localities
 ) {
 }
