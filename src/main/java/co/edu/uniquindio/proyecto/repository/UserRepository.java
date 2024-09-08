@@ -1,10 +1,9 @@
 package co.edu.uniquindio.proyecto.repository;
 
-import co.edu.uniquindio.proyecto.model.Accounts.Account;
+import co.edu.uniquindio.proyecto.model.Accounts.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AccountRepository extends MongoRepository<Account, String> {
-
+public interface UserRepository extends MongoRepository<User, String> {
 }
