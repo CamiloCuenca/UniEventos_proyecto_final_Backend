@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 public class Account {
 
     @Id
-    private String id;
+    private ObjectId id;
     private String email;
     private ValidationCode registrationValidationCode;
     private Rol rol;
@@ -29,6 +29,5 @@ public class Account {
     private String password;
     private AccountStatus status;
     private ValidationCode passwordValidationCode;
-    private User user;
 
 }
