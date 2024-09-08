@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record EditarEventoDTO(
+        // Agrege el id
+        @NotBlank String id,
         @NotBlank String coverImage,
         @NotBlank @Size(max = 100) String name,
         EventStatus status,
