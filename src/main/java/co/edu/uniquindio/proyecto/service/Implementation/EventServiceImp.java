@@ -21,7 +21,7 @@ public class EventServiceImp implements EventService {
     private final EventRepository eventRepository;
 
     @Override
-    public String crearEvento(createDTOEvent crearEventoDTO) throws Exception {
+    public String createEvent(createDTOEvent crearEventoDTO) throws Exception {
         // Mapping (transferring) the data from the DTO to an object of type Event
         Event newEvent = new Event();
         newEvent.setName(crearEventoDTO.name());
@@ -39,7 +39,7 @@ public class EventServiceImp implements EventService {
     }
 
     @Override
-    public String editarEvento(editDTOEvent editarEventoDTO) throws Exception {
+    public String editEvent(editDTOEvent editarEventoDTO) throws Exception {
 
         // Search for the existing event by its id
         Event event = eventRepository.findById(editarEventoDTO.id()) // Asegúrate de tener el ID en el DTO
@@ -64,7 +64,7 @@ public class EventServiceImp implements EventService {
     }
 
     @Override
-    public String eliminarEvento(String id) throws Exception {
+    public String deleteEvent(String id) throws Exception {
         // Check if the event exists before trying to delete it
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new Exception("El evento no existe"));
@@ -75,8 +75,7 @@ public class EventServiceImp implements EventService {
         return "El evento se eliminó correctamente";
     }
 
-    @Override
-    public dtoEventInformation obtenerInformacionEvento(String id) throws Exception {
+    public dtoEventInformation obtainEventInformation(String id) throws Exception {
         //Search the event by id
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new Exception("El evento no existe"));
@@ -95,7 +94,7 @@ public class EventServiceImp implements EventService {
     }
 
     @Override
-    public List<ItemEventDTO> listarEventos() {
+    public List<ItemEventDTO> listEvents() {
         List<Event> events = eventRepository.findAll();
         List<ItemEventDTO>  items = new ArrayList<>();
 
@@ -111,7 +110,7 @@ public class EventServiceImp implements EventService {
     }
 
     @Override
-    public List<ItemEventDTO> filtrarEventos(dtoEventFilter filtroEventoDTO) {
+    public List<ItemEventDTO> filterEvents(dtoEventFilter filtroEventoDTO) {
 
         List<Event> filteredEvents = eventRepository.findByFiltros(
                 filtroEventoDTO.name(),

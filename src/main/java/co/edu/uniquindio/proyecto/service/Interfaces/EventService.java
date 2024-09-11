@@ -6,15 +6,15 @@ import java.util.List;
 
 public interface EventService {
 
-    String crearEvento(createDTOEvent crearEventoDTO) throws Exception;
+    String createEvent(createDTOEvent crearEventoDTO) throws Exception;
 
-    String editarEvento(editDTOEvent editarEventoDTO) throws Exception;
+    String editEvent(editDTOEvent editarEventoDTO) throws Exception;
 
-    String eliminarEvento(String id) throws Exception;
+    String deleteEvent(String id) throws Exception;
 
-    dtoEventInformation obtenerInformacionEvento(String id) throws Exception;
+    dtoEventInformation obtainEventInformation(String id) throws Exception;
 
-    List<ItemEventDTO> listarEventos();
+    List<ItemEventDTO> listEvents();
 
-    List<ItemEventDTO> filtrarEventos(dtoEventFilter filtroEventoDTO);
+    List<ItemEventDTO> filterEvents(dtoEventFilter filtroEventoDTO);
 }

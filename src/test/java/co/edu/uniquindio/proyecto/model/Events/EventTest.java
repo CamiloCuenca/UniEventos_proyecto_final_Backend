@@ -43,7 +43,7 @@ class EventTest {
         );
 
         // Llamar al método de servicio para crear el evento
-        String eventId = eventService.crearEvento(crearEventoDTO);
+        String eventId = eventService.createEvent(crearEventoDTO);
 
         // Verificar que el ID no sea nulo
         assertNotNull(eventId);
@@ -70,7 +70,7 @@ class EventTest {
                 )
         );
 
-        String re = eventService.editarEvento(editarEventoDTO);
+        String re = eventService.editEvent(editarEventoDTO);
 
     }
 
@@ -80,7 +80,7 @@ class EventTest {
         String eventId = "66dd0e1c113a9b5dcb6be87e";
 
         // Call service method to delete event
-        String result = eventService.eliminarEvento(eventId);
+        String result = eventService.deleteEvent(eventId);
 
         // Verify that the delete message is correct // provisional
         assertEquals("El evento se eliminó correctamente", result);
@@ -96,7 +96,7 @@ class EventTest {
         String eventId = "66dcf9d99b293d0c2aba1370";
 
         // Llamar al método de servicio para obtener la información del evento
-        dtoEventInformation informacionEventoDTO = eventService.obtenerInformacionEvento(eventId);
+        dtoEventInformation informacionEventoDTO = eventService.obtainEventInformation(eventId);
 
         // Verificar que el DTO no sea nulo
         assertNotNull(informacionEventoDTO);
@@ -106,13 +106,13 @@ class EventTest {
     public void filterTest() throws Exception {
         dtoEventFilter filtroEventoDTO = new dtoEventFilter("",EventType.CONCIERTO,"");
 
-        System.out.println(eventService.filtrarEventos(filtroEventoDTO));
+        System.out.println(eventService.filterEvents(filtroEventoDTO));
 
     }
 
     @Test
     public void ListEvents() throws Exception {
-        System.out.println(eventService.listarEventos());
+        System.out.println(eventService.listEvents());
     }
 
 }
