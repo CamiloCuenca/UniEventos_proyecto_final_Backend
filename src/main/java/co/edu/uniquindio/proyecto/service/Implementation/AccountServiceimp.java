@@ -43,7 +43,7 @@ public class AccountServiceimp implements AccountService {
      * @throws Exception
      */
     @Override
-    public String crearCuenta(CrearCuentaDTO cuenta) throws Exception {
+    public String crearCuenta(CrearCuentaDTO cuenta) throws Exception   {
 
         if (existeEmail(cuenta.email())) {
             throw new Exception("El correo " + cuenta.email() + " ya está en uso");
