@@ -53,13 +53,13 @@ class AccountServiceTest {
      */
     @Test
     public void actualizarCuentaTest() {
-        String idCuenta = "66e1346b3334371ad6ad7cd8";
+        String idCuenta = "66e1dde556152b147784aab2";
         EditarCuentaDTO editarCuentaDTO = new EditarCuentaDTO(
                 idCuenta,
                 "Pepito perez",
                 "12121",
                 "Nueva dirección",
-                "password"
+                "canguro"
         );
 
         //Se espera que no se lance ninguna excepción

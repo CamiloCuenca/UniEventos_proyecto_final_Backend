@@ -8,6 +8,7 @@ import co.edu.uniquindio.proyecto.model.Accounts.User;
 import co.edu.uniquindio.proyecto.repository.AccountRepository;
 import co.edu.uniquindio.proyecto.service.Interfaces.AccountService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,11 +52,15 @@ public class AccountServiceimp implements AccountService {
         if (existeCedula(cuenta.cedula())) {
             throw new Exception("La cédula " + cuenta.cedula() + " ya se encuentra registrada");
         }
+        //Segmento del codigo que se encarga de encriptar el codigo.
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = bCryptPasswordEncoder.encode(cuenta.password());
 
         //Mapeamos (pasamos) los datos del DTO a un objeto de tipo Cuenta
         Account newAccount = new Account();
         newAccount.setEmail(cuenta.email());
-        newAccount.setPassword(cuenta.password());
+        //Clave encriptada.
+        newAccount.setPassword(hashedPassword);
         newAccount.setRol(Rol.CLIENTE);
         newAccount.setRegistrationDate(LocalDateTime.now());
         newAccount.setUser(new User(
@@ -86,10 +91,17 @@ public class AccountServiceimp implements AccountService {
         }
 
         Account cuentaModificada = optionalAccount.get();
+
         cuentaModificada.getUser().setNombre(cuenta.username());
         cuentaModificada.getUser().setTelefono(cuenta.phoneNumber());
         cuentaModificada.getUser().setDireccion(cuenta.address());
         cuentaModificada.setPassword(cuenta.password());
+        //Segmento de codigo que se encarga de encriptar la clave.
+        if (cuenta.password() != null && !cuenta.password().isEmpty()) {
+            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            String hashedPassword = bCryptPasswordEncoder.encode(cuenta.password());
+            cuentaModificada.setPassword(hashedPassword);
+        }
         cuentaRepo.save(cuentaModificada);
         return cuentaModificada.getId();
     }

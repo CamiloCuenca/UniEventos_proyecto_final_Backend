@@ -8,6 +8,6 @@ public record EditarCuentaDTO(
         @NotBlank @Length(max = 100) String username,
         @NotBlank @Length(max = 10) String phoneNumber,
         @Length(max = 100) String address,
-        @NotBlank @Length(min = 7, max = 20) String password
+        @Length(min = 7, max = 20) String password // Ahora la contraseña es opcional
 ) {
 }
