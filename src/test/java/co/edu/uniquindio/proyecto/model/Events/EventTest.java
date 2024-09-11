@@ -2,21 +2,18 @@ package co.edu.uniquindio.proyecto.model.Events;
 
 import co.edu.uniquindio.proyecto.Enum.EventStatus;
 import co.edu.uniquindio.proyecto.Enum.EventType;
-import co.edu.uniquindio.proyecto.dto.Event.CrearEventoDTO;
-import co.edu.uniquindio.proyecto.dto.Event.EditarEventoDTO;
-import co.edu.uniquindio.proyecto.dto.Event.InformacionEventoDTO;
+import co.edu.uniquindio.proyecto.dto.Event.createDTOEvent;
+import co.edu.uniquindio.proyecto.dto.Event.editDTOEvent;
+import co.edu.uniquindio.proyecto.dto.Event.dtoEventFilter;
+import co.edu.uniquindio.proyecto.dto.Event.dtoEventInformation;
 import co.edu.uniquindio.proyecto.repository.EventRepository;
 import co.edu.uniquindio.proyecto.service.Implementation.EventServiceImp;
-import co.edu.uniquindio.proyecto.service.Interfaces.EventService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,7 +27,7 @@ class EventTest {
     @Test
     public void createEvent() throws Exception {
         // Crear DTO para el nuevo evento
-        CrearEventoDTO crearEventoDTO = new CrearEventoDTO(
+        createDTOEvent crearEventoDTO = new createDTOEvent(
                 "rutaImg2",
                 "Evento prueba 2",
                 EventStatus.ACTIVO,
@@ -57,7 +54,7 @@ class EventTest {
     @Test
     public void UpdateEvent() throws Exception {
 
-        EditarEventoDTO editarEventoDTO = new EditarEventoDTO(
+        editDTOEvent editarEventoDTO = new editDTOEvent(
                 "66dcf9d99b293d0c2aba1370", // El ID del evento a actualizar
                 "image2.jpg",
                 "Updated Event",
@@ -94,14 +91,28 @@ class EventTest {
     }
 
     @Test
-    public void obtenerInformacionEvento() throws Exception {
+    public void obtainEventInformation() throws Exception {
         // ID del evento que se asume ya existe en la base de datos
         String eventId = "66dcf9d99b293d0c2aba1370";
 
         // Llamar al método de servicio para obtener la información del evento
-        InformacionEventoDTO informacionEventoDTO = eventService.obtenerInformacionEvento(eventId);
+        dtoEventInformation informacionEventoDTO = eventService.obtenerInformacionEvento(eventId);
 
         // Verificar que el DTO no sea nulo
         assertNotNull(informacionEventoDTO);
     }
+
+    @Test
+    public void filterTest() throws Exception {
+        dtoEventFilter filtroEventoDTO = new dtoEventFilter("",EventType.CONCIERTO,"");
+
+        System.out.println(eventService.filtrarEventos(filtroEventoDTO));
+
+    }
+
+    @Test
+    public void ListEvents() throws Exception {
+        System.out.println(eventService.listarEventos());
+    }
+
 }

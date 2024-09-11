@@ -8,7 +8,7 @@ import co.edu.uniquindio.proyecto.model.Events.Locality;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record InformacionEventoDTO(
+public record dtoEventInformation(
         String coverImage,
         String name,
         String description,

@@ -1,18 +1,18 @@
 package co.edu.uniquindio.proyecto.service.Implementation;
 
 import co.edu.uniquindio.proyecto.dto.Event.*;
-import co.edu.uniquindio.proyecto.model.Accounts.Account;
 import co.edu.uniquindio.proyecto.model.Events.Event;
-import co.edu.uniquindio.proyecto.repository.AccountRepository;
 import co.edu.uniquindio.proyecto.repository.EventRepository;
 import co.edu.uniquindio.proyecto.service.Interfaces.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
-import java.util.List;
 
-import static com.mongodb.assertions.Assertions.assertNull;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @RequiredArgsConstructor
 @Service
@@ -21,7 +21,7 @@ public class EventServiceImp implements EventService {
     private final EventRepository eventRepository;
 
     @Override
-    public String crearEvento(CrearEventoDTO crearEventoDTO) throws Exception {
+    public String crearEvento(createDTOEvent crearEventoDTO) throws Exception {
         // Mapping (transferring) the data from the DTO to an object of type Event
         Event newEvent = new Event();
         newEvent.setName(crearEventoDTO.name());
@@ -39,7 +39,7 @@ public class EventServiceImp implements EventService {
     }
 
     @Override
-    public String editarEvento(EditarEventoDTO editarEventoDTO) throws Exception {
+    public String editarEvento(editDTOEvent editarEventoDTO) throws Exception {
 
         // Search for the existing event by its id
         Event event = eventRepository.findById(editarEventoDTO.id()) // Asegúrate de tener el ID en el DTO
@@ -76,13 +76,13 @@ public class EventServiceImp implements EventService {
     }
 
     @Override
-    public InformacionEventoDTO obtenerInformacionEvento(String id) throws Exception {
+    public dtoEventInformation obtenerInformacionEvento(String id) throws Exception {
         //Search the event by id
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new Exception("El evento no existe"));
         // Mapear el evento al DTO InformacionEventoDTO
 
-        return new InformacionEventoDTO(
+        return new dtoEventInformation(
                 event.getCoverImage(),
                 event.getName(),
                 event.getDescription(),
@@ -95,12 +95,38 @@ public class EventServiceImp implements EventService {
     }
 
     @Override
-    public List<ItemEventoDTO> listarEventos() {
-        return List.of();
+    public List<ItemEventDTO> listarEventos() {
+        List<Event> events = eventRepository.findAll();
+        List<ItemEventDTO>  items = new ArrayList<>();
+
+        for ( Event event : events ) {
+            items.add(new ItemEventDTO(
+                   event.getCoverImage(),
+                    event.getName(),
+                    event.getDate(),
+                    event.getAddress()
+            ));
+        }
+        return items;
     }
 
     @Override
-    public List<ItemEventoDTO> filtrarEventos(FiltroEventoDTO filtroEventoDTO) {
-        return List.of();
+    public List<ItemEventDTO> filtrarEventos(dtoEventFilter filtroEventoDTO) {
+
+        List<Event> filteredEvents = eventRepository.findByFiltros(
+                filtroEventoDTO.name(),
+                filtroEventoDTO.city(),
+                filtroEventoDTO.type()
+        );
+
+        return filteredEvents.stream()
+                .map(event -> new ItemEventDTO(
+                        event.getCoverImage(),
+                        event.getName(),
+                        event.getDate(),
+                        event.getAddress()
+                ))
+                .collect(Collectors.toList());
     }
+       
 }

@@ -26,6 +26,7 @@ public class Event {
     private EventType type;
     private LocalDateTime date;
     private String city;
+    private String address;
     private List<Locality> localities;
 
 }
