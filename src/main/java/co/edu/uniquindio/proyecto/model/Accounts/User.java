@@ -14,10 +14,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class User {
 
     @Id
-    private String cedula;
-    private String nombre;
-    private String telefono;
-    private String direccion;
+    private String idNumber;
+    private String name;
+    private String phoneNumber;
+    private String address;
 
 
 }

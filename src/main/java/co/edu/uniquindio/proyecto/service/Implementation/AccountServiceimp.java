@@ -43,14 +43,14 @@ public class AccountServiceimp implements AccountService {
      * @throws Exception
      */
     @Override
-    public String crearCuenta(CrearCuentaDTO cuenta) throws Exception   {
+    public String crearCuenta(createAccountDTO cuenta) throws Exception   {
 
         if (existeEmail(cuenta.email())) {
-            throw new Exception("El correo " + cuenta.email() + " ya está en uso");
+            throw new Exception("El email " + cuenta.email() + " ya está en uso");
         }
 
-        if (existeCedula(cuenta.cedula())) {
-            throw new Exception("La cédula " + cuenta.cedula() + " ya se encuentra registrada");
+        if (existeCedula(cuenta.idNumber())) {
+            throw new Exception("La cédula " + cuenta.idNumber() + " ya se encuentra registrada");
         }
         //Segmento del codigo que se encarga de encriptar el codigo.
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -64,10 +64,10 @@ public class AccountServiceimp implements AccountService {
         newAccount.setRol(Rol.CLIENTE);
         newAccount.setRegistrationDate(LocalDateTime.now());
         newAccount.setUser(new User(
-                cuenta.cedula(),
-                cuenta.nombre(),
-                cuenta.telefono(),
-                cuenta.direccion()
+                cuenta.idNumber(),
+                cuenta.name(),
+                cuenta.phoneNumber(),
+                cuenta.address()
         ));
         newAccount.setStatus(AccountStatus.INACTIVO);
         Account createdAccount = cuentaRepo.save(newAccount);
@@ -83,7 +83,7 @@ public class AccountServiceimp implements AccountService {
      * @throws Exception
      */
     @Override
-    public String editarCuenta(EditarCuentaDTO cuenta) throws Exception {
+    public String editarCuenta(editAccountDTO cuenta) throws Exception {
         Optional<Account> optionalAccount = cuentaRepo.findById(cuenta.id());
 
         if (optionalAccount.isEmpty()) {
@@ -92,9 +92,9 @@ public class AccountServiceimp implements AccountService {
 
         Account cuentaModificada = optionalAccount.get();
 
-        cuentaModificada.getUser().setNombre(cuenta.username());
-        cuentaModificada.getUser().setTelefono(cuenta.phoneNumber());
-        cuentaModificada.getUser().setDireccion(cuenta.address());
+        cuentaModificada.getUser().setName(cuenta.username());
+        cuentaModificada.getUser().setPhoneNumber(cuenta.phoneNumber());
+        cuentaModificada.getUser().setAddress(cuenta.address());
         cuentaModificada.setPassword(cuenta.password());
         //Segmento de codigo que se encarga de encriptar la clave.
         if (cuenta.password() != null && !cuenta.password().isEmpty()) {
@@ -106,8 +106,14 @@ public class AccountServiceimp implements AccountService {
         return cuentaModificada.getId();
     }
 
+    /**
+     * Metodo encargado de obtener la informacion de la cuenta.
+     * @param id
+     * @return
+     * @throws Exception
+     */
     @Override
-    public InformacionCuentaDTO obtenerInformacionCuenta(String id) throws Exception {
+    public dtoAccountInformation obtenerInformacionCuenta(String id) throws Exception {
         Optional<Account> optionalCuenta = cuentaRepo.findById(id);
 
         if (optionalCuenta.isEmpty()) {
@@ -116,11 +122,11 @@ public class AccountServiceimp implements AccountService {
 
         Account account = optionalCuenta.get();
 
-        return new InformacionCuentaDTO(
+        return new dtoAccountInformation(
                 account.getId(),
-                account.getUser().getCedula(),
-                account.getUser().getTelefono(),
-                account.getUser().getDireccion(),
+                account.getUser().getIdNumber(),
+                account.getUser().getPhoneNumber(),
+                account.getUser().getAddress(),
                 account.getEmail()
         );
     }
@@ -131,16 +137,16 @@ public class AccountServiceimp implements AccountService {
      * @return
      */
     @Override
-    public List<ItemCuentaDTO> listarCuentas() {
+    public List<dtoAccountItem> listarCuentas() {
         List<Account> cuentas = cuentaRepo.findAll();
-        List<ItemCuentaDTO> items = new ArrayList<>();
+        List<dtoAccountItem> items = new ArrayList<>();
 
         for (Account account : cuentas) {
-            items.add(new ItemCuentaDTO(
+            items.add(new dtoAccountItem(
                     account.getId(),
-                    account.getUser().getNombre(),
+                    account.getUser().getName(),
                     account.getEmail(),
-                    account.getUser().getTelefono()
+                    account.getUser().getPhoneNumber()
             ));
         }
         return items;
@@ -172,7 +178,7 @@ public class AccountServiceimp implements AccountService {
     }
 
     @Override
-    public String cambiarPassword(CambiarPasswordDTO cambiarPasswordDTO) throws Exception {
+    public String cambiarPassword(changePasswordDTO changePasswordDTO) throws Exception {
         return "";
     }
 

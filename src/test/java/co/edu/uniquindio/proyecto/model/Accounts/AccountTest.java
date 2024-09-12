@@ -1,20 +1,16 @@
 package co.edu.uniquindio.proyecto.model.Accounts;
 
-import co.edu.uniquindio.proyecto.Enum.AccountStatus;
-import co.edu.uniquindio.proyecto.dto.Account.CrearCuentaDTO;
-import co.edu.uniquindio.proyecto.dto.Account.EditarCuentaDTO;
-import co.edu.uniquindio.proyecto.dto.Account.InformacionCuentaDTO;
-import co.edu.uniquindio.proyecto.dto.Account.ItemCuentaDTO;
-import co.edu.uniquindio.proyecto.repository.AccountRepository;
+import co.edu.uniquindio.proyecto.dto.Account.createAccountDTO;
+import co.edu.uniquindio.proyecto.dto.Account.editAccountDTO;
+import co.edu.uniquindio.proyecto.dto.Account.dtoAccountInformation;
+import co.edu.uniquindio.proyecto.dto.Account.dtoAccountItem;
 import co.edu.uniquindio.proyecto.service.Implementation.AccountServiceimp;
 import co.edu.uniquindio.proyecto.service.Interfaces.AccountService;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,7 +26,7 @@ class AccountServiceTest {
     @Test
     public void crearCuentaTest() {
         // Crear un DTO con los datos para crear una nueva cuenta
-        CrearCuentaDTO crearCuentaDTO = new CrearCuentaDTO(
+        createAccountDTO createAccountDTO = new createAccountDTO(
                 "1234",
                 "Pepito Perez",
                 "12121",
@@ -42,7 +38,7 @@ class AccountServiceTest {
         // Se espera que no se lance ninguna excepción
         assertDoesNotThrow(() -> {
             // Se crea la cuenta y se imprime el id
-            String id = accountService.crearCuenta(crearCuentaDTO);
+            String id = accountService.crearCuenta(createAccountDTO);
             // Se espera que el id no sea nulo
             assertNotNull(id);
         });
@@ -54,7 +50,7 @@ class AccountServiceTest {
     @Test
     public void actualizarCuentaTest() {
         String idCuenta = "66e1dde556152b147784aab2";
-        EditarCuentaDTO editarCuentaDTO = new EditarCuentaDTO(
+        editAccountDTO editAccountDTO = new editAccountDTO(
                 idCuenta,
                 "Pepito perez",
                 "12121",
@@ -65,15 +61,15 @@ class AccountServiceTest {
         //Se espera que no se lance ninguna excepción
         assertDoesNotThrow(() -> {
             //Se actualiza la cuenta del usuario con el id definido
-            accountService.editarCuenta(editarCuentaDTO);
+            accountService.editarCuenta(editAccountDTO);
 
 
             //Obtenemos el detalle de la cuenta del usuario con el id definido
-            InformacionCuentaDTO detalle = accountService.obtenerInformacionCuenta(idCuenta);
+            dtoAccountInformation detalle = accountService.obtenerInformacionCuenta(idCuenta);
 
 
             //Se verifica que la dirección del usuario sea la actualizada
-            assertEquals("Nueva dirección", detalle.direccion());
+            assertEquals("Nueva dirección", detalle.address());
         });
     }
 
@@ -90,7 +86,7 @@ class AccountServiceTest {
         assertDoesNotThrow(() -> accountService.eliminarCuenta(idCuenta));
 
         // Verifica que la cuenta sigue existiendo y su estado es ELIMINADO
-        InformacionCuentaDTO cuenta = accountService.obtenerInformacionCuenta(idCuenta);
+        dtoAccountInformation cuenta = accountService.obtenerInformacionCuenta(idCuenta);
         assertNotNull(cuenta);
 
     }
@@ -101,7 +97,7 @@ class AccountServiceTest {
     @Test
     public void listarTest() {
         // Asume que ya has configurado datos iniciales en tu base de datos de prueba
-        List<ItemCuentaDTO> lista = accountService.listarCuentas();
+        List<dtoAccountItem> lista = accountService.listarCuentas();
         // Verifica que la lista contiene el número esperado de elementos
         assertEquals(4, lista.size(), "La lista de cuentas debería contener 4 elementos.");
     }
