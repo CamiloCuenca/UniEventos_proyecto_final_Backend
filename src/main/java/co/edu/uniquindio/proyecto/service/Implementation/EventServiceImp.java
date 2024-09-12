@@ -20,6 +20,12 @@ public class EventServiceImp implements EventService {
 
     private final EventRepository eventRepository;
 
+    /** this method is the service of a create  new event
+     *
+     * @param crearEventoDTO
+     * @return eventID
+     * @throws Exception
+     */
     @Override
     public String createEvent(createDTOEvent crearEventoDTO) throws Exception {
         // Mapping (transferring) the data from the DTO to an object of type Event
