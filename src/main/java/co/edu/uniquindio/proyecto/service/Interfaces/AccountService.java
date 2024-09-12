@@ -6,19 +6,19 @@ import java.util.List;
 
 public interface AccountService {
 
-    String crearCuenta(CrearCuentaDTO cuenta) throws Exception;
+    String crearCuenta(createAccountDTO cuenta) throws Exception;
 
-    String editarCuenta(EditarCuentaDTO cuenta) throws Exception;
+    String editarCuenta(editAccountDTO cuenta) throws Exception;
 
     String eliminarCuenta(String id) throws Exception;
 
-    InformacionCuentaDTO obtenerInformacionCuenta(String id) throws Exception;
+    dtoAccountInformation obtenerInformacionCuenta(String id) throws Exception;
 
-    List<ItemCuentaDTO> listarCuentas();
+    List<dtoAccountItem> listarCuentas();
 
     String enviarCodigoRecuperacionPassword(String correo) throws Exception;
 
-    String cambiarPassword(CambiarPasswordDTO cambiarPasswordDTO) throws Exception;
+    String cambiarPassword(changePasswordDTO changePasswordDTO) throws Exception;
 
     String iniciarSesion(LoginDTO loginDTO) throws Exception;
 

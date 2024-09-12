@@ -1,9 +1,9 @@
 package co.edu.uniquindio.proyecto.dto.Account;
 
-public record ItemCuentaDTO(
+public record dtoAccountItem(
         String id,
-        String nombre,
-        String telefono,
+        String name,
+        String phoneNumber,
         String email
 
 ) {
