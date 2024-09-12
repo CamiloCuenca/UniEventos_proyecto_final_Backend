@@ -20,7 +20,8 @@ public class EventServiceImp implements EventService {
 
     private final EventRepository eventRepository;
 
-    /** this method is the service of a create  new event
+    /**
+     * This method is the service of a create  new event
      *
      * @param crearEventoDTO
      * @return eventID
@@ -43,6 +44,14 @@ public class EventServiceImp implements EventService {
         Event createdEvent = eventRepository.save(newEvent);
         return createdEvent.getId();
     }
+
+    /**
+     * This method is the service of edit a event
+     *
+     * @param editarEventoDTO
+     * @return
+     * @throws Exception
+     */
 
     @Override
     public String editEvent(editDTOEvent editarEventoDTO) throws Exception {
@@ -69,6 +78,13 @@ public class EventServiceImp implements EventService {
         return "El evento ha sido actualizado correctamente";
     }
 
+    /**
+     * This method is the service of delete a event
+     *
+     * @param id
+     * @return
+     * @throws Exception
+     */
     @Override
     public String deleteEvent(String id) throws Exception {
         // Check if the event exists before trying to delete it
@@ -81,6 +97,13 @@ public class EventServiceImp implements EventService {
         return "El evento se eliminó correctamente";
     }
 
+    /**
+     * This method is the service of obtain events
+     *
+     * @param id
+     * @return
+     * @throws Exception
+     */
     public dtoEventInformation obtainEventInformation(String id) throws Exception {
         //Search the event by id
         Event event = eventRepository.findById(id)
@@ -99,6 +122,10 @@ public class EventServiceImp implements EventService {
         );
     }
 
+    /** This method is the service of listing the events.
+     *
+     * @return Events
+     */
     @Override
     public List<ItemEventDTO> listEvents() {
         List<Event> events = eventRepository.findAll();
@@ -115,6 +142,11 @@ public class EventServiceImp implements EventService {
         return items;
     }
 
+    /** This method is the service of filtering the events
+     *
+     * @param filtroEventoDTO
+     * @return dtoEventFilter
+     */
     @Override
     public List<ItemEventDTO> filterEvents(dtoEventFilter filtroEventoDTO) {
 
