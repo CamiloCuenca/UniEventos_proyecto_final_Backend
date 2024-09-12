@@ -92,9 +92,9 @@ public class AccountServiceimp implements AccountService {
 
         Account cuentaModificada = optionalAccount.get();
 
-        cuentaModificada.getUser().setNombre(cuenta.username());
-        cuentaModificada.getUser().setTelefono(cuenta.phoneNumber());
-        cuentaModificada.getUser().setDireccion(cuenta.address());
+        cuentaModificada.getUser().setName(cuenta.username());
+        cuentaModificada.getUser().setPhoneNumber(cuenta.phoneNumber());
+        cuentaModificada.getUser().setAddress(cuenta.address());
         cuentaModificada.setPassword(cuenta.password());
         //Segmento de codigo que se encarga de encriptar la clave.
         if (cuenta.password() != null && !cuenta.password().isEmpty()) {
@@ -106,6 +106,12 @@ public class AccountServiceimp implements AccountService {
         return cuentaModificada.getId();
     }
 
+    /**
+     * Metodo encargado de obtener la informacion de la cuenta.
+     * @param id
+     * @return
+     * @throws Exception
+     */
     @Override
     public dtoAccountInformation obtenerInformacionCuenta(String id) throws Exception {
         Optional<Account> optionalCuenta = cuentaRepo.findById(id);
@@ -118,9 +124,9 @@ public class AccountServiceimp implements AccountService {
 
         return new dtoAccountInformation(
                 account.getId(),
-                account.getUser().getCedula(),
-                account.getUser().getTelefono(),
-                account.getUser().getDireccion(),
+                account.getUser().getIdNumber(),
+                account.getUser().getPhoneNumber(),
+                account.getUser().getAddress(),
                 account.getEmail()
         );
     }
@@ -138,9 +144,9 @@ public class AccountServiceimp implements AccountService {
         for (Account account : cuentas) {
             items.add(new dtoAccountItem(
                     account.getId(),
-                    account.getUser().getNombre(),
+                    account.getUser().getName(),
                     account.getEmail(),
-                    account.getUser().getTelefono()
+                    account.getUser().getPhoneNumber()
             ));
         }
         return items;
