@@ -1,5 +1,9 @@
 package co.edu.uniquindio.proyecto.dto.Carts;
 
+import co.edu.uniquindio.proyecto.model.Carts.CartDetail;
+import lombok.*;
+import org.bson.types.ObjectId;
+
 
 public record CartDetailDTO(
         String eventId,
@@ -7,6 +11,7 @@ public record CartDetailDTO(
         String localityName,
         String city,
         double price,
-        int amount
+        int amount,
+        int capacity
 ) {
 }

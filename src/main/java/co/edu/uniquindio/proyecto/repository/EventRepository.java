@@ -17,4 +17,6 @@ public interface EventRepository extends MongoRepository<Event,String> {
             + "]"
             + "}")
     List<Event> findByFiltros(String nombre, String ciudad, EventType tipo);
+
+    List<Event> findAllById(String id);
 }

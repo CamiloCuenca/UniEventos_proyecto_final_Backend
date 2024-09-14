@@ -1,6 +1,7 @@
 package co.edu.uniquindio.proyecto.service.Interfaces;
 
 import co.edu.uniquindio.proyecto.dto.Event.*;
+import co.edu.uniquindio.proyecto.model.Events.Event;
 
 import java.util.List;
 
@@ -15,6 +16,6 @@ public interface EventService {
     dtoEventInformation obtainEventInformation(String id) throws Exception;
 
     List<ItemEventDTO> listEvents();
-
+    Event getById(String id) throws Exception;
     List<ItemEventDTO> filterEvents(dtoEventFilter filtroEventoDTO);
 }

@@ -1,27 +1,21 @@
 package co.edu.uniquindio.proyecto.model.Carts;
 
 import co.edu.uniquindio.proyecto.Enum.EventType;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.bson.types.ObjectId;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
+@Builder
+@AllArgsConstructor
 public class CartDetail {
 
     private int amount;
     private int capacity;
-    private EventType type;
-    private String address;
-    private String city;
-    private String site;
     private String localityName;
-    private String eventName;
-    private double price;
-    private ObjectId idEvent;
+    private String idEvent;
+
 
 }

@@ -7,9 +7,9 @@ import co.edu.uniquindio.proyecto.model.Carts.CartDetail;
 
 public interface CartService {
 
-    public void addItemToCart(String accountId, CartDetailDTO cartDetailDTO);
+    public void addItemToCart(String accountId, CartDetailDTO cartDetailDTO) throws Exception;
 
-    void removeItemFromCart(String accountId, String eventId);
+    void removeItemFromCart(String accountId, String eventId) throws Exception;
 
     CartDTO getCartByAccountId(String accountId);
 
