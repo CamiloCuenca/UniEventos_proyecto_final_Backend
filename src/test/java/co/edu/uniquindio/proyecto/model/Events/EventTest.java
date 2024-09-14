@@ -7,7 +7,7 @@ import co.edu.uniquindio.proyecto.dto.Event.editDTOEvent;
 import co.edu.uniquindio.proyecto.dto.Event.dtoEventFilter;
 import co.edu.uniquindio.proyecto.dto.Event.dtoEventInformation;
 import co.edu.uniquindio.proyecto.repository.EventRepository;
-import co.edu.uniquindio.proyecto.service.Implementation.EventServiceImp;
+import co.edu.uniquindio.proyecto.service.Interfaces.EventService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,9 +20,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class EventTest {
     @Autowired
-    private EventRepository eventRepository;
+    private EventService eventService;
     @Autowired
-    private EventServiceImp eventService;
+    private EventRepository eventRepository;
+
 
     @Test
     public void createEvent() throws Exception {
@@ -55,7 +56,7 @@ class EventTest {
     public void UpdateEvent() throws Exception {
 
         editDTOEvent editarEventoDTO = new editDTOEvent(
-                "66dcf9d99b293d0c2aba1370", // El ID del evento a actualizar
+                "66dcf9d99b293d0c2aba1372", // El ID del evento a actualizar
                 "image2.jpg",
                 "Updated Event",
                 EventStatus.INACTIVO,
@@ -77,7 +78,7 @@ class EventTest {
     @Test
     public void DeleteEvent() throws Exception {
         // ID of the event that is assumed to already exist in the database
-        String eventId = "66dd0e1c113a9b5dcb6be87e";
+        String eventId = "66dcf9d99b293d0c2aba1372";
 
         // Call service method to delete event
         String result = eventService.deleteEvent(eventId);

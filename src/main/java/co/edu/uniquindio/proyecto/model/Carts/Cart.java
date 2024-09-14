@@ -24,6 +24,6 @@ public class Cart {
     private LocalDateTime date;
     private List<CartDetail> items;
     private ObjectId idAccount;
-    private double totalEventPrice;
+
 
 }

@@ -165,5 +165,9 @@ public class EventServiceImp implements EventService {
                 ))
                 .collect(Collectors.toList());
     }
+
+    public Event getById(String id) throws Exception{
+        return eventRepository.findById(id).orElseThrow(()-> new Exception("El evento No existe"));
+    }
        
 }
