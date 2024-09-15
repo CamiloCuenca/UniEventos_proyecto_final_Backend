@@ -1,9 +1,6 @@
 package co.edu.uniquindio.proyecto.service.Implementation;
 
-import co.edu.uniquindio.proyecto.dto.Carts.CartDTO;
 import co.edu.uniquindio.proyecto.dto.Carts.CartDetailDTO;
-import co.edu.uniquindio.proyecto.dto.Carts.CartTotalDTO;
-import co.edu.uniquindio.proyecto.model.Accounts.Account;
 import co.edu.uniquindio.proyecto.model.Carts.Cart;
 import co.edu.uniquindio.proyecto.model.Carts.CartDetail;
 import co.edu.uniquindio.proyecto.model.Events.Event;
@@ -27,10 +24,17 @@ public class CartServiceImp implements CartService {
     private final CartRepository cartRepository;
     private final EventService eventService;
 
+    /** This method add items to the account cart.
+     *
+     * @param accountId
+     * @param cartDetailDTO
+     * @throws Exception
+     */
     @Override
     public void addItemToCart(String accountId, CartDetailDTO cartDetailDTO) throws Exception {
         // Buscar si el carrito ya existe para esta cuenta
-        Optional<Cart> cartOptional = cartRepository.findByIdAccount(new ObjectId(accountId));
+
+        Optional<Cart> cartOptional = getCartByAccountId(accountId);
         Cart cart;
         if (cartOptional.isPresent()) {
             cart = cartOptional.get();
@@ -55,7 +59,12 @@ public class CartServiceImp implements CartService {
         cartRepository.save(cart);
     }
 
-
+    /** This method remove item to the account cart.
+     *
+     * @param accountId
+     * @param eventId
+     * @throws Exception
+     */
     @Override
     public void removeItemFromCart(String accountId, String eventId) throws Exception {
         Optional<Cart> cartOptional = cartRepository.findByIdAccount(new ObjectId(accountId));
@@ -73,41 +82,23 @@ public class CartServiceImp implements CartService {
                 break;
             }
         }
-
         cartRepository.save(cart);
 
+    }
 
+    /** this method return the account cart
+     *
+     * @param accountId
+     * @return
+     */
+    @Override
+    public Optional<Cart> getCartByAccountId(String accountId) {
+        return cartRepository.findByIdAccount(new ObjectId(accountId));
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
     @Override
-    public CartDTO getCartByAccountId(String accountId) {
-        return null;
-    }
+    public void updateItemFromCart(String accountId, String eventId) throws Exception {
 
-    @Override
-    public void updateItemQuantity(String accountId, String eventId, int quantity) {
-
-    }
-
-    @Override
-    public void clearCart(String accountId) {
-
-    }
-
-    @Override
-    public CartTotalDTO calculateTotal(String accountId) {
-        return null;
     }
 }
