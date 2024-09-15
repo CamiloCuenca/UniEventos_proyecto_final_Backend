@@ -1,22 +1,19 @@
 package co.edu.uniquindio.proyecto.service.Interfaces;
 
-import co.edu.uniquindio.proyecto.dto.Carts.CartDTO;
 import co.edu.uniquindio.proyecto.dto.Carts.CartDetailDTO;
-import co.edu.uniquindio.proyecto.dto.Carts.CartTotalDTO;
-import co.edu.uniquindio.proyecto.model.Carts.CartDetail;
+import co.edu.uniquindio.proyecto.model.Carts.Cart;
+
+import java.util.Optional;
 
 public interface CartService {
 
-    public void addItemToCart(String accountId, CartDetailDTO cartDetailDTO) throws Exception;
+    void addItemToCart(String accountId, CartDetailDTO cartDetailDTO) throws Exception;
 
     void removeItemFromCart(String accountId, String eventId) throws Exception;
 
-    CartDTO getCartByAccountId(String accountId);
+    Optional<Cart> getCartByAccountId(String accountId);
 
-    void updateItemQuantity(String accountId, String eventId, int quantity);
+    void updateItemFromCart(String accountId,String eventId ) throws Exception;
 
-    void clearCart(String accountId);
-
-    CartTotalDTO calculateTotal(String accountId);
 
 }
