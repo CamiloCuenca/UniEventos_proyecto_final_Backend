@@ -40,7 +40,7 @@ public class CartServiceImp implements CartService {
             cart = cartOptional.get();
         } else {
             cart = new Cart();
-            cart.setIdAccount(new ObjectId(accountId));
+            cart.setAccountId(new ObjectId(accountId));
             cart.setDate(LocalDateTime.now());
             cart.setItems(new ArrayList<>());
         }
