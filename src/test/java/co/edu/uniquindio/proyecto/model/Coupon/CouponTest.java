@@ -49,4 +49,10 @@ public class CouponTest {
         couponService.deactivateCoupon(couponId);
     }
 
+    @Test
+    public void activateCouponTest() throws Exception {
+        String couponId= "66e8865bdbc7b554d5bbc780";
+        couponService.activateCoupon(couponId);
+    }
+
 }
