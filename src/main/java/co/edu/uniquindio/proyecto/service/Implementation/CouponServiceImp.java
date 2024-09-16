@@ -93,11 +93,24 @@ public class CouponServiceImp implements CouponService {
         Coupon coupon = couponRepository.findById(couponId)
                 .orElseThrow(() -> new Exception("El cupón no existe"));
 
-        // Cambiar el estado del cupón a INACTIVO
+        // Cambiar el estado del cupón a NO_DISPONIBLE
         coupon.setStatus(CouponStatus.NO_DISPONIBLE);
 
         // Guardar el cupón actualizado en la base de datos
         couponRepository.save(coupon);
+    }
+
+    @Override
+    public void activateCoupon(String couponId) throws Exception {
+        // Buscar el cupón por su ID y lanzar una excepción si no existe
+        Coupon coupon = couponRepository.findById(couponId)
+                .orElseThrow(() -> new Exception("El cupón no existe"));
+        // Cambiar el estado del cupón a DISPONIBLE
+        coupon.setStatus(CouponStatus.DISPONIBLE);
+
+        // Guardar el cupón actualizado en la base de datos
+        couponRepository.save(coupon);
+
     }
 
 

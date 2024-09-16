@@ -48,6 +48,15 @@ public interface CouponService {
      * @throws Exception If the coupon could not be found or deactivated
      */
     void deactivateCoupon(String couponId) throws Exception;
+
+
+    /** Activate a coupon by its ID
+     *
+     * @param couponId
+     * @throws Exception
+     */
+    void activateCoupon(String couponId) throws Exception;
+
     /**
      * Update coupon information
      *
