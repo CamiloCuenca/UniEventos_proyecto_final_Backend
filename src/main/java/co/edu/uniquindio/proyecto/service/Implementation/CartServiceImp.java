@@ -67,7 +67,7 @@ public class CartServiceImp implements CartService {
      */
     @Override
     public void removeItemFromCart(String accountId, String eventId) throws Exception {
-        Optional<Cart> cartOptional = cartRepository.findByIdAccount(new ObjectId(accountId));
+        Optional<Cart> cartOptional = Optional.ofNullable(cartRepository.findByIdAccount(accountId));
 
         if(cartOptional.isEmpty()) {
             throw new Exception("No existe un carrito para el usuario");
@@ -93,7 +93,7 @@ public class CartServiceImp implements CartService {
      */
     @Override
     public Optional<Cart> getCartByAccountId(String accountId) {
-        return cartRepository.findByIdAccount(new ObjectId(accountId));
+        return Optional.ofNullable(cartRepository.findByIdAccount(accountId));
     }
 
 

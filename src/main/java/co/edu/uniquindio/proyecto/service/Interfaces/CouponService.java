@@ -49,6 +49,14 @@ public interface CouponService {
      */
     void deactivateCoupon(String couponId) throws Exception;
 
+
+    /** Activate a coupon by its ID
+     *
+     * @param couponId
+     * @throws Exception
+     */
+    void activateCoupon(String couponId) throws Exception;
+
     /**
      * Update coupon information
      *
