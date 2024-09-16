@@ -43,9 +43,6 @@ public class CouponServiceImp implements CouponService {
             throw new Exception("El coupon no existe o no esta activo");
         }
 
-        if(coupon.getExpirationDate().isBefore(LocalDateTime.now())){
-            throw new Exception("El cupon ha expirado");
-        }
 
         return true;
     }
@@ -87,8 +84,7 @@ public class CouponServiceImp implements CouponService {
 
     @Override
     public List<Coupon> getAvailableCoupons() {
-        LocalDateTime now = LocalDateTime.now();
-        return couponRepository.findAvailableCoupons(now);
+        return couponRepository.findAvailableCoupons();
     }
 
     @Override
@@ -103,6 +99,7 @@ public class CouponServiceImp implements CouponService {
         // Guardar el cupón actualizado en la base de datos
         couponRepository.save(coupon);
     }
+
 
     @Override
     public void updateCoupon(String couponId, CouponDTO couponDTO) throws Exception {

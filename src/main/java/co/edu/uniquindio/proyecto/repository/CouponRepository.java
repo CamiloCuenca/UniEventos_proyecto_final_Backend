@@ -11,7 +11,6 @@ public interface CouponRepository extends MongoRepository<Coupon,String> {
 
     // Method to find a coupon by its code
     Coupon findByCode(String code);
-
-    @Query("{ 'status': 'ACTIVO', 'expirationDate': { $gte: ?0 } }")
-    List<Coupon> findAvailableCoupons(LocalDateTime currentDateTime);
+    @Query("{ 'status': 'DISPONIBLE' }")
+    List<Coupon> findAvailableCoupons();
 }
