@@ -10,7 +10,7 @@ public interface OrderService {
     Order createOrder(Order order) throws Exception;
 
     // Actualizar una orden existente
-    Order updateOrder(String orderId, Order order) throws Exception;
+    Order updateOrder(String orderId, Order updatedOrder) throws Exception;
 
     // Eliminar una orden
     void deleteOrder(String orderId) throws Exception;
