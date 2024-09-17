@@ -2,7 +2,7 @@ db = connect('mongodb://localhost:27017/proyecto');
 
 
 // Events
-db.Eventos.insertMany([
+db.Evento.insertMany([
     {
         _id: ObjectId('66dcf9d99b293d0c2aba1372'),
         coverImage: 'image4.jpg',

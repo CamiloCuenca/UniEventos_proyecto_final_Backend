@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 @ToString
 public class Payment {
 
+    // Miara bien lo de typePayment y state si son ENUMs
+
     private String id;
     private String currency;
     private String typePayment;
