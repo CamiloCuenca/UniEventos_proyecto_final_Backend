@@ -1,9 +1,6 @@
 package co.edu.uniquindio.proyecto.model.PurchaseOrder;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -13,6 +10,8 @@ import java.util.List;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @Document ("Orden")
@@ -20,7 +19,7 @@ public class Order {
 
     @Id
     private String id;
-    private ObjectId idUser;
+    private ObjectId idUser;   // Mirar bien , esto deberia de ser el id de la cuenta ya que en si no se guarada en la DB al usuario
     private LocalDateTime date;
     private String gatewayCode;
     private List<OrderDetail> items;
