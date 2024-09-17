@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Document("Eventos")
+@Document("Evento")
 public class Event {
     @Id
     private String id;
@@ -27,6 +27,7 @@ public class Event {
     private LocalDateTime date;
     private String city;
     private String address;
+    private int amount;
     private List<Locality> localities;
 
     public Locality findByName(String name) {

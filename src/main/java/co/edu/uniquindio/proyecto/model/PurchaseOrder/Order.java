@@ -19,7 +19,7 @@ public class Order {
 
     @Id
     private String id;
-    private ObjectId idUser;   // Mirar bien , esto deberia de ser el id de la cuenta ya que en si no se guarada en la DB al usuario
+    private ObjectId idAccount;   // Mirar bien , esto deberia de ser el id de la cuenta ya que en si no se guarada en la DB al usuario
     private LocalDateTime date;
     private String gatewayCode;
     private List<OrderDetail> items;
