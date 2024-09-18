@@ -3,6 +3,7 @@ package co.edu.uniquindio.proyecto.service.Implementation;
 import co.edu.uniquindio.proyecto.dto.Event.*;
 import co.edu.uniquindio.proyecto.exception.event.EventNotFoundException;
 import co.edu.uniquindio.proyecto.exception.event.IdAlreadyExistsException;
+import co.edu.uniquindio.proyecto.exception.event.NameAndDateAlreadyExistsException;
 import co.edu.uniquindio.proyecto.model.Events.Event;
 import co.edu.uniquindio.proyecto.repository.EventRepository;
 import co.edu.uniquindio.proyecto.service.Interfaces.EventService;
@@ -10,7 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
-
+import javax.naming.NameAlreadyBoundException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,8 +25,8 @@ public class EventServiceImp implements EventService {
 
     private final EventRepository eventRepository;
 
-    private boolean idExists(String id) {
-        return eventRepository.findAllById(id).isPresent();
+    private boolean nameExistsAndDate(String name, LocalDateTime dateTime) {
+        return eventRepository.findAllByNameAndDate(name, dateTime).isPresent();
     }
 
     /**
@@ -35,10 +37,10 @@ public class EventServiceImp implements EventService {
      * @throws Exception
      */
     @Override
-    public String createEvent(createDTOEvent crearEventoDTO) throws IdAlreadyExistsException {
+    public String createEvent(createDTOEvent crearEventoDTO) throws NameAndDateAlreadyExistsException {
 
-        if (idExists(crearEventoDTO.id())){
-            throw new IdAlreadyExistsException(crearEventoDTO.id());
+        if (nameExistsAndDate(crearEventoDTO.name(), crearEventoDTO.date())) {
+            throw new NameAndDateAlreadyExistsException(crearEventoDTO.name(), crearEventoDTO.date());
         }
         // Mapping (transferring) the data from the DTO to an object of type Event
         Event newEvent = new Event();
@@ -69,7 +71,7 @@ public class EventServiceImp implements EventService {
 
         Optional<Event> optionalEvent = eventRepository.findById(editarEventoDTO.id());
         // Search for the existing event by its id
-        if (optionalEvent.isEmpty()){
+        if (optionalEvent.isEmpty()) {
             throw new EventNotFoundException(editarEventoDTO.id());
         }
 
@@ -136,18 +138,19 @@ public class EventServiceImp implements EventService {
         );
     }
 
-    /** This method is the service of listing the events.
+    /**
+     * This method is the service of listing the events.
      *
      * @return Events
      */
     @Override
     public List<ItemEventDTO> listEvents() {
         List<Event> events = eventRepository.findAll();
-        List<ItemEventDTO>  items = new ArrayList<>();
+        List<ItemEventDTO> items = new ArrayList<>();
 
-        for ( Event event : events ) {
+        for (Event event : events) {
             items.add(new ItemEventDTO(
-                   event.getCoverImage(),
+                    event.getCoverImage(),
                     event.getName(),
                     event.getDate(),
                     event.getAddress()
@@ -156,7 +159,8 @@ public class EventServiceImp implements EventService {
         return items;
     }
 
-    /** This method is the service of filtering the events
+    /**
+     * This method is the service of filtering the events
      *
      * @param filtroEventoDTO
      * @return dtoEventFilter
@@ -180,8 +184,8 @@ public class EventServiceImp implements EventService {
                 .collect(Collectors.toList());
     }
 
-    public Event getById(String id) throws Exception{
-        return eventRepository.findById(id).orElseThrow(()-> new Exception("El evento No existe"));
+    public Event getById(String id) throws Exception {
+        return eventRepository.findById(id).orElseThrow(() -> new Exception("El evento No existe"));
     }
-       
+
 }

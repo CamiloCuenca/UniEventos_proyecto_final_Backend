@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record createDTOEvent(
-        String id,
         @NotBlank String coverImage,
         @NotBlank @Length(max = 100) String name,
         EventStatus status,
