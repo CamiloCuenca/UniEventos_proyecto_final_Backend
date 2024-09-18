@@ -10,4 +10,6 @@ import java.util.Optional;
 
 public interface OrderRepository extends MongoRepository<Order,String> {
 
+    @Query("{'accountId': ?0}")
+    List<Order> findByAccountId (String accountId);
 }
