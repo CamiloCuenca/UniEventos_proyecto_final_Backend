@@ -44,7 +44,7 @@ public class OrderTest {
                 .build();
 
         Order order= Order.builder()
-                .idUser(new ObjectId("66a2c14dd9219911cd34f2c0"))
+                .id(String.valueOf(new ObjectId("66a2c14dd9219911cd34f2c0")))
                 .date(LocalDateTime.now())
                 .gatewayCode("12345")
                 .items(orderDetails)
