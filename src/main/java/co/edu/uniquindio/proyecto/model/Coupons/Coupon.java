@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class Coupon {
 
     @Id
-    private String id;
+    private String couponId;
     private LocalDateTime expirationDate;
     private String code;
     private CouponStatus status;

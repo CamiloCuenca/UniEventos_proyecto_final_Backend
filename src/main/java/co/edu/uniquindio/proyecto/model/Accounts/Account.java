@@ -9,6 +9,7 @@ import org.bson.types.ObjectId;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.repository.Query;
 
 import java.time.LocalDateTime;
 
@@ -22,7 +23,7 @@ import java.time.LocalDateTime;
 public class Account {
 
     @Id
-    private String id;
+    private String  accountId;
     private String email;
     private ValidationCode registrationValidationCode;
     private Rol rol;
