@@ -3,7 +3,7 @@ package co.edu.uniquindio.proyecto.service.Implementation;
 import co.edu.uniquindio.proyecto.Enum.AccountStatus;
 import co.edu.uniquindio.proyecto.Enum.Rol;
 import co.edu.uniquindio.proyecto.dto.Account.*;
-import co.edu.uniquindio.proyecto.exception.*;
+import co.edu.uniquindio.proyecto.exception.account.*;
 import co.edu.uniquindio.proyecto.model.Accounts.Account;
 import co.edu.uniquindio.proyecto.model.Accounts.User;
 import co.edu.uniquindio.proyecto.repository.AccountRepository;
@@ -26,11 +26,11 @@ public class AccountServiceimp implements AccountService {
 
     private final AccountRepository cuentaRepo;
 
-    private boolean existeEmail(String email) {
+    private boolean existsEmail(String email) {
         return cuentaRepo.findByEmail(email).isPresent();
     }
 
-    private boolean existeCedula(String cedula) {
+    private boolean idExists(String cedula) {
         return cuentaRepo.findByCedula(cedula).isPresent();
     }
 
@@ -43,13 +43,13 @@ public class AccountServiceimp implements AccountService {
      * @throws Exception
      */
     @Override
-    public String crearCuenta(createAccountDTO cuenta) throws EmailAlreadyExistsException, CedulaAlreadyExistsException {
+    public String createAccount(createAccountDTO cuenta) throws EmailAlreadyExistsException, CedulaAlreadyExistsException {
 
-        if (existeEmail(cuenta.email())) {
+        if (existsEmail(cuenta.email())) {
             throw new EmailAlreadyExistsException(cuenta.email());
         }
 
-        if (existeCedula(cuenta.idNumber())) {
+        if (idExists(cuenta.idNumber())) {
             throw new CedulaAlreadyExistsException(cuenta.idNumber());
         }
         //Segmento del codigo que se encarga de encriptar el codigo.
@@ -83,7 +83,7 @@ public class AccountServiceimp implements AccountService {
      * @throws Exception
      */
     @Override
-    public String editarCuenta(editAccountDTO cuenta) throws AccountNtFoundException {
+    public String editAccount(editAccountDTO cuenta) throws AccountNtFoundException {
         Optional<Account> optionalAccount = cuentaRepo.findById(cuenta.id());
 
         if (optionalAccount.isEmpty()) {
@@ -113,7 +113,7 @@ public class AccountServiceimp implements AccountService {
      * @throws Exception
      */
     @Override
-    public dtoAccountInformation obtenerInformacionCuenta(String id) throws AccountNotFoundException {
+    public dtoAccountInformation obtainAccountInformation(String id) throws AccountNotFoundException {
         Optional<Account> optionalCuenta = cuentaRepo.findById(id);
         if (optionalCuenta.isEmpty()) {
             throw new AccountNotFoundException(id);
@@ -135,7 +135,7 @@ public class AccountServiceimp implements AccountService {
      * @return
      */
     @Override
-    public List<dtoAccountItem> listarCuentas() {
+    public List<dtoAccountItem> listAccounts() {
         try {
             List<Account> cuentas = cuentaRepo.findAll();
             if (cuentas.isEmpty()) {
@@ -165,7 +165,7 @@ public class AccountServiceimp implements AccountService {
      * @throws Exception
      */
     @Override
-    public String eliminarCuenta(String id) throws AccountNotFoundException {
+    public String deleteAccount(String id) throws AccountNotFoundException {
         //Buscamos la cuenta del usuario que se quiere eliminar
         Optional<Account> optionalCuenta = cuentaRepo.findById(id);
         if (optionalCuenta.isEmpty()) {

@@ -1,6 +1,8 @@
 package co.edu.uniquindio.proyecto.service.Implementation;
 
 import co.edu.uniquindio.proyecto.dto.Event.*;
+import co.edu.uniquindio.proyecto.exception.event.EventNotFoundException;
+import co.edu.uniquindio.proyecto.exception.event.IdAlreadyExistsException;
 import co.edu.uniquindio.proyecto.model.Events.Event;
 import co.edu.uniquindio.proyecto.repository.EventRepository;
 import co.edu.uniquindio.proyecto.service.Interfaces.EventService;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -20,6 +23,10 @@ public class EventServiceImp implements EventService {
 
     private final EventRepository eventRepository;
 
+    private boolean idExists(String id) {
+        return eventRepository.findAllById(id).isPresent();
+    }
+
     /**
      * This method is the service of a create  new event
      *
@@ -28,7 +35,11 @@ public class EventServiceImp implements EventService {
      * @throws Exception
      */
     @Override
-    public String createEvent(createDTOEvent crearEventoDTO) throws Exception {
+    public String createEvent(createDTOEvent crearEventoDTO) throws IdAlreadyExistsException {
+
+        if (idExists(crearEventoDTO.id())){
+            throw new IdAlreadyExistsException(crearEventoDTO.id());
+        }
         // Mapping (transferring) the data from the DTO to an object of type Event
         Event newEvent = new Event();
         newEvent.setName(crearEventoDTO.name());
@@ -54,26 +65,29 @@ public class EventServiceImp implements EventService {
      */
 
     @Override
-    public String editEvent(editDTOEvent editarEventoDTO) throws Exception {
+    public String editEvent(editDTOEvent editarEventoDTO) throws EventNotFoundException {
 
+        Optional<Event> optionalEvent = eventRepository.findById(editarEventoDTO.id());
         // Search for the existing event by its id
-        Event event = eventRepository.findById(editarEventoDTO.id()) // Asegúrate de tener el ID en el DTO
-                .orElseThrow(() -> new Exception("El evento no existe"));
+        if (optionalEvent.isEmpty()){
+            throw new EventNotFoundException(editarEventoDTO.id());
+        }
 
+        Event eventMondificado = optionalEvent.get();
 
         // Update event data with DTO data
-        event.setCoverImage(editarEventoDTO.coverImage());
-        event.setName(editarEventoDTO.name());
-        event.setStatus(editarEventoDTO.status());
-        event.setDescription(editarEventoDTO.description());
-        event.setImageLocalities(editarEventoDTO.imageLocalities());
-        event.setType(editarEventoDTO.type());
-        event.setDate(editarEventoDTO.date());
-        event.setCity(editarEventoDTO.city());
-        event.setLocalities(editarEventoDTO.localities());
+        eventMondificado.setCoverImage(editarEventoDTO.coverImage());
+        eventMondificado.setName(editarEventoDTO.name());
+        eventMondificado.setStatus(editarEventoDTO.status());
+        eventMondificado.setDescription(editarEventoDTO.description());
+        eventMondificado.setImageLocalities(editarEventoDTO.imageLocalities());
+        eventMondificado.setType(editarEventoDTO.type());
+        eventMondificado.setDate(editarEventoDTO.date());
+        eventMondificado.setCity(editarEventoDTO.city());
+        eventMondificado.setLocalities(editarEventoDTO.localities());
 
         // Save the updated event
-        eventRepository.save(event);
+        eventRepository.save(eventMondificado);
 
         return "El evento ha sido actualizado correctamente";
     }

@@ -29,6 +29,7 @@ class EventTest {
     public void createEvent() throws Exception {
         // Crear DTO para el nuevo evento
         createDTOEvent crearEventoDTO = new createDTOEvent(
+                "66eb44b425a3ee6359359a2f",
                 "rutaImg2",
                 "Evento prueba 2",
                 EventStatus.ACTIVO,
@@ -56,7 +57,7 @@ class EventTest {
     public void UpdateEvent() throws Exception {
 
         editDTOEvent editarEventoDTO = new editDTOEvent(
-                "66dcf9d99b293d0c2aba1372", // El ID del evento a actualizar
+                "66eb44b425a3ee6359359a2f", // El ID del evento a actualizar
                 "image2.jpg",
                 "Updated Event",
                 EventStatus.INACTIVO,

@@ -6,15 +6,15 @@ import java.util.List;
 
 public interface AccountService {
 
-    String crearCuenta(createAccountDTO cuenta) throws Exception;
+    String createAccount(createAccountDTO cuenta) throws Exception;
 
-    String editarCuenta(editAccountDTO cuenta) throws Exception;
+    String editAccount(editAccountDTO cuenta) throws Exception;
 
-    String eliminarCuenta(String id) throws Exception;
+    String deleteAccount(String id) throws Exception;
 
-    dtoAccountInformation obtenerInformacionCuenta(String id) throws Exception;
+    dtoAccountInformation obtainAccountInformation(String id) throws Exception;
 
-    List<dtoAccountItem> listarCuentas();
+    List<dtoAccountItem> listAccounts();
 
     String enviarCodigoRecuperacionPassword(String correo) throws Exception;
 

@@ -27,7 +27,7 @@ class AccountServiceTest {
      * al método 'crearCuenta', se obtenga un id válido para la cuenta creada.
      */
     @Test
-    public void crearCuentaTest() {
+    public void createAccountTest() {
         createAccountDTO createAccountDTO = new createAccountDTO(
                 "1231", // Identificación
                 "Pepito Perez", // Nombre
@@ -39,7 +39,7 @@ class AccountServiceTest {
 
         // Se espera que no se lance ninguna excepción al crear la cuenta
         assertDoesNotThrow(() -> {
-            String id = accountService.crearCuenta(createAccountDTO);
+            String id = accountService.createAccount(createAccountDTO);
             // Verifica que el id de la cuenta creada no sea nulo
             assertNotNull(id);
         });
@@ -64,10 +64,10 @@ class AccountServiceTest {
 
         // Se espera que no se lance ninguna excepción al editar la cuenta
         assertDoesNotThrow(() -> {
-            accountService.editarCuenta(editAccountDTO); // Actualiza la cuenta
+            accountService.editAccount(editAccountDTO); // Actualiza la cuenta
 
             // Verifica que los cambios se han reflejado correctamente
-            dtoAccountInformation detalle = accountService.obtenerInformacionCuenta(idCuenta);
+            dtoAccountInformation detalle = accountService.obtainAccountInformation(idCuenta);
 
             // Comprueba que la dirección del usuario es la nueva dirección
             assertEquals("Nueva dirección", detalle.address());
@@ -80,11 +80,11 @@ class AccountServiceTest {
      * 'obtenerInformacionCuenta' devuelve correctamente la información de la cuenta.
      */
     @Test
-    public void obtenerInformacionCuentaTest_ExisteCuenta() throws Exception {
+    public void obtainAccountInformatio() throws Exception {
         String idCuenta = "66eb290b65664d4c873bc362"; // ID de cuenta válida en la base de datos
 
         // Obtiene la información de la cuenta y verifica que no sea nula
-        dtoAccountInformation cuentaInfo = accountService.obtenerInformacionCuenta(idCuenta);
+        dtoAccountInformation cuentaInfo = accountService.obtainAccountInformation(idCuenta);
         assertNotNull(cuentaInfo);
 
         // Verifica que el ID de la cuenta obtenida es el esperado
@@ -98,12 +98,12 @@ class AccountServiceTest {
      * obtener la información de una cuenta que no existe en la base de datos.
      */
     @Test
-    public void obtenerInformacionCuentaTest_NoExisteCuenta() {
+    public void obtainAccountInformation() {
         String idCuenta = "66eb19255765bd1b96784e53"; // ID de una cuenta inexistente
 
         // Verifica que se lanza la excepción esperada
         AccountNotFoundException thrownException = assertThrows(AccountNotFoundException.class, () -> {
-            accountService.obtenerInformacionCuenta(idCuenta);
+            accountService.obtainAccountInformation(idCuenta);
         });
 
         // Verifica que el mensaje de la excepción contiene el ID de la cuenta no encontrada
@@ -117,14 +117,14 @@ class AccountServiceTest {
      * Luego, se verifica que la cuenta aún existe, pero en estado ELIMINADO.
      */
     @Test
-    public void eliminarCuentaTEst() throws Exception {
+    public void deleteAccountTEst() throws Exception {
         String idCuenta = "66eb290b65664d4c873bc362"; // ID de la cuenta a eliminar
 
         // Cambia el estado de la cuenta a ELIMINADO sin lanzar excepciones
-        assertDoesNotThrow(() -> accountService.eliminarCuenta(idCuenta));
+        assertDoesNotThrow(() -> accountService.deleteAccount(idCuenta));
 
         // Verifica que la cuenta sigue existiendo pero con el estado ELIMINADO
-        dtoAccountInformation cuenta = accountService.obtenerInformacionCuenta(idCuenta);
+        dtoAccountInformation cuenta = accountService.obtainAccountInformation(idCuenta);
         assertNotNull(cuenta);
     }
 
@@ -136,7 +136,7 @@ class AccountServiceTest {
     @Test
     public void listarTest() {
         // Lista las cuentas disponibles en la base de datos de pruebas
-        List<dtoAccountItem> lista = accountService.listarCuentas();
+        List<dtoAccountItem> lista = accountService.listAccounts();
 
         // Verifica que la lista contiene el número esperado de elementos
         assertEquals(3, lista.size(), "La lista de cuentas debería contener 2 elementos.");
