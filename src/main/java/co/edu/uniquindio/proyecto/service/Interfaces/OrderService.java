@@ -19,7 +19,7 @@ public interface OrderService {
     Order getOrderById(String orderId) throws Exception;
 
     // Listar todas las órdenes de un usuario específico
-    List<Order> getOrdersByUser(String userId) throws Exception;
+    //List<Order> getOrdersByUser(String userId) throws Exception;
 
     // Listar todas las órdenes
     List<Order> getAllOrders() throws Exception;

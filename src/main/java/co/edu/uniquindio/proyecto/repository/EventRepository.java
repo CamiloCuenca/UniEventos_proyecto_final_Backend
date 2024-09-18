@@ -1,11 +1,13 @@
 package co.edu.uniquindio.proyecto.repository;
 
 import co.edu.uniquindio.proyecto.Enum.EventType;
+import co.edu.uniquindio.proyecto.model.Accounts.Account;
 import co.edu.uniquindio.proyecto.model.Events.Event;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EventRepository extends MongoRepository<Event,String> {
 
@@ -18,5 +20,6 @@ public interface EventRepository extends MongoRepository<Event,String> {
             + "}")
     List<Event> findByFiltros(String nombre, String ciudad, EventType tipo);
 
-    List<Event> findAllById(String id);
+    @Query("{'_id': ?0}")
+    Optional<Account> findAllById(String id);
 }

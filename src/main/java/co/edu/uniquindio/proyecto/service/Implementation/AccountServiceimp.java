@@ -3,6 +3,7 @@ package co.edu.uniquindio.proyecto.service.Implementation;
 import co.edu.uniquindio.proyecto.Enum.AccountStatus;
 import co.edu.uniquindio.proyecto.Enum.Rol;
 import co.edu.uniquindio.proyecto.dto.Account.*;
+import co.edu.uniquindio.proyecto.exception.account.*;
 import co.edu.uniquindio.proyecto.model.Accounts.Account;
 import co.edu.uniquindio.proyecto.model.Accounts.User;
 import co.edu.uniquindio.proyecto.repository.AccountRepository;
@@ -12,12 +13,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.security.auth.login.AccountNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 
 @Service
 @Transactional
@@ -26,11 +26,11 @@ public class AccountServiceimp implements AccountService {
 
     private final AccountRepository cuentaRepo;
 
-    private boolean existeEmail(String email) {
+    private boolean existsEmail(String email) {
         return cuentaRepo.findByEmail(email).isPresent();
     }
 
-    private boolean existeCedula(String cedula) {
+    private boolean idExists(String cedula) {
         return cuentaRepo.findByCedula(cedula).isPresent();
     }
 
@@ -43,14 +43,14 @@ public class AccountServiceimp implements AccountService {
      * @throws Exception
      */
     @Override
-    public String crearCuenta(createAccountDTO cuenta) throws Exception   {
+    public String createAccount(createAccountDTO cuenta) throws EmailAlreadyExistsException, CedulaAlreadyExistsException {
 
-        if (existeEmail(cuenta.email())) {
-            throw new Exception("El email " + cuenta.email() + " ya está en uso");
+        if (existsEmail(cuenta.email())) {
+            throw new EmailAlreadyExistsException(cuenta.email());
         }
 
-        if (existeCedula(cuenta.idNumber())) {
-            throw new Exception("La cédula " + cuenta.idNumber() + " ya se encuentra registrada");
+        if (idExists(cuenta.idNumber())) {
+            throw new CedulaAlreadyExistsException(cuenta.idNumber());
         }
         //Segmento del codigo que se encarga de encriptar el codigo.
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -83,15 +83,14 @@ public class AccountServiceimp implements AccountService {
      * @throws Exception
      */
     @Override
-    public String editarCuenta(editAccountDTO cuenta) throws Exception {
+    public String editAccount(editAccountDTO cuenta) throws AccountNtFoundException {
         Optional<Account> optionalAccount = cuentaRepo.findById(cuenta.id());
 
         if (optionalAccount.isEmpty()) {
-            throw new Exception("El usuario no existe");
+            throw new AccountNtFoundException(cuenta.id());
         }
 
         Account cuentaModificada = optionalAccount.get();
-
         cuentaModificada.getUser().setName(cuenta.username());
         cuentaModificada.getUser().setPhoneNumber(cuenta.phoneNumber());
         cuentaModificada.getUser().setAddress(cuenta.address());
@@ -108,18 +107,17 @@ public class AccountServiceimp implements AccountService {
 
     /**
      * Metodo encargado de obtener la informacion de la cuenta.
+     *
      * @param id
      * @return
      * @throws Exception
      */
     @Override
-    public dtoAccountInformation obtenerInformacionCuenta(String id) throws Exception {
+    public dtoAccountInformation obtainAccountInformation(String id) throws AccountNotFoundException {
         Optional<Account> optionalCuenta = cuentaRepo.findById(id);
-
         if (optionalCuenta.isEmpty()) {
-            throw new Exception("No se encontró el usuario con el id " + id);
+            throw new AccountNotFoundException(id);
         }
-
         Account account = optionalCuenta.get();
 
         return new dtoAccountInformation(
@@ -137,19 +135,26 @@ public class AccountServiceimp implements AccountService {
      * @return
      */
     @Override
-    public List<dtoAccountItem> listarCuentas() {
-        List<Account> cuentas = cuentaRepo.findAll();
-        List<dtoAccountItem> items = new ArrayList<>();
+    public List<dtoAccountItem> listAccounts() {
+        try {
+            List<Account> cuentas = cuentaRepo.findAll();
+            if (cuentas.isEmpty()) {
+                throw new NoAccountsFoundException();
+            }
+            List<dtoAccountItem> items = new ArrayList<>();
 
-        for (Account account : cuentas) {
-            items.add(new dtoAccountItem(
-                    account.getId(),
-                    account.getUser().getName(),
-                    account.getEmail(),
-                    account.getUser().getPhoneNumber()
-            ));
+            for (Account account : cuentas) {
+                items.add(new dtoAccountItem(
+                        account.getId(),
+                        account.getUser().getName(),
+                        account.getEmail(),
+                        account.getUser().getPhoneNumber()
+                ));
+            }
+            return items;
+        } catch (Exception e) {
+            throw new AccountRetrievalException(e.getMessage());
         }
-        return items;
     }
 
     /**
@@ -160,11 +165,11 @@ public class AccountServiceimp implements AccountService {
      * @throws Exception
      */
     @Override
-    public String eliminarCuenta(String id) throws Exception {
+    public String deleteAccount(String id) throws AccountNotFoundException {
         //Buscamos la cuenta del usuario que se quiere eliminar
         Optional<Account> optionalCuenta = cuentaRepo.findById(id);
         if (optionalCuenta.isEmpty()) {
-            throw new Exception("No se encontró el usuario con el id " + id);
+            throw new AccountNotFoundException(id);
         }
         Account cuenta = optionalCuenta.get();
         cuenta.setStatus(AccountStatus.ELIMINADO);

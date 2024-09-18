@@ -54,11 +54,12 @@ public class OrderServiceImp implements OrderService {
                 .orElseThrow(() -> new Exception("La orden no existe"));
 
     }
-
+/*
     @Override
     public List<Order> getOrdersByUser(String userId) throws Exception {
-        return orderRepository.findByidUser(userId);
+        return orderRepository.findByCedula(userId);
     }
+     */
 
     @Override
     public List<Order> getAllOrders() throws Exception {
