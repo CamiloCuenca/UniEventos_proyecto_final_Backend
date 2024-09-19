@@ -33,7 +33,7 @@ public class CouponServiceImp implements CouponService {
         newCoupon.setType(couponDTO.type());
 
         Coupon createdCoupon = couponRepository.save(newCoupon);
-        return createdCoupon.getId();
+        return createdCoupon.getCouponId();
     }
 
     @Override

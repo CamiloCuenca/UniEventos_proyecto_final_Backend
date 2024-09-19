@@ -33,7 +33,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation 'org.springframework.security:spring-security-crypto:5.8.0'
-    implementation 'org.simplejavamail:simple-java-mail:8.0.0'
+    implementation 'org.simplejavamail:simple-java-mail:8.11.2'
+    implementation 'org.simplejavamail:batch-module:8.10.1'
 
 }
 

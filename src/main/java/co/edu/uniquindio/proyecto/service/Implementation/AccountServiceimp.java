@@ -71,7 +71,7 @@ public class AccountServiceimp implements AccountService {
         ));
         newAccount.setStatus(AccountStatus.INACTIVO);
         Account createdAccount = cuentaRepo.save(newAccount);
-        return createdAccount.getId();
+        return createdAccount.getAccountId();
     }
 
 
@@ -102,7 +102,7 @@ public class AccountServiceimp implements AccountService {
             cuentaModificada.setPassword(hashedPassword);
         }
         cuentaRepo.save(cuentaModificada);
-        return cuentaModificada.getId();
+        return cuentaModificada.getAccountId();
     }
 
     /**
@@ -121,7 +121,7 @@ public class AccountServiceimp implements AccountService {
         Account account = optionalCuenta.get();
 
         return new dtoAccountInformation(
-                account.getId(),
+                account.getAccountId(),
                 account.getUser().getIdNumber(),
                 account.getUser().getPhoneNumber(),
                 account.getUser().getAddress(),
@@ -145,7 +145,7 @@ public class AccountServiceimp implements AccountService {
 
             for (Account account : cuentas) {
                 items.add(new dtoAccountItem(
-                        account.getId(),
+                        account.getAccountId(),
                         account.getUser().getName(),
                         account.getEmail(),
                         account.getUser().getPhoneNumber()
@@ -174,7 +174,7 @@ public class AccountServiceimp implements AccountService {
         Account cuenta = optionalCuenta.get();
         cuenta.setStatus(AccountStatus.ELIMINADO);
         cuentaRepo.save(cuenta);
-        return cuenta.getId();
+        return cuenta.getAccountId();
     }
 
     @Override
