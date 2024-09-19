@@ -29,7 +29,6 @@ class EventTest {
     public void createEvent() throws Exception {
         // Crear DTO para el nuevo evento
         createDTOEvent crearEventoDTO = new createDTOEvent(
-                "66eb44b425a3ee6359359a2f",
                 "rutaImg2",
                 "Evento prueba 2",
                 EventStatus.ACTIVO,
