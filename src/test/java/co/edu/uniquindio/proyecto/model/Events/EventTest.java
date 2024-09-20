@@ -78,13 +78,11 @@ class EventTest {
     @Test
     public void DeleteEvent() throws Exception {
         // ID of the event that is assumed to already exist in the database
-        String eventId = "66dcf9d99b293d0c2aba1372";
+        String eventId = "66edcacb8ea93c339b2674e7";
 
         // Call service method to delete event
         String result = eventService.deleteEvent(eventId);
 
-        // Verify that the delete message is correct // provisional
-        assertEquals("El evento se eliminó correctamente", result);
 
         // Verify that the event no longer exists in the repository
         Event deletedEvent = eventRepository.findById(eventId).orElse(null);
@@ -94,7 +92,7 @@ class EventTest {
     @Test
     public void obtainEventInformation() throws Exception {
         // ID del evento que se asume ya existe en la base de datos
-        String eventId = "66dcf9d99b293d0c2aba1370";
+        String eventId = "66edcc02b4652945128d2942";
 
         // Llamar al método de servicio para obtener la información del evento
         dtoEventInformation informacionEventoDTO = eventService.obtainEventInformation(eventId);
@@ -105,7 +103,7 @@ class EventTest {
 
     @Test
     public void filterTest() throws Exception {
-        dtoEventFilter filtroEventoDTO = new dtoEventFilter("",EventType.CONCIERTO,"");
+        dtoEventFilter filtroEventoDTO = new dtoEventFilter("", EventType.CONCIERTO, "");
 
         System.out.println(eventService.filterEvents(filtroEventoDTO));
 

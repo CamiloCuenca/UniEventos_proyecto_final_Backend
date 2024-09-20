@@ -1,9 +1,7 @@
 package co.edu.uniquindio.proyecto.service.Implementation;
 
 import co.edu.uniquindio.proyecto.dto.Event.*;
-import co.edu.uniquindio.proyecto.exception.event.EventNotFoundException;
-import co.edu.uniquindio.proyecto.exception.event.IdAlreadyExistsException;
-import co.edu.uniquindio.proyecto.exception.event.NameAndDateAlreadyExistsException;
+import co.edu.uniquindio.proyecto.exception.event.*;
 import co.edu.uniquindio.proyecto.model.Events.Event;
 import co.edu.uniquindio.proyecto.repository.EventRepository;
 import co.edu.uniquindio.proyecto.service.Interfaces.EventService;
@@ -12,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 
 import javax.naming.NameAlreadyBoundException;
+import javax.security.auth.login.AccountNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +73,6 @@ public class EventServiceImp implements EventService {
         if (optionalEvent.isEmpty()) {
             throw new EventNotFoundException(editarEventoDTO.id());
         }
-
         Event eventMondificado = optionalEvent.get();
 
         // Update event data with DTO data
@@ -102,16 +100,19 @@ public class EventServiceImp implements EventService {
      * @throws Exception
      */
     @Override
-    public String deleteEvent(String id) throws Exception {
-        // Check if the event exists before trying to delete it
-        Event event = eventRepository.findById(id)
-                .orElseThrow(() -> new Exception("El evento no existe"));
+    public String deleteEvent(String id) throws EventNotFoundException {
+        Optional<Event> optionalEvent = eventRepository.findById(id);
+        if (optionalEvent.isEmpty()) {
+            throw new EventNotFoundException(id);
+        }
 
-        // Delete the event
-        eventRepository.deleteById(id);
+        // Eliminar el evento si se encuentra
+        Event deletedEvent = optionalEvent.get();
+        eventRepository.delete(deletedEvent);
 
-        return "El evento se eliminó correctamente";
+        return "El evento con id " + id + " fue eliminado correctamente.";
     }
+
 
     /**
      * This method is the service of obtain events
@@ -120,12 +121,12 @@ public class EventServiceImp implements EventService {
      * @return
      * @throws Exception
      */
-    public dtoEventInformation obtainEventInformation(String id) throws Exception {
-        //Search the event by id
-        Event event = eventRepository.findById(id)
-                .orElseThrow(() -> new Exception("El evento no existe"));
-        // Mapear el evento al DTO InformacionEventoDTO
-
+    public dtoEventInformation obtainEventInformation(String id) throws EventNotFoundException{
+        Optional<Event> optionalEvent = eventRepository.findById(id);
+        if (optionalEvent.isEmpty()) {
+            throw new EventNotFoundException(id);
+        }
+        Event event = optionalEvent.get();
         return new dtoEventInformation(
                 event.getCoverImage(),
                 event.getName(),
@@ -145,18 +146,25 @@ public class EventServiceImp implements EventService {
      */
     @Override
     public List<ItemEventDTO> listEvents() {
-        List<Event> events = eventRepository.findAll();
-        List<ItemEventDTO> items = new ArrayList<>();
-
-        for (Event event : events) {
-            items.add(new ItemEventDTO(
-                    event.getCoverImage(),
-                    event.getName(),
-                    event.getDate(),
-                    event.getAddress()
-            ));
+        try{
+            List<Event> events = eventRepository.findAll();
+            if (events.isEmpty()){
+                throw new NoEventsFoundException();
+            }
+            List<ItemEventDTO> items = new ArrayList<>();
+            for (Event event : events) {
+                items.add(new ItemEventDTO(
+                        event.getCoverImage(),
+                        event.getName(),
+                        event.getDate(),
+                        event.getAddress()
+                ));
+            }
+            return items;
+        }catch (Exception e){
+            throw new EventRetrievalException(e.getMessage());
         }
-        return items;
+
     }
 
     /**
