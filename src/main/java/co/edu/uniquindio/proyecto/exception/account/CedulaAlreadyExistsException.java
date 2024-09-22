@@ -1,7 +1,7 @@
 package co.edu.uniquindio.proyecto.exception.account;
 
 public class CedulaAlreadyExistsException extends RuntimeException {
-    public CedulaAlreadyExistsException(String cedula) {
-        super("la cedula ya existe: " + cedula);
+    public CedulaAlreadyExistsException(String idNumber) {
+        super("la cedula ya existe: " + idNumber);
     }
 }

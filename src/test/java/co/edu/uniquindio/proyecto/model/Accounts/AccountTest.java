@@ -1,15 +1,16 @@
 package co.edu.uniquindio.proyecto.model.Accounts;
 
-import co.edu.uniquindio.proyecto.dto.Account.createAccountDTO;
-import co.edu.uniquindio.proyecto.dto.Account.dtoAccountInformation;
-import co.edu.uniquindio.proyecto.dto.Account.dtoAccountItem;
-import co.edu.uniquindio.proyecto.dto.Account.editAccountDTO;
+import co.edu.uniquindio.proyecto.dto.Account.*;
+import co.edu.uniquindio.proyecto.exception.account.EmailNotFoundException;
+import co.edu.uniquindio.proyecto.exception.account.InvalidPasswordException;
 import co.edu.uniquindio.proyecto.service.Interfaces.AccountService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.security.auth.login.AccountNotFoundException;
+import java.net.PasswordAuthentication;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,6 +21,8 @@ class AccountServiceTest {
     @Autowired
     private AccountService accountService;
 
+
+
     /**
      * Metodo crearCuenta Test.
      * Este test verifica que una cuenta puede ser creada correctamente sin lanzar excepciones.
@@ -29,12 +32,12 @@ class AccountServiceTest {
     @Test
     public void createAccountTest() {
         createAccountDTO createAccountDTO = new createAccountDTO(
-                "1231", // Identificación
+                "1001277430", // Identificación
                 "Pepito Perez", // Nombre
                 "12121", // Número de teléfono
                 "Calle 123", // Dirección
-                "brandonlomejor10@gmail.com", // Correo
-                "password" // Contraseña
+                "brandonca123@gmai.com", // Correo
+                "M@mahermosa123" // Contraseña
         );
 
         // Se espera que no se lance ninguna excepción al crear la cuenta
@@ -42,6 +45,23 @@ class AccountServiceTest {
             String id = accountService.createAccount(createAccountDTO);
             // Verifica que el id de la cuenta creada no sea nulo
             assertNotNull(id);
+        });
+    }
+
+
+    @Test
+    public void loginAccountTest() {
+        // Datos de prueba: Asegúrate de que este usuario ya existe en la base de datos
+        String email = "brandonca123@gmai.com";
+        String password = "M@mahermosa123";  // Asegúrate de que esta contraseña sea válida para el usuario
+
+        // Crear el DTO con las credenciales del usuario almacenado en la base de datos
+        LoginDTO createLoginDTO = new LoginDTO(email, password);
+
+        // Llamar al método iniciarSesion y verificar que no lanza excepciones
+        assertDoesNotThrow(() -> {
+            String result = accountService.iniciarSesion(createLoginDTO);
+            assertTrue(result.contains("Inicio de sesión exitoso para el usuario"));
         });
     }
 
