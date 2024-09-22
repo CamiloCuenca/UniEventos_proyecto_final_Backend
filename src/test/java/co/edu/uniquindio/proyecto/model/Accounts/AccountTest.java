@@ -166,7 +166,7 @@ class AccountServiceTest {
     @Test
     public void activateAccountTest() throws Exception {
         String correo = "camilocuenca1810@gmail.com";
-        String code = "294c5acc";
+        String code = "be31e14f";
         accountService.activateAccount(correo,code);
 
     }

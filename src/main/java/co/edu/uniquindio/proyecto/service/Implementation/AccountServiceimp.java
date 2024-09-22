@@ -131,7 +131,15 @@ public class AccountServiceimp implements AccountService {
 
         Account createdAccount = cuentaRepo.save(newAccount);
 
-        emailService.sendMail( new EmailDTO(newAccount.getEmail(), "\"Activación de cuenta\"",  "Su código de activación es: " + validationCode));
+        String plainTextMessage = "Estimado usuario,\n\n" +
+                "Gracias por registrarse en nuestra plataforma. Para activar su cuenta, por favor utilice el siguiente código de activación:\n\n" +
+                "Código de activación: " + validationCode + "\n\n" +
+                "Este código es válido por 15 minutos.\n\n" +
+                "Si usted no solicitó este registro, por favor ignore este correo.\n\n" +
+                "Atentamente,\n" +
+                "El equipo de UniEventos";
+
+        emailService.sendMail( new EmailDTO(newAccount.getEmail(), "\"Activación de cuenta\"",  plainTextMessage));
 
 
         return createdAccount.getAccountId();
@@ -253,6 +261,7 @@ public class AccountServiceimp implements AccountService {
     public String cambiarPassword(changePasswordDTO changePasswordDTO) throws Exception {
         return "";
     }
+
 
 
 

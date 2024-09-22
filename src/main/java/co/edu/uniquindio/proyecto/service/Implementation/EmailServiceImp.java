@@ -10,6 +10,9 @@ import org.simplejavamail.mailer.MailerBuilder;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.IOException;
+
 import static org.simplejavamail.config.ConfigLoader.Property.SMTP_PORT;
 
 
@@ -24,6 +27,9 @@ public class EmailServiceImp implements EmailService {
     @Override
     @Async
     public void sendMail(EmailDTO emailDTO) throws Exception {
+
+
+
         Email email = EmailBuilder.startingBlank()
                 .from(SMTP_USERNAME)
                 .to(emailDTO.recipient())
@@ -42,5 +48,8 @@ public class EmailServiceImp implements EmailService {
             mailer.sendMail(email);
         }
 
+
     }
+
+
 }
