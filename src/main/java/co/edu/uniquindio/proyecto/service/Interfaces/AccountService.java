@@ -22,6 +22,7 @@ public interface AccountService {
 
     String iniciarSesion(LoginDTO loginDTO) throws Exception;
 
+    String activateAccount(String correo ,String code) throws Exception;
 
 
 }

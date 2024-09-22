@@ -3,11 +3,14 @@ package co.edu.uniquindio.proyecto.service.Implementation;
 import co.edu.uniquindio.proyecto.Enum.AccountStatus;
 import co.edu.uniquindio.proyecto.Enum.Rol;
 import co.edu.uniquindio.proyecto.dto.Account.*;
+import co.edu.uniquindio.proyecto.dto.EmailDTO;
 import co.edu.uniquindio.proyecto.exception.account.*;
 import co.edu.uniquindio.proyecto.model.Accounts.Account;
 import co.edu.uniquindio.proyecto.model.Accounts.User;
+import co.edu.uniquindio.proyecto.model.Accounts.ValidationCode;
 import co.edu.uniquindio.proyecto.repository.AccountRepository;
 import co.edu.uniquindio.proyecto.service.Interfaces.AccountService;
+import co.edu.uniquindio.proyecto.service.Interfaces.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -37,6 +41,9 @@ public class AccountServiceimp implements AccountService {
     private boolean idExists(String idNumber) {
         return cuentaRepo.findByIdnumber(idNumber).isPresent();
     }
+
+    @Autowired
+    EmailService emailService;
 
     @Override
     public String iniciarSesion(LoginDTO loginDTO) throws EmailNotFoundException, InvalidPasswordException {
@@ -57,6 +64,31 @@ public class AccountServiceimp implements AccountService {
         // Retorna mensaje de éxito con el nombre del usuario
         return "Inicio de sesión exitoso para el usuario " + account.getUser().getName();
     }
+
+    @Override
+    public String activateAccount(String correo, String code) throws Exception {
+        Optional<Account> optionalAccount = cuentaRepo.findByEmail(correo);
+        if (optionalAccount.isEmpty()) {
+            throw new EmailNotFoundException(correo);
+        }
+
+        Account account = optionalAccount.get();
+        ValidationCode validationCode = account.getRegistrationValidationCode();
+
+        if (validationCode == null || validationCode.isExpired()) {
+            throw new ValidationCodeExpiredException();
+        }
+
+        if (!validationCode.getCode().equals(code)) {
+            throw new InvalidValidationCodeException();
+        }
+
+        account.setStatus(AccountStatus.ACTIVO);
+        cuentaRepo.save(account);
+
+        return "Cuenta activada exitosamente";
+    }
+
     /**
      * Metodo encargado de crear una cuenta.
      *
@@ -65,7 +97,7 @@ public class AccountServiceimp implements AccountService {
      * @throws Exception
      */
     @Override
-    public String createAccount(createAccountDTO cuenta) throws EmailAlreadyExistsException, CedulaAlreadyExistsException {
+    public String createAccount(createAccountDTO cuenta) throws Exception {
 
         if (existsEmail(cuenta.email())) {
             throw new EmailAlreadyExistsException(cuenta.email());
@@ -92,8 +124,29 @@ public class AccountServiceimp implements AccountService {
                 cuenta.address()
         ));
         newAccount.setStatus(AccountStatus.INACTIVO);
+
+        String validationCode = generateValidationCode();
+        ValidationCode validationCodeObj = new ValidationCode(validationCode);
+        newAccount.setRegistrationValidationCode(validationCodeObj);
+
         Account createdAccount = cuentaRepo.save(newAccount);
+
+        String plainTextMessage = "Estimado usuario,\n\n" +
+                "Gracias por registrarse en nuestra plataforma. Para activar su cuenta, por favor utilice el siguiente código de activación:\n\n" +
+                "Código de activación: " + validationCode + "\n\n" +
+                "Este código es válido por 15 minutos.\n\n" +
+                "Si usted no solicitó este registro, por favor ignore este correo.\n\n" +
+                "Atentamente,\n" +
+                "El equipo de UniEventos";
+
+        emailService.sendMail( new EmailDTO(newAccount.getEmail(), "\"Activación de cuenta\"",  plainTextMessage));
+
+
         return createdAccount.getAccountId();
+    }
+    // Método auxiliar para generar un código de validación aleatorio
+    private String generateValidationCode() {
+        return UUID.randomUUID().toString().substring(0, 8); // Código de 8 caracteres
     }
 
 
@@ -208,6 +261,7 @@ public class AccountServiceimp implements AccountService {
     public String cambiarPassword(changePasswordDTO changePasswordDTO) throws Exception {
         return "";
     }
+
 
 
 
