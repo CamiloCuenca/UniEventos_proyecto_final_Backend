@@ -9,7 +9,9 @@ import co.edu.uniquindio.proyecto.model.Accounts.User;
 import co.edu.uniquindio.proyecto.repository.AccountRepository;
 import co.edu.uniquindio.proyecto.service.Interfaces.AccountService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,15 +28,35 @@ public class AccountServiceimp implements AccountService {
 
     private final AccountRepository cuentaRepo;
 
+    private final PasswordEncoder passwordEncoder;
+
     private boolean existsEmail(String email) {
         return cuentaRepo.findByEmail(email).isPresent();
     }
 
-    private boolean idExists(String cedula) {
-        return cuentaRepo.findByCedula(cedula).isPresent();
+    private boolean idExists(String idNumber) {
+        return cuentaRepo.findByIdnumber(idNumber).isPresent();
     }
 
+    @Override
+    public String iniciarSesion(LoginDTO loginDTO) throws EmailNotFoundException, InvalidPasswordException {
+        Optional<Account> optionalAccount = cuentaRepo.findByEmail(loginDTO.email());
 
+        // Corregido: lanzar excepción si no se encuentra el email
+        if (optionalAccount.isEmpty()) {
+            throw new EmailNotFoundException(loginDTO.email());
+        }
+
+        Account account = optionalAccount.get();
+
+        // Verificar si la contraseña es válida
+        if (!passwordEncoder.matches(loginDTO.password(), account.getPassword())) {
+            throw new InvalidPasswordException();
+        }
+
+        // Retorna mensaje de éxito con el nombre del usuario
+        return "Inicio de sesión exitoso para el usuario " + account.getUser().getName();
+    }
     /**
      * Metodo encargado de crear una cuenta.
      *
@@ -187,10 +209,6 @@ public class AccountServiceimp implements AccountService {
         return "";
     }
 
-    @Override
-    public String iniciarSesion(LoginDTO loginDTO) throws Exception {
-        return "";
-    }
 
 
 }
