@@ -131,7 +131,7 @@ public class AccountServiceimp implements AccountService {
 
         Account createdAccount = cuentaRepo.save(newAccount);
 
-        emailService.sendMail( new EmailDTO("camilocuenca1810@gmail.com", "saludo", "hola") );
+        emailService.sendMail( new EmailDTO(newAccount.getEmail(), "\"Activación de cuenta\"",  "Su código de activación es: " + validationCode));
 
 
         return createdAccount.getAccountId();

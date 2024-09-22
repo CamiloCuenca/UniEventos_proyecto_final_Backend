@@ -32,11 +32,11 @@ class AccountServiceTest {
     @Test
     public void createAccountTest() {
         createAccountDTO createAccountDTO = new createAccountDTO(
-                "1004773035", // Identificación
+                "1004779025", // Identificación
                 "Juan Camilo", // Nombre
                 "12121", // Número de teléfono
                 "Calle 123", // Dirección
-                "brandonca123@gmai.com", // Correo
+                "camilocuenca1810@gmail.com", // Correo
                 "M@mahermosa123" // Contraseña
         );
 
@@ -162,6 +162,14 @@ class AccountServiceTest {
         assertEquals(3, lista.size(), "La lista de cuentas debería contener 2 elementos.");
     }
 
+
+    @Test
+    public void activateAccountTest() throws Exception {
+        String correo = "camilocuenca1810@gmail.com";
+        String code = "294c5acc";
+        accountService.activateAccount(correo,code);
+
+    }
 
 
 }
