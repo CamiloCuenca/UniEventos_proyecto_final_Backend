@@ -17,7 +17,7 @@ public interface AccountService {
 
     List<dtoAccountItem> listAccounts();
 
-    String enviarCodigoRecuperacionPassword(String correo) throws Exception;
+    String sendPasswordRecoveryCode(String correo) throws Exception;
 
     String cambiarPassword(changePasswordDTO changePasswordDTO) throws Exception;
 

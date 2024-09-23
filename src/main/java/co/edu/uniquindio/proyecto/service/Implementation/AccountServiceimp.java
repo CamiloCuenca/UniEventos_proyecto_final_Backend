@@ -10,6 +10,7 @@ import co.edu.uniquindio.proyecto.exception.account.*;
 import co.edu.uniquindio.proyecto.model.Accounts.Account;
 import co.edu.uniquindio.proyecto.model.Accounts.User;
 import co.edu.uniquindio.proyecto.model.Accounts.ValidationCode;
+import co.edu.uniquindio.proyecto.model.Accounts.ValidationCodePassword;
 import co.edu.uniquindio.proyecto.repository.AccountRepository;
 import co.edu.uniquindio.proyecto.service.Interfaces.AccountService;
 import co.edu.uniquindio.proyecto.service.Interfaces.EmailService;
@@ -181,6 +182,8 @@ public class AccountServiceimp implements AccountService {
     }
 
 
+
+
     /**
      * Metodo para actualizarCuenta.
      *
@@ -283,15 +286,81 @@ public class AccountServiceimp implements AccountService {
         return cuenta.getAccountId();
     }
 
+    /**
+     * Metodo para enviar el codigo de cambio de contraseña
+     * @param email
+     * @return
+     * @throws Exception
+     */
     @Override
-    public String enviarCodigoRecuperacionPassword(String correo) throws Exception {
-        return "";
+    public String sendPasswordRecoveryCode(String email) throws Exception {
+        Optional<Account> optionalAccount = cuentaRepo.findByEmail(email);
+        if (optionalAccount.isEmpty()) {
+            throw new EmailNotFoundException(email);
+        }
+        Account account = optionalAccount.get();
+
+        String passwordValidationCOde = generateValidationCode();
+        ValidationCodePassword validationCodePassword = new ValidationCodePassword(generateValidationCode());
+        account.setPasswordValidationCode(validationCodePassword);
+        cuentaRepo.save(account);
+        // Crear el mensaje a enviar por correo
+        String plainTextMessage = "Estimado usuario,\n\n" +
+                "Ha solicitado recuperar su contraseña. Utilice el siguiente código de recuperación para restablecer su contraseña:\n\n" +
+                "Código de recuperación: " + passwordValidationCOde + "\n\n" +
+                "Este código es válido por 15 minutos.\n\n" +
+                "Si usted no solicitó esta recuperación, por favor ignore este correo.\n\n" +
+                "Atentamente,\n" +
+                "El equipo de UniEventos";
+
+        // Enviar el correo electrónico con el código de recuperación
+        emailService.sendMail(new EmailDTO(account.getEmail(), "Recuperación de contraseña", plainTextMessage));
+
+        return "Código de recuperación enviado al correo " + account.getEmail();
     }
 
+    /**
+     * El metodo que estaba implementado para el cambio de contraseña
+     * @param changePasswordDTO
+     * @return
+     * @throws Exception
+     */
     @Override
     public String cambiarPassword(changePasswordDTO changePasswordDTO) throws Exception {
-        return "";
+        // Buscar la cuenta por el código de recuperación
+        Optional<Account> optionalAccount = cuentaRepo.findByPasswordValidationCode(changePasswordDTO.verificationCode());
+        if (optionalAccount.isEmpty()) {
+            throw new InvalidValidationCodeException("El código de recuperación es incorrecto.");
+        }
+
+        Account account = optionalAccount.get();
+        ValidationCode validationCodeObj = account.getRegistrationValidationCode();
+
+        // Validar si el código ha expirado
+        if (validationCodeObj.isExpired()) {
+            throw new ValidationCodeExpiredException("El código de recuperación ha expirado.");
+        }
+
+        // Verificar que las contraseñas ingresadas coinciden
+        if (!changePasswordDTO.newPassword().equals(changePasswordDTO.confirmationPassword())) {
+            throw new PasswordsDoNotMatchException("Las contraseñas no coinciden.");
+        }
+
+        // Encriptar la nueva contraseña
+        String encryptedPassword = passwordEncoder.encode(changePasswordDTO.newPassword());
+        account.setPassword(encryptedPassword);
+
+        // Limpiar el código de recuperación para evitar su reutilización
+        account.setRegistrationValidationCode(null);
+
+        // Guardar la cuenta actualizada
+        cuentaRepo.save(account);
+
+        return "La contraseña ha sido cambiada exitosamente.";
     }
+
+
+
 
 
 }
