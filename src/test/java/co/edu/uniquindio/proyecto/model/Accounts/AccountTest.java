@@ -1,19 +1,28 @@
 package co.edu.uniquindio.proyecto.model.Accounts;
 
 import co.edu.uniquindio.proyecto.dto.Account.*;
+import co.edu.uniquindio.proyecto.dto.EmailDTO;
+import co.edu.uniquindio.proyecto.dto.JWT.TokenDTO;
 import co.edu.uniquindio.proyecto.exception.account.EmailNotFoundException;
 import co.edu.uniquindio.proyecto.exception.account.InvalidPasswordException;
+import co.edu.uniquindio.proyecto.repository.AccountRepository;
 import co.edu.uniquindio.proyecto.service.Interfaces.AccountService;
+import co.edu.uniquindio.proyecto.service.Interfaces.EmailService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.security.auth.login.AccountNotFoundException;
 import java.net.PasswordAuthentication;
 import java.util.List;
+import java.util.Optional;
 
+import static org.hamcrest.CoreMatchers.any;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class AccountServiceTest {
@@ -21,6 +30,14 @@ class AccountServiceTest {
     @Autowired
     private AccountService accountService;
 
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @MockBean
+        private EmailService emailService;
+
+    @MockBean
+    private PasswordEncoder passwordEncoder;
 
 
     /**
@@ -51,17 +68,16 @@ class AccountServiceTest {
 
     @Test
     public void loginAccountTest() {
-        // Datos de prueba: Asegúrate de que este usuario ya existe en la base de datos
         String email = "brandonca123@gmai.com";
-        String password = "M@mahermosa123";  // Asegúrate de que esta contraseña sea válida para el usuario
+        String password = "M@mahermosa123";  // Contraseña válida
 
-        // Crear el DTO con las credenciales del usuario almacenado en la base de datos
         LoginDTO createLoginDTO = new LoginDTO(email, password);
 
-        // Llamar al método iniciarSesion y verificar que no lanza excepciones
         assertDoesNotThrow(() -> {
-            String result = accountService.iniciarSesion(createLoginDTO);
-            assertTrue(result.contains("Inicio de sesión exitoso para el usuario"));
+            TokenDTO tokenDTO = accountService.iniciarSesion(createLoginDTO);
+
+            // Imprimir el token en la consola
+            System.out.println("Token generado: " + tokenDTO.token());
         });
     }
 
@@ -165,11 +181,50 @@ class AccountServiceTest {
 
     @Test
     public void activateAccountTest() throws Exception {
-        String correo = "camilocuenca1810@gmail.com";
-        String code = "be31e14f";
+        String correo = "ba5808864@gmail.com";
+        String code = "ef7b359d";
         accountService.activateAccount(correo,code);
 
     }
+
+    /**
+     * Metodo para mandar el codigo de cambio de password
+     * @throws Exception
+     */
+    @Test
+        void testSendPasswordRecoveryCode_success() throws Exception {
+            // Datos de prueba
+            String email = "ba5808864@gmail.com";
+
+            // Ejecutar el método
+            String result = accountService.sendPasswordRecoveryCode(email);
+
+            // Verificaciones
+            assertEquals("Código de recuperación enviado al correo " + email, result);
+        }
+
+    /**
+     * el metodo de cambio de contraseña que no alcance hacer
+     * @throws Exception
+     */
+    @Test
+    void testCambiarPassword_success() throws Exception {
+        // Datos de prueba
+        String verificationCode = "2b9ebe95";
+        String newPassword = "M@mahermosa123";
+        String confirmationPassword = "M@mahermosa123";
+
+        changePasswordDTO changePasswordDTO = new changePasswordDTO(verificationCode, newPassword, confirmationPassword);
+
+        accountService.cambiarPassword(changePasswordDTO);
+
+    }
+
+
+      
+
+
+
 
 
 }

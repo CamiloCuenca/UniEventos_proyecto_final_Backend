@@ -30,7 +30,7 @@ public class Account {
     private LocalDateTime registrationDate;
     private String password;
     private AccountStatus status;
-    private ValidationCode passwordValidationCode;
+    private ValidationCodePassword passwordValidationCode;
     private User user;
 
 }

@@ -13,5 +13,12 @@ public interface AccountRepository extends MongoRepository<Account, String> {
     Optional<Account> findByEmail(String email);
     @Query("{'user._id': ?0}")
     Optional<Account> findByIdnumber(String accountId);
+
+
+
+    @Query("{'passwordValidationCode': ?0}")
+    Optional<Account> findByPasswordValidationCode(String passwordValidationCode);
+
+
 }
 
