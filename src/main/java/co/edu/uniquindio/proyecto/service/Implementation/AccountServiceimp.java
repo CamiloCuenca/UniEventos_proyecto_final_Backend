@@ -2,8 +2,10 @@ package co.edu.uniquindio.proyecto.service.Implementation;
 
 import co.edu.uniquindio.proyecto.Enum.AccountStatus;
 import co.edu.uniquindio.proyecto.Enum.Rol;
+import co.edu.uniquindio.proyecto.config.JWTUtils;
 import co.edu.uniquindio.proyecto.dto.Account.*;
 import co.edu.uniquindio.proyecto.dto.EmailDTO;
+import co.edu.uniquindio.proyecto.dto.JWT.TokenDTO;
 import co.edu.uniquindio.proyecto.exception.account.*;
 import co.edu.uniquindio.proyecto.model.Accounts.Account;
 import co.edu.uniquindio.proyecto.model.Accounts.User;
@@ -20,10 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.security.auth.login.AccountNotFoundException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Transactional
@@ -34,6 +33,25 @@ public class AccountServiceimp implements AccountService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final JWTUtils jwtUtils;
+
+    @Autowired
+    EmailService emailService;
+
+    /**
+     * Metodo encargado de la estructura del token.
+     *
+     * @param account
+     * @return
+     */
+    private Map<String, Object> construirClaims(Account account) {
+        return Map.of(
+                "rol", account.getRol(),
+                "nombre", account.getUser().getName(),
+                "id", account.getAccountId()
+        );
+    }
+
     private boolean existsEmail(String email) {
         return cuentaRepo.findByEmail(email).isPresent();
     }
@@ -42,11 +60,16 @@ public class AccountServiceimp implements AccountService {
         return cuentaRepo.findByIdnumber(idNumber).isPresent();
     }
 
-    @Autowired
-    EmailService emailService;
-
+    /**
+     * Metodo encargado del inicio de sesion de la cuenta Encriptado la clave del usuario y a su vez generando un token segun su rol.
+     *
+     * @param loginDTO
+     * @return
+     * @throws EmailNotFoundException
+     * @throws InvalidPasswordException
+     */
     @Override
-    public String iniciarSesion(LoginDTO loginDTO) throws EmailNotFoundException, InvalidPasswordException {
+    public TokenDTO iniciarSesion(LoginDTO loginDTO) throws EmailNotFoundException, InvalidPasswordException {
         Optional<Account> optionalAccount = cuentaRepo.findByEmail(loginDTO.email());
 
         // Corregido: lanzar excepción si no se encuentra el email
@@ -60,11 +83,18 @@ public class AccountServiceimp implements AccountService {
         if (!passwordEncoder.matches(loginDTO.password(), account.getPassword())) {
             throw new InvalidPasswordException();
         }
-
-        // Retorna mensaje de éxito con el nombre del usuario
-        return "Inicio de sesión exitoso para el usuario " + account.getUser().getName();
+        Map<String, Object> map = construirClaims(account);
+        return new TokenDTO(jwtUtils.generateToken(account.getEmail(), map));
     }
 
+    /**
+     * Metodo encargado de Activar la cuenta con el codigo mandado por correo.
+     *
+     * @param correo
+     * @param code
+     * @return
+     * @throws Exception
+     */
     @Override
     public String activateAccount(String correo, String code) throws Exception {
         Optional<Account> optionalAccount = cuentaRepo.findByEmail(correo);
@@ -139,11 +169,12 @@ public class AccountServiceimp implements AccountService {
                 "Atentamente,\n" +
                 "El equipo de UniEventos";
 
-        emailService.sendMail( new EmailDTO(newAccount.getEmail(), "\"Activación de cuenta\"",  plainTextMessage));
+        emailService.sendMail(new EmailDTO(newAccount.getEmail(), "\"Activación de cuenta\"", plainTextMessage));
 
 
         return createdAccount.getAccountId();
     }
+
     // Método auxiliar para generar un código de validación aleatorio
     private String generateValidationCode() {
         return UUID.randomUUID().toString().substring(0, 8); // Código de 8 caracteres
@@ -261,8 +292,6 @@ public class AccountServiceimp implements AccountService {
     public String cambiarPassword(changePasswordDTO changePasswordDTO) throws Exception {
         return "";
     }
-
-
 
 
 }

@@ -1,6 +1,7 @@
 package co.edu.uniquindio.proyecto.model.Accounts;
 
 import co.edu.uniquindio.proyecto.dto.Account.*;
+import co.edu.uniquindio.proyecto.dto.JWT.TokenDTO;
 import co.edu.uniquindio.proyecto.exception.account.EmailNotFoundException;
 import co.edu.uniquindio.proyecto.exception.account.InvalidPasswordException;
 import co.edu.uniquindio.proyecto.service.Interfaces.AccountService;
@@ -51,17 +52,16 @@ class AccountServiceTest {
 
     @Test
     public void loginAccountTest() {
-        // Datos de prueba: Asegúrate de que este usuario ya existe en la base de datos
         String email = "brandonca123@gmai.com";
-        String password = "M@mahermosa123";  // Asegúrate de que esta contraseña sea válida para el usuario
+        String password = "M@mahermosa123";  // Contraseña válida
 
-        // Crear el DTO con las credenciales del usuario almacenado en la base de datos
         LoginDTO createLoginDTO = new LoginDTO(email, password);
 
-        // Llamar al método iniciarSesion y verificar que no lanza excepciones
         assertDoesNotThrow(() -> {
-            String result = accountService.iniciarSesion(createLoginDTO);
-            assertTrue(result.contains("Inicio de sesión exitoso para el usuario"));
+            TokenDTO tokenDTO = accountService.iniciarSesion(createLoginDTO);
+
+            // Imprimir el token en la consola
+            System.out.println("Token generado: " + tokenDTO.token());
         });
     }
 

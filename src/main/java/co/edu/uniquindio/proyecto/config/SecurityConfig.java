@@ -1,4 +1,4 @@
-package co.edu.uniquindio.proyecto.model.Accounts;
+package co.edu.uniquindio.proyecto.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

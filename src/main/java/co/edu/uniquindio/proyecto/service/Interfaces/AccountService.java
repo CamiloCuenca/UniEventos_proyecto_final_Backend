@@ -1,6 +1,7 @@
 package co.edu.uniquindio.proyecto.service.Interfaces;
 
 import co.edu.uniquindio.proyecto.dto.Account.*;
+import co.edu.uniquindio.proyecto.dto.JWT.TokenDTO;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface AccountService {
 
     String cambiarPassword(changePasswordDTO changePasswordDTO) throws Exception;
 
-    String iniciarSesion(LoginDTO loginDTO) throws Exception;
+    TokenDTO iniciarSesion(LoginDTO loginDTO) throws Exception;
 
     String activateAccount(String correo ,String code) throws Exception;
 
