@@ -19,10 +19,8 @@ import static org.simplejavamail.config.ConfigLoader.Property.SMTP_PORT;
 @Service
 
 public class EmailServiceImp implements EmailService {
-    //private final String SMTP_USERNAME = "unieventosproyect@gmail.com";
-    private final String SMTP_USERNAME = "camilocuencadev@gmail.com";
-    //private final String  SMTP_PASSWORD = "vhopyvooxyyyrlne";
-    private final String  SMTP_PASSWORD ="pvalybwlfpebggub";
+    private final String SMTP_USERNAME = "unieventosproyect@gmail.com";
+    private final String  SMTP_PASSWORD ="fyncswwbtqwubuja";
 
     @Override
     @Async
