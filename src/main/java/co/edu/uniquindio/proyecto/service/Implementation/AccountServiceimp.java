@@ -39,6 +39,7 @@ public class AccountServiceimp implements AccountService {
     @Autowired
     EmailService emailService;
 
+
     /**
      * Metodo encargado de la estructura del token.
      *
@@ -88,37 +89,6 @@ public class AccountServiceimp implements AccountService {
         return new TokenDTO(jwtUtils.generateToken(account.getEmail(), map));
     }
 
-    /**
-     * Metodo encargado de Activar la cuenta con el codigo mandado por correo.
-     *
-     * @param correo
-     * @param code
-     * @return
-     * @throws Exception
-     */
-    @Override
-    public String activateAccount(String correo, String code) throws Exception {
-        Optional<Account> optionalAccount = cuentaRepo.findByEmail(correo);
-        if (optionalAccount.isEmpty()) {
-            throw new EmailNotFoundException(correo);
-        }
-
-        Account account = optionalAccount.get();
-        ValidationCode validationCode = account.getRegistrationValidationCode();
-
-        if (validationCode == null || validationCode.isExpired()) {
-            throw new ValidationCodeExpiredException();
-        }
-
-        if (!validationCode.getCode().equals(code)) {
-            throw new InvalidValidationCodeException();
-        }
-
-        account.setStatus(AccountStatus.ACTIVO);
-        cuentaRepo.save(account);
-
-        return "Cuenta activada exitosamente";
-    }
 
     /**
      * Metodo encargado de crear una cuenta.
@@ -180,8 +150,6 @@ public class AccountServiceimp implements AccountService {
     private String generateValidationCode() {
         return UUID.randomUUID().toString().substring(0, 8); // Código de 8 caracteres
     }
-
-
 
 
     /**
@@ -288,6 +256,7 @@ public class AccountServiceimp implements AccountService {
 
     /**
      * Metodo para enviar el codigo de cambio de contraseña
+     *
      * @param email
      * @return
      * @throws Exception
@@ -321,24 +290,28 @@ public class AccountServiceimp implements AccountService {
 
     /**
      * El metodo que estaba implementado para el cambio de contraseña
+     *
      * @param changePasswordDTO
      * @return
      * @throws Exception
      */
+
     @Override
-    public String cambiarPassword(changePasswordDTO changePasswordDTO) throws Exception {
-        // Buscar la cuenta por el código de recuperación
-        Optional<Account> optionalAccount = cuentaRepo.findByPasswordValidationCode(changePasswordDTO.verificationCode());
+    public String changePassword(changePasswordDTO changePasswordDTO, String correo, String code) throws Exception {
+        Optional<Account> optionalAccount = cuentaRepo.findByEmail(correo);
         if (optionalAccount.isEmpty()) {
-            throw new InvalidValidationCodeException("El código de recuperación es incorrecto.");
+            throw new EmailNotFoundException(correo);
         }
 
         Account account = optionalAccount.get();
-        ValidationCode validationCodeObj = account.getRegistrationValidationCode();
+        ValidationCodePassword validationCodePassword = account.getPasswordValidationCode();
 
-        // Validar si el código ha expirado
-        if (validationCodeObj.isExpired()) {
-            throw new ValidationCodeExpiredException("El código de recuperación ha expirado.");
+        if (validationCodePassword == null || validationCodePassword.isExpired()) {
+            throw new ValidationCodeExpiredException();
+        }
+
+        if (!validationCodePassword.getCode().equals(code)) {
+            throw new InvalidValidationCodeException();
         }
 
         // Verificar que las contraseñas ingresadas coinciden
@@ -351,16 +324,47 @@ public class AccountServiceimp implements AccountService {
         account.setPassword(encryptedPassword);
 
         // Limpiar el código de recuperación para evitar su reutilización
-        account.setRegistrationValidationCode(null);
-
+        account.setPasswordValidationCode(null);
         // Guardar la cuenta actualizada
         cuentaRepo.save(account);
+
 
         return "La contraseña ha sido cambiada exitosamente.";
     }
 
+    /**
+     * Metodo encargado de Activar la cuenta con el codigo mandado por correo.
+     *
+     * @param correo
+     * @param code
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public String activateAccount(String correo, String code) throws Exception {
+        Account account = cuentaRepo.findByEmail(correo)
+                .orElseThrow(() -> new EmailNotFoundException(correo));
 
+        ValidationCode validationCode = account.getRegistrationValidationCode();
 
+        if (validationCode == null) {
+            throw new ValidationCodeExpiredException("El código de validación no existe.");
+        }
+
+        if (validationCode.isExpired()) {
+            throw new ValidationCodeExpiredException("El código de validación ha expirado.");
+        }
+
+        if (!validationCode.getCode().equals(code)) {
+            throw new InvalidValidationCodeException("El código de validación es inválido.");
+        }
+
+        account.setRegistrationValidationCode(null);
+        account.setStatus(AccountStatus.ACTIVO);
+        cuentaRepo.save(account);
+
+        return "Cuenta activada exitosamente";
+    }
 
 
 }

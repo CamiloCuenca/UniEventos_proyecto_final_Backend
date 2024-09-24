@@ -19,11 +19,11 @@ public interface AccountService {
 
     String sendPasswordRecoveryCode(String correo) throws Exception;
 
-    String cambiarPassword(changePasswordDTO changePasswordDTO) throws Exception;
+    String changePassword(changePasswordDTO changePasswordDTO, String corre, String code) throws Exception;
 
     TokenDTO iniciarSesion(LoginDTO loginDTO) throws Exception;
 
-    String activateAccount(String correo ,String code) throws Exception;
+    String activateAccount(String correo, String code) throws Exception;
 
 
 }
