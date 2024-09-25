@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @ToString
-@Document ("Carrito")
+@Document ("Cart")
 public class Cart {
 
     @Id

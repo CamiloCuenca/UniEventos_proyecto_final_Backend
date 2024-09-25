@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Document ("Orden")
+@Document ("Order")
 public class Order {
 
     @Id

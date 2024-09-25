@@ -4,11 +4,9 @@ import co.edu.uniquindio.proyecto.dto.Account.*;
 import co.edu.uniquindio.proyecto.dto.JWT.TokenDTO;
 import co.edu.uniquindio.proyecto.repository.AccountRepository;
 import co.edu.uniquindio.proyecto.service.Interfaces.AccountService;
-import co.edu.uniquindio.proyecto.service.Interfaces.EmailService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.security.auth.login.AccountNotFoundException;
@@ -64,7 +62,7 @@ class AccountServiceTest {
         LoginDTO createLoginDTO = new LoginDTO(email, password);
 
         assertDoesNotThrow(() -> {
-            TokenDTO tokenDTO = accountService.iniciarSesion(createLoginDTO);
+            TokenDTO tokenDTO = accountService.login(createLoginDTO);
 
             // Imprimir el token en la consola
             System.out.println("Token generado: " + tokenDTO.token());
@@ -78,7 +76,7 @@ class AccountServiceTest {
      * se reflejan correctamente.
      */
     @Test
-    public void actualizarCuentaTest() {
+    public void updateTestAccount() {
         String idCuenta = "66eb290b65664d4c873bc362"; // ID de la cuenta existente
         editAccountDTO editAccountDTO = new editAccountDTO(
                 idCuenta, // ID de la cuenta a modificar
