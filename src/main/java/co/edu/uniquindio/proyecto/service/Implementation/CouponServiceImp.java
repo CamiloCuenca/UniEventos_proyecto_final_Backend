@@ -11,7 +11,6 @@ import co.edu.uniquindio.proyecto.service.Interfaces.CouponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,7 +57,7 @@ public class CouponServiceImp implements CouponService {
         Coupon coupon = couponRepository.findByCode(code);
 
         // Verificar el tipo de cupón (UNICO o MULTIPLE)
-        if (coupon.getType() == TypeCoupon.UNICO && coupon.getStatus() == CouponStatus.NO_DISPONIBLE) {
+        if (coupon.getType() == TypeCoupon.ONLY && coupon.getStatus() == CouponStatus.NO_DISPONIBLE) {
             throw new Exception("El cupón ya ha sido utilizado");
         }
 
@@ -70,7 +69,7 @@ public class CouponServiceImp implements CouponService {
         double discount = applyDiscountToOrder(order, coupon);
 
         // Marcar el cupón como usado si es UNICO
-        if (coupon.getType() == TypeCoupon.UNICO) {
+        if (coupon.getType() == TypeCoupon.ONLY) {
             coupon.setStatus(CouponStatus.NO_DISPONIBLE);
             couponRepository.save(coupon);
         }

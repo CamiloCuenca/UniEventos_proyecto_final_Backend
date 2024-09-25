@@ -31,10 +31,10 @@ class EventTest {
         createDTOEvent crearEventoDTO = new createDTOEvent(
                 "rutaImg2",
                 "Evento prueba 2",
-                EventStatus.ACTIVO,
+                EventStatus.ACTIVE,
                 "Prueba Creacion de Evento 2",
                 "updated_image_localities.jpg",
-                EventType.CONCIERTO,
+                EventType.CONCERT,
                 LocalDateTime.of(2024, 10, 20, 18, 0),
                 "Armenia",
                 Arrays.asList(
@@ -59,10 +59,10 @@ class EventTest {
                 "66eb44b425a3ee6359359a2f", // El ID del evento a actualizar
                 "image2.jpg",
                 "Updated Event",
-                EventStatus.INACTIVO,
+                EventStatus.INACTIVE,
                 "Updated description",
                 "updated_image_localities.jpg",
-                EventType.CONCIERTO,
+                EventType.CONCERT,
                 LocalDateTime.of(2024, 10, 20, 18, 0),
                 "Updated City",
                 Arrays.asList(
@@ -103,7 +103,7 @@ class EventTest {
 
     @Test
     public void filterTest() throws Exception {
-        dtoEventFilter filtroEventoDTO = new dtoEventFilter("", EventType.CONCIERTO, "");
+        dtoEventFilter filtroEventoDTO = new dtoEventFilter("", EventType.CONCERT, "");
 
         System.out.println(eventService.filterEvents(filtroEventoDTO));
 

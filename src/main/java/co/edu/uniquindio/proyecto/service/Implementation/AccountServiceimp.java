@@ -116,7 +116,7 @@ public class AccountServiceimp implements AccountService {
         newAccount.setEmail(cuenta.email());
         //Clave encriptada.
         newAccount.setPassword(hashedPassword);
-        newAccount.setRol(Rol.CLIENTE);
+        newAccount.setRol(Rol.CUSTOMER);
         newAccount.setRegistrationDate(LocalDateTime.now());
         newAccount.setUser(new User(
                 cuenta.idNumber(),
@@ -124,7 +124,7 @@ public class AccountServiceimp implements AccountService {
                 cuenta.phoneNumber(),
                 cuenta.address()
         ));
-        newAccount.setStatus(AccountStatus.INACTIVO);
+        newAccount.setStatus(AccountStatus.INACTIVE);
 
         String validationCode = generateValidationCode();
         ValidationCode validationCodeObj = new ValidationCode(validationCode);
@@ -360,7 +360,7 @@ public class AccountServiceimp implements AccountService {
         }
 
         account.setRegistrationValidationCode(null);
-        account.setStatus(AccountStatus.ACTIVO);
+        account.setStatus(AccountStatus.ACTIVE);
         cuentaRepo.save(account);
 
         return "Cuenta activada exitosamente";
