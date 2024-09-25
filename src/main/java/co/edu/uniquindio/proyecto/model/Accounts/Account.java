@@ -19,11 +19,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString
 @Builder
-@Document("Cuenta")
+@Document("Account")
 public class Account {
 
     @Id
-    private String  accountId;
+    private String accountId;
     private String email;
     private ValidationCode registrationValidationCode;
     private Rol rol;
