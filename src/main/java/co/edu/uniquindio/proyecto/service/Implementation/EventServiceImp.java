@@ -43,6 +43,7 @@ public class EventServiceImp implements EventService {
         }
         // Mapping (transferring) the data from the DTO to an object of type Event
         Event newEvent = new Event();
+        newEvent.setCoverImage(crearEventoDTO.coverImage());
         newEvent.setName(crearEventoDTO.name());
         newEvent.setDescription(crearEventoDTO.description());
         newEvent.setDate(crearEventoDTO.date());
@@ -50,6 +51,8 @@ public class EventServiceImp implements EventService {
         newEvent.setImageLocalities(crearEventoDTO.imageLocalities());
         newEvent.setType(crearEventoDTO.type());
         newEvent.setCity(crearEventoDTO.city());
+        newEvent.setAddress(crearEventoDTO.address());
+        newEvent.setAmount(crearEventoDTO.amount());
         newEvent.setLocalities(crearEventoDTO.localities());
 
         // save user account to database
@@ -84,6 +87,8 @@ public class EventServiceImp implements EventService {
         eventMondificado.setType(editarEventoDTO.type());
         eventMondificado.setDate(editarEventoDTO.date());
         eventMondificado.setCity(editarEventoDTO.city());
+        eventMondificado.setAddress(editarEventoDTO.address());
+        eventMondificado.setAmount(editarEventoDTO.amount());
         eventMondificado.setLocalities(editarEventoDTO.localities());
 
         // Save the updated event
@@ -108,7 +113,7 @@ public class EventServiceImp implements EventService {
 
         // Eliminar el evento si se encuentra
         Event deletedEvent = optionalEvent.get();
-        eventRepository.delete(deletedEvent);
+        eventRepository.delete(deletedEvent);  // no eliminarlos cambiarlos a INACTIVOS
 
         return "El evento con id " + id + " fue eliminado correctamente.";
     }

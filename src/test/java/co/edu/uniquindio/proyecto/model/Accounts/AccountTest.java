@@ -37,10 +37,10 @@ class AccountServiceTest {
     @Test
     public void createAccountTest() {
         createAccountDTO createAccountDTO = new createAccountDTO(
-                "100000000101", // Identificación
+                "1005774025", // Identificación
                 "Brandon Montealegre", // Nombre
-                "12121", // Número de teléfono
-                "Calle 123", // Dirección
+                "3245478525", // Número de teléfono
+                "Crr 22 # 7-12", // Dirección
                 "ba5808864@gmail.com", // Correo
                 "M@mahermosa123" // Contraseña
         );

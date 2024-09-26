@@ -25,5 +25,7 @@ public interface AccountService {
 
     String activateAccount(String correo, String code) throws Exception;
 
+    //Falta eliminar cuenta
+
 
 }

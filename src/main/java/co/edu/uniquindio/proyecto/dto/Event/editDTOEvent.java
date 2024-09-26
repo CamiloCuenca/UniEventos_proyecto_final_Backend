@@ -21,6 +21,8 @@ public record editDTOEvent(
         EventType type,
         @NotBlank  @Future() LocalDateTime date,
         @NotBlank @Pattern(regexp = "^[a-zA-Z\\s]+$") String city,
+        @NotBlank String address,
+        @NotBlank int amount,
         @NotNull @Size(min = 1) List<Locality> localities
 ) {
 }
