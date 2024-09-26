@@ -29,7 +29,7 @@ class EventTest {
     public void createEvent() throws Exception {
         // Crear DTO para el nuevo evento
         createDTOEvent crearEventoDTO = new createDTOEvent(
-                "rutaImg2",
+                "rutaImg2.png",
                 "Evento prueba 2",
                 EventStatus.ACTIVE,
                 "Prueba Creacion de Evento 2",
@@ -37,6 +37,8 @@ class EventTest {
                 EventType.CONCERT,
                 LocalDateTime.of(2024, 10, 20, 18, 0),
                 "Armenia",
+                "crr 20 # 1-23",
+                600,
                 Arrays.asList(
                         new Locality(50.0, "General", 100, 200),
                         new Locality(150.0, "VIP", 50, 100)
@@ -65,6 +67,8 @@ class EventTest {
                 EventType.CONCERT,
                 LocalDateTime.of(2024, 10, 20, 18, 0),
                 "Updated City",
+                "crr 20 # 1-23",
+                600,
                 Arrays.asList(
                         new Locality(75.0, "General", 150, 250),
                         new Locality(200.0, "VIP", 80, 150)
