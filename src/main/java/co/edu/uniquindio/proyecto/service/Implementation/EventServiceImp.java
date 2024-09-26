@@ -108,7 +108,7 @@ public class EventServiceImp implements EventService {
 
         // Eliminar el evento si se encuentra
         Event deletedEvent = optionalEvent.get();
-        eventRepository.delete(deletedEvent);
+        eventRepository.delete(deletedEvent);  // no eliminarlos cambiarlos a INACTIVOS
 
         return "El evento con id " + id + " fue eliminado correctamente.";
     }
