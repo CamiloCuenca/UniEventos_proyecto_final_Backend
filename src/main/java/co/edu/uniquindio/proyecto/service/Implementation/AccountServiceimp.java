@@ -71,7 +71,7 @@ public class AccountServiceimp implements AccountService {
      * @throws InvalidPasswordException
      */
     @Override
-    public TokenDTO iniciarSesion(LoginDTO loginDTO) throws EmailNotFoundException, InvalidPasswordException {
+    public TokenDTO login(LoginDTO loginDTO) throws EmailNotFoundException, InvalidPasswordException {
         Optional<Account> optionalAccount = cuentaRepo.findByEmail(loginDTO.email());
 
         // Corregido: lanzar excepción si no se encuentra el email
@@ -116,7 +116,7 @@ public class AccountServiceimp implements AccountService {
         newAccount.setEmail(cuenta.email());
         //Clave encriptada.
         newAccount.setPassword(hashedPassword);
-        newAccount.setRol(Rol.CLIENTE);
+        newAccount.setRol(Rol.CUSTOMER);
         newAccount.setRegistrationDate(LocalDateTime.now());
         newAccount.setUser(new User(
                 cuenta.idNumber(),
@@ -124,7 +124,7 @@ public class AccountServiceimp implements AccountService {
                 cuenta.phoneNumber(),
                 cuenta.address()
         ));
-        newAccount.setStatus(AccountStatus.INACTIVO);
+        newAccount.setStatus(AccountStatus.INACTIVE);
 
         String validationCode = generateValidationCode();
         ValidationCode validationCodeObj = new ValidationCode(validationCode);
@@ -150,7 +150,6 @@ public class AccountServiceimp implements AccountService {
     private String generateValidationCode() {
         return UUID.randomUUID().toString().substring(0, 8); // Código de 8 caracteres
     }
-
 
     /**
      * Metodo para actualizarCuenta.
@@ -249,7 +248,7 @@ public class AccountServiceimp implements AccountService {
             throw new AccountNotFoundException(id);
         }
         Account cuenta = optionalCuenta.get();
-        cuenta.setStatus(AccountStatus.ELIMINADO);
+        cuenta.setStatus(AccountStatus.ELIMINATED);
         cuentaRepo.save(cuenta);
         return cuenta.getAccountId();
     }
@@ -360,7 +359,7 @@ public class AccountServiceimp implements AccountService {
         }
 
         account.setRegistrationValidationCode(null);
-        account.setStatus(AccountStatus.ACTIVO);
+        account.setStatus(AccountStatus.ACTIVE);
         cuentaRepo.save(account);
 
         return "Cuenta activada exitosamente";

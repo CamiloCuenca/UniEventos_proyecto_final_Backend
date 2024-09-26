@@ -1,7 +1,7 @@
 package co.edu.uniquindio.proyecto.Enum;
 
 public enum EventType {
-    DEPORTE,CONCIERTO,CULTURAL,BELLEZA,FESTIVAL,GALA,CONFERENCIA;
+    DEPORT, CONCERT, CULTURAL, BEAUTY, FESTIVAL, GALA, CONFERENCE;
 
 
 }

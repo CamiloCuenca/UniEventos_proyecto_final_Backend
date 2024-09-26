@@ -11,7 +11,6 @@ import co.edu.uniquindio.proyecto.service.Interfaces.CouponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,7 +38,7 @@ public class CouponServiceImp implements CouponService {
     @Override
     public boolean validateCoupon(String code) throws Exception {
         Coupon coupon = couponRepository.findByCode(code);
-        if(coupon == null || coupon.getStatus() != CouponStatus.DISPONIBLE){
+        if(coupon == null || coupon.getStatus() != CouponStatus.AVAILABLE){
             throw new Exception("El coupon no existe o no esta activo");
         }
 
@@ -58,7 +57,7 @@ public class CouponServiceImp implements CouponService {
         Coupon coupon = couponRepository.findByCode(code);
 
         // Verificar el tipo de cupón (UNICO o MULTIPLE)
-        if (coupon.getType() == TypeCoupon.UNICO && coupon.getStatus() == CouponStatus.NO_DISPONIBLE) {
+        if (coupon.getType() == TypeCoupon.ONLY && coupon.getStatus() == CouponStatus.NOT_AVAILABLE) {
             throw new Exception("El cupón ya ha sido utilizado");
         }
 
@@ -70,8 +69,8 @@ public class CouponServiceImp implements CouponService {
         double discount = applyDiscountToOrder(order, coupon);
 
         // Marcar el cupón como usado si es UNICO
-        if (coupon.getType() == TypeCoupon.UNICO) {
-            coupon.setStatus(CouponStatus.NO_DISPONIBLE);
+        if (coupon.getType() == TypeCoupon.ONLY) {
+            coupon.setStatus(CouponStatus.NOT_AVAILABLE);
             couponRepository.save(coupon);
         }
 
@@ -94,7 +93,7 @@ public class CouponServiceImp implements CouponService {
                 .orElseThrow(() -> new Exception("El cupón no existe"));
 
         // Cambiar el estado del cupón a NO_DISPONIBLE
-        coupon.setStatus(CouponStatus.NO_DISPONIBLE);
+        coupon.setStatus(CouponStatus.NOT_AVAILABLE);
 
         // Guardar el cupón actualizado en la base de datos
         couponRepository.save(coupon);
@@ -106,7 +105,7 @@ public class CouponServiceImp implements CouponService {
         Coupon coupon = couponRepository.findById(couponId)
                 .orElseThrow(() -> new Exception("El cupón no existe"));
         // Cambiar el estado del cupón a DISPONIBLE
-        coupon.setStatus(CouponStatus.DISPONIBLE);
+        coupon.setStatus(CouponStatus.AVAILABLE);
 
         // Guardar el cupón actualizado en la base de datos
         couponRepository.save(coupon);

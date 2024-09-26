@@ -21,7 +21,7 @@ public interface AccountService {
 
     String changePassword(changePasswordDTO changePasswordDTO, String corre, String code) throws Exception;
 
-    TokenDTO iniciarSesion(LoginDTO loginDTO) throws Exception;
+    TokenDTO login(LoginDTO loginDTO) throws Exception;
 
     String activateAccount(String correo, String code) throws Exception;
 

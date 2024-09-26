@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Document("Evento")
+@Document("Event")
 public class Event {
     @Id
     private String id;

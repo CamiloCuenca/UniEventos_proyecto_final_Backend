@@ -22,7 +22,7 @@ public class CouponTest {
 
     @Test
     public void createCouponTest() throws Exception {
-        CouponDTO  couponDTO = new CouponDTO("Amor y la Amistad 3","123","10", LocalDateTime.now(), CouponStatus.NO_DISPONIBLE, TypeCoupon.MULTIPLE);
+        CouponDTO  couponDTO = new CouponDTO("Amor y la Amistad 3","123","10", LocalDateTime.now(), CouponStatus.NOT_AVAILABLE, TypeCoupon.MULTIPLE);
         couponService.createCoupon(couponDTO);
 
     }
