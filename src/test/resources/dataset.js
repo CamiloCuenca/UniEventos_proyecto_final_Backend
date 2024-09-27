@@ -1,10 +1,9 @@
 db = connect('mongodb://localhost:27017/proyecto');
 
 // Account
-// Account
 db.Account.insertMany([
     {
-        _id: ObjectId(),
+        _id: ObjectId("66f70c5a0000000000ae1ccf"),
         email: "juan.perez@example.com",
         registrationValidationCode: {
             creationDate: new Date(),
@@ -23,7 +22,7 @@ db.Account.insertMany([
         }
     },
     {
-        _id: ObjectId(),
+        _id: ObjectId("66f70c5a0000000000ae1cd0"),
         email: "ana.lopez@example.com",
         registrationValidationCode: {
             creationDate: new Date(),
@@ -42,7 +41,7 @@ db.Account.insertMany([
         }
     },
     {
-        _id: ObjectId(),
+        _id: ObjectId("66f70c5a0000000000ae1cd1"),
         email: "carlos.martinez@example.com",
         registrationValidationCode: {
             creationDate: new Date(),
@@ -61,7 +60,7 @@ db.Account.insertMany([
         }
     },
     {
-        _id: ObjectId(),
+        _id: ObjectId("66f70c5a0000000000ae1cd2"),
         email: "laura.gomez@example.com",
         registrationValidationCode: {
             creationDate: new Date(),
@@ -80,7 +79,7 @@ db.Account.insertMany([
         }
     },
     {
-        _id: ObjectId(),
+        _id: ObjectId("66f70c5a0000000000ae1cd3"),
         email: "brandon.montealegre@example.com",
         registrationValidationCode: {
             creationDate: new Date(),
@@ -99,7 +98,6 @@ db.Account.insertMany([
         }
     }
 ]);
-
 // EVent
 db.Event.insertMany([
     {
@@ -243,8 +241,79 @@ db.Event.insertMany([
         _class: "co.edu.uniquindio.proyecto.model.Events.Event"
     }
 ]);
-
 // Cart
+db.Cart.insertMany([
+    {
+        _id: ObjectId("66f7112588751406573dcef9"),
+        date: new Date(),
+        items: [
+            {
+                amount: 2,
+                capacity: 250,
+                localityName: "General",
+                idEvent: ObjectId("66f5c5a0de22e82833106d92") // Evento de prueba
+            }
+        ],
+        accountId: ObjectId("66f70c5a0000000000ae1ccf"), // Juan Perez
+        _class: "co.edu.uniquindio.proyecto.model.Carts.Cart"
+    },
+    {
+        _id: ObjectId("66f7112588751406573dcefa"),
+        date: new Date(),
+        items: [
+            {
+                amount: 1,
+                capacity: 150,
+                localityName: "VIP",
+                idEvent: ObjectId("66f5c5a0de22e82833106d93") // Evento de "Music Fest 2024"
+            }
+        ],
+        accountId: ObjectId("66f70c5a0000000000ae1cd0"), // Ana Lopez
+        _class: "co.edu.uniquindio.proyecto.model.Carts.Cart"
+    },
+    {
+        _id: ObjectId("66f7112588751406573dcefb"),
+        date: new Date(),
+        items: [
+            {
+                amount: 3,
+                capacity: 100,
+                localityName: "Palco",
+                idEvent: ObjectId("66f5c5a0de22e82833106d94") // Evento de "Art Expo 2024"
+            }
+        ],
+        accountId: ObjectId("66f70c5a0000000000ae1cd1"), // Carlos Martinez
+        _class: "co.edu.uniquindio.proyecto.model.Carts.Cart"
+    },
+    {
+        _id: ObjectId("66f7112588751406573dcefc"),
+        date: new Date(),
+        items: [
+            {
+                amount: 4,
+                capacity: 300,
+                localityName: "Preferencial",
+                idEvent: ObjectId("66f5c5a0de22e82833106d95") // Evento de "Startup Summit 2024"
+            }
+        ],
+        accountId: ObjectId("66f70c5a0000000000ae1cd2"), // Laura Gomez
+        _class: "co.edu.uniquindio.proyecto.model.Carts.Cart"
+    },
+    {
+        _id: ObjectId("66f7112588751406573dcefd"),
+        date: new Date(),
+        items: [
+            {
+                amount: 5,
+                capacity: 500,
+                localityName: "General",
+                idEvent: ObjectId("66f5c5a0de22e82833106d96") // Evento de "Science Fair 2024"
+            }
+        ],
+        accountId: ObjectId("66f70c5a0000000000ae1cd3"), // Brandon Montealegre
+        _class: "co.edu.uniquindio.proyecto.model.Carts.Cart"
+    }
+]);
 
 // Coupon
 
