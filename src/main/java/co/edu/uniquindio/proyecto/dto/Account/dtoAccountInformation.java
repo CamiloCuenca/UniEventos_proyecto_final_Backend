@@ -1,10 +1,14 @@
 package co.edu.uniquindio.proyecto.dto.Account;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.Length;
+
 public record dtoAccountInformation(
-        String idNumber,
-        String name,
-        String phoneNumber,
-        String address,
-        String email
+        @NotBlank @Length(max = 10) String idNumber,
+        @NotBlank @Length(max = 100) String name,
+        @NotBlank @Length(max = 10) String phoneNumber,
+        @Length(max = 100) String address,
+        @NotBlank @Length(max = 50) @Email String email
 ) {
 }

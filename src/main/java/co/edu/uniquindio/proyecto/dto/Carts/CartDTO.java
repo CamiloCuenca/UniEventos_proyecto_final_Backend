@@ -1,13 +1,16 @@
 package co.edu.uniquindio.proyecto.dto.Carts;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
 public record CartDTO(
-        String id,
+        @NotBlank String id,
         LocalDateTime date,
         List<CartDetailDTO> items,
-        double totalEventPrice
+        @Positive double totalEventPrice
 
 ) {
 }

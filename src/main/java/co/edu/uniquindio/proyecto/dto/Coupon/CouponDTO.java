@@ -2,14 +2,17 @@ package co.edu.uniquindio.proyecto.dto.Coupon;
 
 import co.edu.uniquindio.proyecto.Enum.CouponStatus;
 import co.edu.uniquindio.proyecto.Enum.TypeCoupon;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
 
 public record CouponDTO(
-        String name,
-        String code,
-        String discount,
-        LocalDateTime expirationDate,
-        CouponStatus status,
-        TypeCoupon type
+        @NotBlank @Length(max = 100) String name,
+        @NotBlank @Length(min = 5, max = 5) String code,
+        @NotBlank String discount,
+        @NotNull LocalDateTime expirationDate,
+        @NotNull CouponStatus status,
+        @NotNull TypeCoupon type
 ) { }
