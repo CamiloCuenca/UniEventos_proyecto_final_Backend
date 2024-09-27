@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.Length;
 
 public record dtoEventFilter(
         @NotBlank @Length(max = 100) String name,
-        EventType type,
+        @NotBlank EventType type,
         @NotBlank @Pattern(regexp = "^[a-zA-Z\\s]+$")String city
 ) {
 }
