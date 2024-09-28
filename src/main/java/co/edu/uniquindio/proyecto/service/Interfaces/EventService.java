@@ -17,7 +17,6 @@ public interface EventService {
 
     List<ItemEventDTO> listEvents();
 
-    Event getById(String id) throws Exception;
 
     List<ItemEventDTO> filterEvents(dtoEventFilter filtroEventoDTO);
 }

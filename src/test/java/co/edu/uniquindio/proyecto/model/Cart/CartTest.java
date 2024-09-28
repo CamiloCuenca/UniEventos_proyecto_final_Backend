@@ -20,7 +20,7 @@ public class CartTest {
     @Test
     public void addItemToCartTest() throws Exception {
 
-        String accountId = "66f70c5a0000000000ae1ccf";
+        String accountId = "66f79539c15bdf6a1c74cb2d";
         CartDetailDTO  cartDetailDTO = new CartDetailDTO("66f5c5a0de22e82833106d92","Food Festival 2024","General","Medellín",30,2,250);
 
         cartService.addItemToCart(accountId,cartDetailDTO);
@@ -29,10 +29,10 @@ public class CartTest {
 
     @Test
     public void removeItemFromCartTest() throws Exception {
-        String accountId = "66a2c1517f3b340441ffdeb0";
-        String eventId = "66dcf9d99b293d0c2aba1376";
+        String accountId = "66f79539c15bdf6a1c74cb2d";
+        String eventId = "66f5c5a0de22e82833106d92";
 
-        cartService.removeItemFromCart(accountId, eventId);
+        cartService.removeItemFromCart(accountId,eventId);
 
     }
 }

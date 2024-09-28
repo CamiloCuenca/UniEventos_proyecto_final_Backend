@@ -11,8 +11,6 @@ public interface CartService {
 
     void removeItemFromCart(String accountId, String eventId) throws Exception;
 
-    Optional<Cart> getCartByAccountId(String accountId);
-
     void updateItemFromCart(String accountId,String eventId ) throws Exception;
 
 
