@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface CartRepository extends MongoRepository<Cart,String> {
     @Query("{'accountId': ?0}")
-    public Cart findByIdAccount(String accountId);
+    Optional<Cart> findByIdAccount(String accountId);
 }

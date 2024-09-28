@@ -21,6 +21,8 @@ public interface EventRepository extends MongoRepository<Event,String> {
             + "}")
     List<Event> findByFiltros(String nombre, String ciudad, EventType tipo);
 
+    Optional<Event> findAllById(String id);
+
 
     @Query("{'name': ?0}"+"{'date': ?1}")
     Optional<Account> findAllByNameAndDate(String name, LocalDateTime date);

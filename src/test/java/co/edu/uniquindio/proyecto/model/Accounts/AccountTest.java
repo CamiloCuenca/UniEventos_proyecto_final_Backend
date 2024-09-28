@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.security.auth.login.AccountNotFoundException;
+import javax.swing.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,12 +38,12 @@ class AccountServiceTest {
     @Test
     public void createAccountTest() {
         createAccountDTO createAccountDTO = new createAccountDTO(
-                "1005774025", // Identificación
+                "1121", // Identificación
                 "Brandon Montealegre", // Nombre
                 "3245478525", // Número de teléfono
                 "Crr 22 # 7-12", // Dirección
-                "ba5808864@gmail.com", // Correo
-                "M@mahermosa123" // Contraseña
+                "longir@gmail.com", // Correo
+                "123456112" // Contraseña
         );
 
         // Se espera que no se lance ninguna excepción al crear la cuenta
@@ -53,11 +54,23 @@ class AccountServiceTest {
         });
     }
 
+    /**
+     * Metodo encargado de activar la cuenta.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void activateAccountTest() throws Exception {
+        String correo = "longir@gmail.com";
+        String code = "4925b181";
+        accountService.activateAccount(correo, code);
+
+    }
 
     @Test
     public void loginAccountTest() {
-        String email = "brandonca123@gmai.com";
-        String password = "M@mahermosa123";  // Contraseña válida
+        String email = "ba5808864@gmail.com";
+        String password = "1234";  // Contraseña válida
 
         LoginDTO createLoginDTO = new LoginDTO(email, password);
 
@@ -77,13 +90,13 @@ class AccountServiceTest {
      */
     @Test
     public void updateTestAccount() {
-        String idCuenta = "66eb290b65664d4c873bc362"; // ID de la cuenta existente
+        String idCuenta = "66f79539c15bdf6a1c74cb2d"; // ID de la cuenta existente
         editAccountDTO editAccountDTO = new editAccountDTO(
                 idCuenta, // ID de la cuenta a modificar
-                "Pepito perez", // Nombre actualizado
+                "brandon", // Nombre actualizado
                 "12121", // Teléfono
                 "Nueva dirección", // Dirección actualizada
-                "canguro" // Contraseña actualizada
+                "1234567" // Contraseña actualizada
         );
 
         // Se espera que no se lance ninguna excepción al editar la cuenta
@@ -166,14 +179,6 @@ class AccountServiceTest {
         assertEquals(3, lista.size(), "La lista de cuentas debería contener 2 elementos.");
     }
 
-
-    @Test
-    public void activateAccountTest() throws Exception {
-        String correo = "brandon.montealegre@example.com";
-        String code = "d9cv6hhe";
-        accountService.activateAccount(correo, code);
-
-    }
 
     /**
      * Metodo para mandar el codigo de cambio de password

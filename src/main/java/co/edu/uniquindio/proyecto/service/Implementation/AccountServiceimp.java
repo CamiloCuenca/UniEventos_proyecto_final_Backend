@@ -41,7 +41,37 @@ public class AccountServiceimp implements AccountService {
 
 
     /**
-     * Metodo encargado de la estructura del token.
+     * Metodo encargado validar que el Email no este en uso
+     *
+     * @param email
+     * @return
+     */
+    private boolean existsEmail(String email) {
+        return cuentaRepo.findByEmail(email).isPresent();
+    }
+
+    /**
+     * Metodo para encriptar la contrasena.
+     *
+     * @param password
+     * @return
+     */
+    private String encryptPassword(String password) {
+        return passwordEncoder.encode(password);
+    }
+
+    /**
+     * Metodo encargado de validar que la cedula del usuario no este en uso.
+     *
+     * @param idNumber
+     * @return
+     */
+    private boolean idExists(String idNumber) {
+        return cuentaRepo.findByIdnumber(idNumber).isPresent();
+    }
+
+    /**
+     * Metodo encargado de crear el cuerpo del token.
      *
      * @param account
      * @return
@@ -54,16 +84,9 @@ public class AccountServiceimp implements AccountService {
         );
     }
 
-    private boolean existsEmail(String email) {
-        return cuentaRepo.findByEmail(email).isPresent();
-    }
-
-    private boolean idExists(String idNumber) {
-        return cuentaRepo.findByIdnumber(idNumber).isPresent();
-    }
-
     /**
-     * Metodo encargado del inicio de sesion de la cuenta Encriptado la clave del usuario y a su vez generando un token segun su rol.
+     * Método login(): Permite iniciar sesión utilizando las credenciales de correo y contraseña del usuario. Si la cuenta no está activa o la contraseña es incorrecta, lanza las excepciones correspondientes.
+     * Utiliza JWT para generar un token basado en los detalles de la cuenta (rol, nombre, id).
      *
      * @param loginDTO
      * @return
@@ -71,7 +94,7 @@ public class AccountServiceimp implements AccountService {
      * @throws InvalidPasswordException
      */
     @Override
-    public TokenDTO login(LoginDTO loginDTO) throws EmailNotFoundException, InvalidPasswordException {
+    public TokenDTO login(LoginDTO loginDTO) throws EmailNotFoundException, InvalidPasswordException, ActiveAccountException {
         Optional<Account> optionalAccount = cuentaRepo.findByEmail(loginDTO.email());
 
         // Corregido: lanzar excepción si no se encuentra el email
@@ -80,18 +103,24 @@ public class AccountServiceimp implements AccountService {
         }
 
         Account account = optionalAccount.get();
+        if (!account.getStatus().equals(AccountStatus.ACTIVE)) {
+            throw new ActiveAccountException("La cuenta no se encutra Activada. Porfavor activala para ingresar!");
+        }
 
         // Verificar si la contraseña es válida
         if (!passwordEncoder.matches(loginDTO.password(), account.getPassword())) {
             throw new InvalidPasswordException();
         }
+
+
         Map<String, Object> map = construirClaims(account);
         return new TokenDTO(jwtUtils.generateToken(account.getEmail(), map));
     }
 
 
     /**
-     * Metodo encargado de crear una cuenta.
+     * Método createAccount(): Crea una nueva cuenta, encripta la contraseña con BCryptPasswordEncoder, genera un código de validación, y envía un correo electrónico al usuario para activar la cuenta.
+     * Valida que el correo y el número de identificación no existan previamente en la base de datos.
      *
      * @param cuenta
      * @return
@@ -146,13 +175,17 @@ public class AccountServiceimp implements AccountService {
         return createdAccount.getAccountId();
     }
 
-    // Método auxiliar para generar un código de validación aleatorio
+    /**
+     * Metodo encargado de generar un codigo de validacion.
+     *
+     * @return
+     */
     private String generateValidationCode() {
         return UUID.randomUUID().toString().substring(0, 8); // Código de 8 caracteres
     }
 
     /**
-     * Metodo para actualizarCuenta.
+     * Metodo encargado de actualizar o editar los datos de la cuenta.
      *
      * @param cuenta
      * @return
@@ -166,23 +199,20 @@ public class AccountServiceimp implements AccountService {
             throw new AccountNtFoundException(cuenta.id());
         }
 
-        Account cuentaModificada = optionalAccount.get();
-        cuentaModificada.getUser().setName(cuenta.username());
-        cuentaModificada.getUser().setPhoneNumber(cuenta.phoneNumber());
-        cuentaModificada.getUser().setAddress(cuenta.address());
-        cuentaModificada.setPassword(cuenta.password());
-        //Segmento de codigo que se encarga de encriptar la clave.
-        if (cuenta.password() != null && !cuenta.password().isEmpty()) {
-            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-            String hashedPassword = bCryptPasswordEncoder.encode(cuenta.password());
-            cuentaModificada.setPassword(hashedPassword);
+        Account cuentaActualizada = optionalAccount.get();
+        cuentaActualizada.getUser().setName(cuenta.username());
+        cuentaActualizada.getUser().setPhoneNumber(cuenta.phoneNumber());
+        cuentaActualizada.getUser().setAddress(cuenta.address());
+        String newPassword = cuenta.password();
+        if (newPassword != null && !newPassword.isEmpty()) {
+            cuentaActualizada.setPassword(encryptPassword(newPassword));
         }
-        cuentaRepo.save(cuentaModificada);
-        return cuentaModificada.getAccountId();
+        cuentaRepo.save(cuentaActualizada);
+        return cuentaActualizada.getAccountId();
     }
 
     /**
-     * Metodo encargado de obtener la informacion de la cuenta.
+     * Método obtainAccountInformation(): Recupera la información básica de la cuenta basada en su ID.
      *
      * @param id
      * @return
@@ -210,7 +240,7 @@ public class AccountServiceimp implements AccountService {
     }
 
     /**
-     * Metodo para listar cuentas.
+     * Método listAccounts(): Devuelve una lista de todas las cuentas registradas en la base de datos, lanzando una excepción si no se encuentran cuentas.
      *
      * @return
      */
@@ -238,7 +268,7 @@ public class AccountServiceimp implements AccountService {
     }
 
     /**
-     * Metodo para eliminarCuenta.
+     * Método deleteAccount(): Cambia el estado de una cuenta a "ELIMINADA" en lugar de borrarla físicamente.
      *
      * @param id
      * @return
@@ -258,7 +288,7 @@ public class AccountServiceimp implements AccountService {
     }
 
     /**
-     * Metodo para enviar el codigo de cambio de contraseña
+     * Método sendPasswordRecoveryCode(): Genera un código de validación para recuperar la contraseña y lo envía al correo electrónico del usuario.
      *
      * @param email
      * @return
@@ -292,7 +322,7 @@ public class AccountServiceimp implements AccountService {
     }
 
     /**
-     * El metodo que estaba implementado para el cambio de contraseña
+     * Método changePassword(): Permite al usuario cambiar su contraseña tras verificar que el código de recuperación es válido y no ha expirado.
      *
      * @param changePasswordDTO
      * @return
@@ -336,7 +366,7 @@ public class AccountServiceimp implements AccountService {
     }
 
     /**
-     * Metodo encargado de Activar la cuenta con el codigo mandado por correo.
+     * Método activateAccount(): Activa la cuenta de un usuario utilizando el código de validación que se envía por correo al momento de crear la cuenta.
      *
      * @param correo
      * @param code
@@ -344,9 +374,13 @@ public class AccountServiceimp implements AccountService {
      * @throws Exception
      */
     @Override
-    public String activateAccount(String correo, String code) throws Exception {
+    public String activateAccount(String correo, String code) throws EmailNotFoundException, ValidationCodeExpiredException, InvalidValidationCodeException {
         Account account = cuentaRepo.findByEmail(correo)
                 .orElseThrow(() -> new EmailNotFoundException(correo));
+
+        if (account.getStatus().equals(AccountStatus.ACTIVE)) {
+            throw new AccountAlreadyActiveException("La cuenta ya esta activada.");
+        }
 
         ValidationCode validationCode = account.getRegistrationValidationCode();
 
@@ -361,6 +395,7 @@ public class AccountServiceimp implements AccountService {
         if (!validationCode.getCode().equals(code)) {
             throw new InvalidValidationCodeException("El código de validación es inválido.");
         }
+
 
         account.setRegistrationValidationCode(null);
         account.setStatus(AccountStatus.ACTIVE);
