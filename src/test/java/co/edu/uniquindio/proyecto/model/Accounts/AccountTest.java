@@ -57,8 +57,8 @@ class AccountServiceTest {
 
     @Test
     public void loginAccountTest() {
-        String email = "brandonca123@gmai.com";
-        String password = "M@mahermosa123";  // Contraseña válida
+        String email = "ba5808864@gmail.com";
+        String password = "1234";  // Contraseña válida
 
         LoginDTO createLoginDTO = new LoginDTO(email, password);
 
