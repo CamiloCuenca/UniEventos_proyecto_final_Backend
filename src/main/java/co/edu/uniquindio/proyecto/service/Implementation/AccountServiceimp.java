@@ -190,6 +190,10 @@ public class AccountServiceimp implements AccountService {
      */
     @Override
     public dtoAccountInformation obtainAccountInformation(String id) throws AccountNotFoundException {
+        if (id == null) {
+            throw new IllegalArgumentException("El ID no debe ser null");
+        }
+
         Optional<Account> optionalCuenta = cuentaRepo.findById(id);
         if (optionalCuenta.isEmpty()) {
             throw new AccountNotFoundException(id);
