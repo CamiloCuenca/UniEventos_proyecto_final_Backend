@@ -17,6 +17,10 @@ public class CartTest {
     @Autowired
     private CartService cartService;
 
+    /**
+     * Metodo encargado de agregar un item o producto al carro.
+     * @throws Exception
+     */
     @Test
     public void addItemToCartTest() throws Exception {
 
@@ -27,6 +31,10 @@ public class CartTest {
 
     }
 
+    /**
+     * Metodo para eliminar o retirar un producto o item del carro.
+     * @throws Exception
+     */
     @Test
     public void removeItemFromCartTest() throws Exception {
         String accountId = "66f79539c15bdf6a1c74cb2d";
