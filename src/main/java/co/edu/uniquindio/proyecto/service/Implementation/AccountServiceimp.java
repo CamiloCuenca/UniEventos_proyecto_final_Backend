@@ -114,6 +114,9 @@ public class AccountServiceimp implements AccountService {
 
 
         Map<String, Object> map = construirClaims(account);
+
+
+
         return new TokenDTO(jwtUtils.generateToken(account.getEmail(), map));
     }
 

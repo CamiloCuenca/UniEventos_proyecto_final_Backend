@@ -27,6 +27,11 @@ public class Coupon {
     private String name;
     private String discount;
 
+    // Nuevo campo para asociar el cupón a un evento específico
+    private String eventId;
+
+    // Nuevos campos para manejar el rango de fechas
+    private LocalDateTime startDate;
 
 
 }
