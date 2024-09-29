@@ -54,23 +54,11 @@ class AccountServiceTest {
         });
     }
 
-    /**
-     * Metodo encargado de activar la cuenta.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void activateAccountTest() throws Exception {
-        String correo = "longir@gmail.com";
-        String code = "4925b181";
-        accountService.activateAccount(correo, code);
-
-    }
 
     @Test
     public void loginAccountTest() {
-        String email = "ba5808864@gmail.com";
-        String password = "1234";  // Contraseña válida
+        String email = "brandonca123@gmai.com";
+        String password = "M@mahermosa123";  // Contraseña válida
 
         LoginDTO createLoginDTO = new LoginDTO(email, password);
 
@@ -179,6 +167,14 @@ class AccountServiceTest {
         assertEquals(3, lista.size(), "La lista de cuentas debería contener 2 elementos.");
     }
 
+
+    @Test
+    public void activateAccountTest() throws Exception {
+        String correo = "brandon.montealegre@example.com";
+        String code = "d9cv6hhe";
+        accountService.activateAccount(correo, code);
+
+    }
 
     /**
      * Metodo para mandar el codigo de cambio de password
