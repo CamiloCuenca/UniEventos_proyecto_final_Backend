@@ -21,6 +21,12 @@ public class CouponServiceImp implements CouponService {
     private final CouponRepository couponRepository;
     private final OrderRepository orderRepository;
 
+    /**
+     * Metodo para crear un cupon.
+     * @param couponDTO Data Transfer Object containing coupon details
+     * @return
+     * @throws Exception
+     */
     @Override
     public String createCoupon(CouponDTO couponDTO) throws Exception {
         Coupon newCoupon = new Coupon();
@@ -35,6 +41,12 @@ public class CouponServiceImp implements CouponService {
         return createdCoupon.getCouponId();
     }
 
+    /**
+     * Metodo para validar que cupon exista.
+     * @param code Coupon code
+     * @return
+     * @throws Exception
+     */
     @Override
     public boolean validateCoupon(String code) throws Exception {
         Coupon coupon = couponRepository.findByCode(code);
@@ -46,6 +58,13 @@ public class CouponServiceImp implements CouponService {
         return true;
     }
 
+    /**
+     * Metodo para aplicar el cupon
+     * @param code Coupon code
+     * @param orderId The ID of the order to apply the coupon to
+     * @return
+     * @throws Exception
+     */
     @Override
     public double applyCoupon(String code, String orderId) throws Exception {
         // Validar si el cupón es válido o ya expiró
@@ -86,6 +105,11 @@ public class CouponServiceImp implements CouponService {
         return couponRepository.findAvailableCoupons();
     }
 
+    /**
+     * Metodo para desactivar el cupon.
+     * @param couponId The ID of the coupon to deactivate
+     * @throws Exception
+     */
     @Override
     public void deactivateCoupon(String couponId) throws Exception {
         // Buscar el cupón por su ID y lanzar una excepción si no existe
@@ -99,6 +123,11 @@ public class CouponServiceImp implements CouponService {
         couponRepository.save(coupon);
     }
 
+    /**
+     * Metodo para activar el cupon
+     * @param couponId
+     * @throws Exception
+     */
     @Override
     public void activateCoupon(String couponId) throws Exception {
         // Buscar el cupón por su ID y lanzar una excepción si no existe
@@ -113,6 +142,12 @@ public class CouponServiceImp implements CouponService {
     }
 
 
+    /**
+     * Metodo que se encarga de actualizar el cupon.
+     * @param couponId The ID of the coupon to update
+     * @param couponDTO The new coupon information to update
+     * @throws Exception
+     */
     @Override
     public void updateCoupon(String couponId, CouponDTO couponDTO) throws Exception {
         Optional<Coupon> optionalCoupon = couponRepository.findById(couponId);
@@ -131,6 +166,12 @@ public class CouponServiceImp implements CouponService {
         couponRepository.save(coupon);
     }
 
+    /**
+     * Metodo que se encarga de aplicar un descuento a la orden.
+     * @param order
+     * @param coupon
+     * @return
+     */
     private double applyDiscountToOrder(Order order, Coupon coupon) {
         // Lógica para calcular el descuento basado en el tipo de cupón
         double  discountPercentage = Integer.parseInt(coupon.getDiscount())/ 100.0;

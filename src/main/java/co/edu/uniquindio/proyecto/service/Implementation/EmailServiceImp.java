@@ -22,11 +22,15 @@ public class EmailServiceImp implements EmailService {
     private final String SMTP_USERNAME = "unieventosproyect@gmail.com";
     private final String  SMTP_PASSWORD ="fyncswwbtqwubuja";
 
+
+    /**
+     * Metodo encargado de crear la estrucutra o el cuerpo del correo.
+     * @param emailDTO
+     * @throws Exception
+     */
     @Override
     @Async
     public void sendMail(EmailDTO emailDTO) throws Exception {
-
-
 
         Email email = EmailBuilder.startingBlank()
                 .from(SMTP_USERNAME)

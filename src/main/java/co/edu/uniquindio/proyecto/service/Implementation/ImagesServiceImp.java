@@ -10,6 +10,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.UUID;
 @Service
 public class ImagesServiceImp implements ImagesService {
+    /**
+     * Metodo que se encarga de subir la imagen.
+     * @param imagen
+     * @return
+     * @throws Exception
+     */
     @Override
     public String uploadImage(MultipartFile imagen) throws Exception {
 
@@ -29,7 +35,6 @@ public class ImagesServiceImp implements ImagesService {
             );
 
         }
-
     @Override
     public void deleteImage(String nombreImagen) throws Exception {
         Bucket bucket = StorageClient.getInstance().bucket();
