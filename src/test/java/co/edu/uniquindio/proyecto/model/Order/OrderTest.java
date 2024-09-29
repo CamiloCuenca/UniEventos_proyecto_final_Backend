@@ -19,7 +19,10 @@ public class OrderTest {
     private OrderService orderService;
 
 
-
+    /**
+     * Metodo para crear una orden.
+     * @throws Exception
+     */
     @Test
     public void createOrderTest() throws Exception {
 
