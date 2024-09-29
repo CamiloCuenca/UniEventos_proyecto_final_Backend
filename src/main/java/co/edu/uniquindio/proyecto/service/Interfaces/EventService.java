@@ -7,6 +7,10 @@ import java.util.List;
 
 public interface EventService {
 
+    // Método para crear un evento
+    // Parámetros: createDTOEvent que contiene la información para crear el evento.
+    // Retorno: String que podría ser el ID del evento creado o un mensaje de éxito.
+    // Excepción: Lanza una excepción si ocurre algún error durante la creación del evento.
     String createEvent(createDTOEvent crearEventoDTO) throws Exception;
 
     // Método para editar un evento
@@ -30,7 +34,6 @@ public interface EventService {
     // Método para listar todos los eventos
     // Retorno: Lista de ItemEventDTO que contiene información resumida de los eventos.
     List<ItemEventDTO> listEvents();
-
 
     // Método para filtrar eventos según ciertos criterios
     // Parámetros: dtoEventFilter que contiene los criterios de filtrado (ej. fecha, categoría, etc.).

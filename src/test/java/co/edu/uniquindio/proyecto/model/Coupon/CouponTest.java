@@ -25,6 +25,8 @@ public class CouponTest {
     // Se crea un objeto CouponDTO con los datos del cupón y se llama al método createCoupon del servicio
     @Test
     public void createCouponTest() throws Exception {
+      
+        // Llamar al servicio para crear el cupón
         // Crear un nuevo objeto CouponDTO con nombre, código, descuento, fecha de expiración, estado y tipo
         LocalDateTime expirationDate = LocalDateTime.now().plusDays(30); // La fecha de expiración es en 30 días
         CouponDTO couponDTO = new CouponDTO(
@@ -70,6 +72,7 @@ public class CouponTest {
     // Se utiliza el servicio para validar el cupón, dado un código
     @Test
     public void validateCouponTest() throws Exception {
+        // Llamar al servicio para validar el cupón con el código proporcionado
         String code = "ROCK2024"; // Código del cupón a validar
         // Llamar al servicio para validar el cupón con el código proporcionado
         couponService.validateCoupon(code);

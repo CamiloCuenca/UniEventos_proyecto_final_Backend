@@ -108,8 +108,6 @@ public class CartServiceImp implements CartService {
      * @param accountId
      * @return
      */
-
-
     @Override
     public void updateItemFromCart(String accountId, String eventId) throws Exception {
 
