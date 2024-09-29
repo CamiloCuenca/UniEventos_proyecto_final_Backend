@@ -3,99 +3,99 @@ db = connect('mongodb://localhost:27017/proyecto');
 // Account
 db.Account.insertMany([
     {
-        _id: ObjectId("66f70c5a0000000000ae1ccf"),
-        email: "juan.perez@example.com",
+        _id: ObjectId("66f8db70c1ce3939dbcbe1e0"),
+        email: "juanperez@example.com",
         registrationValidationCode: {
             creationDate: new Date(),
-            code: Math.random().toString(36).substring(2, 10)
+            code: "b5d9ce1f"
         },
         rol: "CUSTOMER",
         registrationDate: new Date(),
-        password: "$2a$10$Op14s.JAlHnPTV8ohJywxeGhCkap.nN6l9EI5plpE/G3tZLbZ80fi",
-        status: "INACTIVE",
-        user: {
-            _id: "1001234567",
-            name: "Juan Perez",
-            phoneNumber: "3123456789",
-            address: "Calle 123 #45-67",
-            _class: "co.edu.uniquindio.proyecto.model.Accounts.Account"
-        }
-    },
-    {
-        _id: ObjectId("66f70c5a0000000000ae1cd0"),
-        email: "ana.lopez@example.com",
-        registrationValidationCode: {
-            creationDate: new Date(),
-            code: Math.random().toString(36).substring(2, 10)
-        },
-        rol: "ADMINISTRATOR",
-        registrationDate: new Date(),
-        password: "$2a$10$0qpAlP/FS/6nOlhXcdjXyZ5v.QiTxLd7Hq/uEyUNqq1Fkhmrkqye.",
-        status: "ACTIVE",
-        user: {
-            _id: "1002345678",
-            name: "Ana Lopez",
-            phoneNumber: "3209876543",
-            address: "Carrera 50 #30-20",
-            _class: "co.edu.uniquindio.proyecto.model.Accounts.Account"
-        }
-    },
-    {
-        _id: ObjectId("66f70c5a0000000000ae1cd1"),
-        email: "carlos.martinez@example.com",
-        registrationValidationCode: {
-            creationDate: new Date(),
-            code: Math.random().toString(36).substring(2, 10)
-        },
-        rol: "CUSTOMER",
-        registrationDate: new Date(),
-        password: "$2a$10$dFkh9kL7M.XGgfZcFlr7zu3b.Buw5b8X9T0Ob8bX9FYlRmqzMhfKS",
-        status: "INACTIVE",
-        user: {
-            _id: "1003456789",
-            name: "Carlos Martinez",
-            phoneNumber: "3012345678",
-            address: "Diagonal 15 #25-10",
-            _class: "co.edu.uniquindio.proyecto.model.Accounts.Account"
-        }
-    },
-    {
-        _id: ObjectId("66f70c5a0000000000ae1cd2"),
-        email: "laura.gomez@example.com",
-        registrationValidationCode: {
-            creationDate: new Date(),
-            code: Math.random().toString(36).substring(2, 10)
-        },
-        rol: "CUSTOMER",
-        registrationDate: new Date(),
-        password: "$2a$10$cA/ZPH/UxClpxxPqGci5puR.MFumXa.Ds6OnVxaEQNgzGkyz9hTgS",
-        status: "ACTIVE",
-        user: {
-            _id: "1004567890",
-            name: "Laura Gomez",
-            phoneNumber: "3109876543",
-            address: "Transversal 20 #30-50",
-            _class: "co.edu.uniquindio.proyecto.model.Accounts.Account"
-        }
-    },
-    {
-        _id: ObjectId("66f70c5a0000000000ae1cd3"),
-        email: "brandon.montealegre@example.com",
-        registrationValidationCode: {
-            creationDate: new Date(),
-            code: Math.random().toString(36).substring(2, 10)
-        },
-        rol: "CUSTOMER",
-        registrationDate: new Date(),
-        password: "$2a$10$4gJmZiKnkqsM9uzL3l8jOebGgNPUdK.6u/ZVTVnrrVWZSqoL8crg2",
+        password: "$2a$10$n7yiHoxleQtFldijM7z4ueqN0DNJzLR9v1nxbf/HH0zrPEuas1DCy", // Contraseña sin encriptar: passwordJuanPerez
         status: "INACTIVE",
         user: {
             _id: "1005774025",
-            name: "Brandon Montealegre",
+            name: "Juan Perez",
             phoneNumber: "3245478525",
-            address: "Crr 22 # 7-12",
-            _class: "co.edu.uniquindio.proyecto.model.Accounts.Account"
-        }
+            address: "Crr 22 # 7-12"
+        },
+        _class: "co.edu.uniquindio.proyecto.model.Accounts.Account"
+    },
+    {
+        _id: ObjectId("66f8dbbb4b350424b236bddb"),
+        email: "maria.rodriguez@example.com",
+        registrationValidationCode: {
+            creationDate: new Date(),
+            code: "6bb0ad32"
+        },
+        rol: "CUSTOMER",
+        registrationDate: new Date(),
+        password: "$2a$10$cfwPyfVpzf/wcHH11yU/SOCG5hL874EmKJKyNlynxslMBtZNuJ6Wu", // Contraseña sin encriptar: passwordMariaRodriguez
+        status: "INACTIVE",
+        user: {
+            _id: "1005774026",
+            name: "Maria Rodriguez",
+            phoneNumber: "3215478925",
+            address: "Cll 30 # 8-32"
+        },
+        _class: "co.edu.uniquindio.proyecto.model.Accounts.Account"
+    },
+    {
+        _id: ObjectId("66f8dbfb12c88b4846e60860"),
+        email: "carlos.gomez@example.com",
+        registrationValidationCode: {
+            creationDate: new Date(),
+            code: "78911fa0"
+        },
+        rol: "CUSTOMER",
+        registrationDate: new Date(),
+        password: "$2a$10$on3iaIhr9W5shk1fbtA9X.lP5qDg/ELveC7zBeWCPsYJvFKZ/FiDG", // Contraseña sin encriptar: passwordCarlosGomez
+        status: "INACTIVE",
+        user: {
+            _id: "1005774027",
+            name: "Carlos Gomez",
+            phoneNumber: "3105478520",
+            address: "Cll 40 # 10-23"
+        },
+        _class: "co.edu.uniquindio.proyecto.model.Accounts.Account"
+    },
+    {
+        _id: ObjectId("66f8dc576f736842f97ca0ce"),
+        email: "luisa.fernandez@example.com",
+        registrationValidationCode: {
+            creationDate: new Date(),
+            code: "688105d8"
+        },
+        rol: "CUSTOMER",
+        registrationDate: new Date(),
+        password: "$2a$10$loCyyJkz7w/khWvxcgkKDeaMbZ91itumuL.spnAZIfl3Brj98BzuC", // Contraseña sin encriptar: passwordLuisaFernandez
+        status: "INACTIVE",
+        user: {
+            _id: "1005774028",
+            name: "Luisa Fernandez",
+            phoneNumber: "3109876543",
+            address: "Cll 15 # 2-50"
+        },
+        _class: "co.edu.uniquindio.proyecto.model.Accounts.Account"
+    },
+    {
+        _id: ObjectId("66f8dc7f8d4a5579f3e388d3"),
+        email: "ana.martinez@example.com",
+        registrationValidationCode: {
+            creationDate: new Date(),
+            code: "39110253"
+        },
+        rol: "CUSTOMER",
+        registrationDate: new Date(),
+        password: "$2a$10$lDWLG6Zc6jkxo/ZPYyTxW.bC0yePHF8gRPyBbynYknktkIfxwM6uy", // Contraseña sin encriptar: passwordAnaMartinez
+        status: "INACTIVE",
+        user: {
+            _id: "1005774029",
+            name: "Ana Martinez",
+            phoneNumber: "3001234567",
+            address: "Av 9 # 5-40"
+        },
+        _class: "co.edu.uniquindio.proyecto.model.Accounts.Account"
     }
 ]);
 // EVent
