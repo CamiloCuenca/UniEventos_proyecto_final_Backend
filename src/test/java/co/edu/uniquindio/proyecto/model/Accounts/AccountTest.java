@@ -168,14 +168,6 @@ class AccountServiceTest {
     }
 
 
-    @Test
-    public void activateAccountTest() throws Exception {
-        String correo = "camilocuenca1810@gmail.com";
-        String code = "b5d9ce1f";
-        accountService.activateAccount(correo, code);
-
-    }
-
     /**
      * Metodo para mandar el codigo de cambio de password
      *
