@@ -6,11 +6,14 @@ import org.springframework.data.mongodb.repository.Query;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 public interface CouponRepository extends MongoRepository<Coupon,String> {
 
     // Method to find a coupon by its code
     Coupon findByCode(String code);
-    @Query("{ 'status': 'DISPONIBLE' }")
+    @Query("{ 'status': 'AVAILABLE' }")
     List<Coupon> findAvailableCoupons();
+
+
 }

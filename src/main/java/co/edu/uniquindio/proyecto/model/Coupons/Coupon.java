@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -34,5 +35,9 @@ public class Coupon {
     private LocalDateTime startDate;
 
 
+    // Método auxiliar para generar un código de cupón aleatorio
+    public String generateRandomCouponCode() {
+        return UUID.randomUUID().toString().substring(0, 8).toUpperCase();  // Código aleatorio de 8 caracteres
+    }
 }
 

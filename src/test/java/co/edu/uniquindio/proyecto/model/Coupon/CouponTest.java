@@ -70,7 +70,7 @@ public class CouponTest {
     // Se utiliza el servicio para validar el cupón, dado un código
     @Test
     public void validateCouponTest() throws Exception {
-        String code = "12345"; // Código del cupón a validar
+        String code = "ROCK2024"; // Código del cupón a validar
         // Llamar al servicio para validar el cupón con el código proporcionado
         couponService.validateCoupon(code);
     }
@@ -85,7 +85,7 @@ public class CouponTest {
         if (couponList.isEmpty()) {
             throw new Exception("No hay cupones válidos");
         }
-        // Imprimir la lista de cupones disponibles
+        // Imprimir la lista de cupones disponibles (provisional)
         System.out.println(Arrays.toString(couponList.toArray()));
     }
 
