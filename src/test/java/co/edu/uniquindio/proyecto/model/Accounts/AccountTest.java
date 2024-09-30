@@ -42,7 +42,7 @@ class AccountServiceTest {
                 "Brandon Montealegre", // Nombre
                 "3245478525", // Número de teléfono
                 "Crr 22 # 7-12", // Dirección
-                "longir@gmail.com", // Correo
+                "longir@gmail.com", // Correo   (para que funcione el envio de correo electronico se debe colocar un email real)
                 "123456112" // Contraseña
         );
 
