@@ -19,11 +19,11 @@ public class Order {
 
     @Id
     private String id;
-    private ObjectId idAccount;   // Mirar bien , esto deberia de ser el id de la cuenta ya que en si no se guarada en la DB al usuario
+    private ObjectId idAccount;
     private LocalDateTime date;
     private String gatewayCode;
     private List<OrderDetail> items;
     private Payment payment;
     private Double total;
-    private ObjectId idCoupon;
+    private String codeCoupon;
 }

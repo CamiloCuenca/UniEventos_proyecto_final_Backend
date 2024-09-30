@@ -1,5 +1,7 @@
 package co.edu.uniquindio.proyecto.model.PurchaseOrder;
 
+import co.edu.uniquindio.proyecto.Enum.PaymentType;
+import co.edu.uniquindio.proyecto.Enum.PaymentState;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -12,14 +14,11 @@ import java.time.LocalDateTime;
 @ToString
 public class Payment {
 
-    // Miara bien lo de typePayment y state si son ENUMs
-
     private String id;
     private String currency;
-    private String typePayment;
+    private PaymentType typePayment;
     private String authorizationCode;
     private LocalDateTime date;
     private double transactionValue;
-    private String state;
-
+    private PaymentState state;
 }
