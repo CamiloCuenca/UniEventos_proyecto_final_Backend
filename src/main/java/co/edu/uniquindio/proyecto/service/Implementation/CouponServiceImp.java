@@ -4,8 +4,10 @@ import co.edu.uniquindio.proyecto.Enum.CouponStatus;
 import co.edu.uniquindio.proyecto.Enum.TypeCoupon;
 import co.edu.uniquindio.proyecto.dto.Coupon.CouponDTO;
 import co.edu.uniquindio.proyecto.model.Coupons.Coupon;
+import co.edu.uniquindio.proyecto.model.Events.Event;
 import co.edu.uniquindio.proyecto.model.PurchaseOrder.Order;
 import co.edu.uniquindio.proyecto.repository.CouponRepository;
+import co.edu.uniquindio.proyecto.repository.EventRepository;
 import co.edu.uniquindio.proyecto.repository.OrderRepository;
 import co.edu.uniquindio.proyecto.service.Interfaces.CouponService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ public class CouponServiceImp implements CouponService {
 
     private final CouponRepository couponRepository;
     private final OrderRepository orderRepository;
+    private final EventRepository eventRepository;
 
     /**
      * Metodo para crear un cupon.
@@ -36,6 +39,28 @@ public class CouponServiceImp implements CouponService {
         newCoupon.setExpirationDate(couponDTO.expirationDate());
         newCoupon.setStatus(couponDTO.status());
         newCoupon.setType(couponDTO.type());
+
+        // Asignar el evento si es que se especificó un eventId
+        if (couponDTO.eventId() != null) {
+            newCoupon.setEventId(couponDTO.eventId());
+        }
+
+        if (couponDTO.startDate() != null && couponDTO.expirationDate() != null) {
+            if (couponDTO.startDate().isAfter(couponDTO.expirationDate())) {
+                throw new Exception("La fecha de inicio no puede ser posterior a la fecha de fin.");
+            }
+        }
+
+        if (couponDTO.eventId() != null) {
+            Event event = eventRepository.findById(couponDTO.eventId())
+                    .orElseThrow(() -> new Exception("El evento especificado no existe."));
+            newCoupon.setEventId(event.getId());
+        }
+
+        // Asignar las fechas de inicio y fin si es que se especificaron
+        if (couponDTO.startDate() != null) {
+            newCoupon.setStartDate(couponDTO.startDate());
+        }
 
         Coupon createdCoupon = couponRepository.save(newCoupon);
         return createdCoupon.getCouponId();

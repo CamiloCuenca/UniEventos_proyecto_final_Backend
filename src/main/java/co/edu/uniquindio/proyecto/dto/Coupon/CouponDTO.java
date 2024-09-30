@@ -14,5 +14,10 @@ public record CouponDTO(
         @NotBlank String discount,
         @NotNull LocalDateTime expirationDate,
         @NotNull CouponStatus status,
-        @NotNull TypeCoupon type
-) { }
+        @NotNull TypeCoupon type,
+        // Nuevo campo para el evento específico
+        @NotBlank String eventId,
+
+        // Nuevos campos para el rango de fechas
+        @NotNull LocalDateTime startDate
+) {}

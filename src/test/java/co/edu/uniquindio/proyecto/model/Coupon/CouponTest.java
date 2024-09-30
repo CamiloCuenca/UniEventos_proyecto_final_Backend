@@ -25,8 +25,45 @@ public class CouponTest {
     // Se crea un objeto CouponDTO con los datos del cupón y se llama al método createCoupon del servicio
     @Test
     public void createCouponTest() throws Exception {
-        // Crear un nuevo objeto CouponDTO con nombre, código, porcentaje, fecha, estado y tipo
-        CouponDTO couponDTO = new CouponDTO("Amor y la Amistad 3", "123", "10", LocalDateTime.now(), CouponStatus.NOT_AVAILABLE, TypeCoupon.MULTIPLE);
+
+        // Llamar al servicio para crear el cupón
+        // Crear un nuevo objeto CouponDTO con nombre, código, descuento, fecha de expiración, estado y tipo
+        LocalDateTime expirationDate = LocalDateTime.now().plusDays(30); // La fecha de expiración es en 30 días
+        CouponDTO couponDTO = new CouponDTO(
+                "Amor y la Amistad",     // Nombre del cupón
+                "12345",                 // Código del cupón
+                "10",                    // Descuento del cupón
+                expirationDate,          // Fecha de expiración
+                CouponStatus.NOT_AVAILABLE, // Estado del cupón
+                TypeCoupon.MULTIPLE,     // Tipo de cupón
+                null,                    // El cupon no está asociado a un evento específico
+                expirationDate           // Se usa expirationDate como endDate
+        );
+
+        // Llamar al servicio para crear el cupón
+        couponService.createCoupon(couponDTO);
+    }
+
+    // Prueba para crear un cupón específico para un evento
+    @Test
+    public void createEventSpecificCouponTest() throws Exception {
+        // ID y nombre del evento específico
+        String eventId = "66f5c5a0de22e82833106d93";
+        String eventName = "Concierto Rock 2024";
+
+        // Crear un nuevo objeto CouponDTO con nombre, código, descuento, fecha de expiración, estado, tipo y evento asociado
+        LocalDateTime expirationDate = LocalDateTime.now().plusDays(30); // La fecha de expiración es en 30 días
+        CouponDTO couponDTO = new CouponDTO(
+                "Descuento Concierto Rock",  // Nombre del cupón
+                "ROCK2024",                  // Código del cupón
+                "15",                        // Descuento del 15%
+                expirationDate,              // Fecha de expiración
+                CouponStatus.AVAILABLE,      // Estado del cupón
+                TypeCoupon.ONLY,           // Tipo de cupón ONLY
+                eventId,                     // ID del evento asociado
+                expirationDate               // Se usa expirationDate como endDate
+        );
+
         // Llamar al servicio para crear el cupón
         couponService.createCoupon(couponDTO);
     }
@@ -35,7 +72,8 @@ public class CouponTest {
     // Se utiliza el servicio para validar el cupón, dado un código
     @Test
     public void validateCouponTest() throws Exception {
-        String code = "12345"; // Código del cupón a validar
+        // Llamar al servicio para validar el cupón con el código proporcionado
+        String code = "ROCK2024"; // Código del cupón a validar
         // Llamar al servicio para validar el cupón con el código proporcionado
         couponService.validateCoupon(code);
     }
@@ -50,7 +88,7 @@ public class CouponTest {
         if (couponList.isEmpty()) {
             throw new Exception("No hay cupones válidos");
         }
-        // Imprimir la lista de cupones disponibles
+        // Imprimir la lista de cupones disponibles (provisional)
         System.out.println(Arrays.toString(couponList.toArray()));
     }
 

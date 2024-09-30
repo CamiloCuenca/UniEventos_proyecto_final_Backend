@@ -1,9 +1,12 @@
 package co.edu.uniquindio.proyecto.service.Implementation;
 
 import co.edu.uniquindio.proyecto.Enum.AccountStatus;
+import co.edu.uniquindio.proyecto.Enum.CouponStatus;
 import co.edu.uniquindio.proyecto.Enum.Rol;
+import co.edu.uniquindio.proyecto.Enum.TypeCoupon;
 import co.edu.uniquindio.proyecto.config.JWTUtils;
 import co.edu.uniquindio.proyecto.dto.Account.*;
+import co.edu.uniquindio.proyecto.dto.Coupon.CouponDTO;
 import co.edu.uniquindio.proyecto.dto.EmailDTO;
 import co.edu.uniquindio.proyecto.dto.JWT.TokenDTO;
 import co.edu.uniquindio.proyecto.exception.account.*;
@@ -12,8 +15,11 @@ import co.edu.uniquindio.proyecto.model.Accounts.User;
 import co.edu.uniquindio.proyecto.model.Accounts.ValidationCode;
 import co.edu.uniquindio.proyecto.model.Accounts.ValidationCodePassword;
 import co.edu.uniquindio.proyecto.repository.AccountRepository;
+import co.edu.uniquindio.proyecto.repository.CouponRepository;
 import co.edu.uniquindio.proyecto.service.Interfaces.AccountService;
+import co.edu.uniquindio.proyecto.service.Interfaces.CouponService;
 import co.edu.uniquindio.proyecto.service.Interfaces.EmailService;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -36,8 +42,12 @@ public class AccountServiceimp implements AccountService {
 
     private final JWTUtils jwtUtils;
 
-    @Autowired
-    EmailService emailService;
+    private final AccountRepository accountRepository;
+
+    private  final CouponService couponService;
+
+    private final EmailService emailService;
+
 
 
     /**
@@ -114,6 +124,9 @@ public class AccountServiceimp implements AccountService {
 
 
         Map<String, Object> map = construirClaims(account);
+
+
+
         return new TokenDTO(jwtUtils.generateToken(account.getEmail(), map));
     }
 
@@ -374,35 +387,70 @@ public class AccountServiceimp implements AccountService {
      * @throws Exception
      */
     @Override
-    public String activateAccount(String correo, String code) throws EmailNotFoundException, ValidationCodeExpiredException, InvalidValidationCodeException {
+    public String activateAccount(String correo, String code) throws Exception {
+        // Buscar la cuenta por correo
         Account account = cuentaRepo.findByEmail(correo)
                 .orElseThrow(() -> new EmailNotFoundException(correo));
 
+        // Verificar si la cuenta ya está activada
         if (account.getStatus().equals(AccountStatus.ACTIVE)) {
-            throw new AccountAlreadyActiveException("La cuenta ya esta activada.");
+            throw new AccountAlreadyActiveException("La cuenta ya está activada.");
         }
 
+        // Obtener el código de validación de registro
         ValidationCode validationCode = account.getRegistrationValidationCode();
 
         if (validationCode == null) {
             throw new ValidationCodeExpiredException("El código de validación no existe.");
         }
 
+        // Verificar si el código ha expirado
         if (validationCode.isExpired()) {
             throw new ValidationCodeExpiredException("El código de validación ha expirado.");
         }
 
+        // Verificar si el código es válido
         if (!validationCode.getCode().equals(code)) {
             throw new InvalidValidationCodeException("El código de validación es inválido.");
         }
 
+        CouponDTO couponDTO = new CouponDTO(
+                "Cupón de Bienvenida",              // Nombre del cupón
+                generateRandomCouponCode(),         // Código único de cupón
+                "15",                               // Descuento del 15%
+                LocalDateTime.now().plusDays(30),   // Fecha de expiración (30 días a partir de ahora)
+                CouponStatus.AVAILABLE,             // Estado disponible
+                TypeCoupon.ONLY,                     // Tipo de cupón: uso único
+                null,                                 // ID del evento: (en este caso no es requerido)
+                LocalDateTime.now()                 // Fecha de inicio: hoy
+        );
 
+
+        // Crear el cupón usando el servicio de cupones
+        String couponId = couponService.createCoupon(couponDTO);
+
+        // Preparar el cuerpo del correo que incluye el código del cupón
+        String plainTextMessage = "Estimado usuario,\n\n" +
+                "Gracias por registrarse en nuestra plataforma. Para celebrar su registro, le ofrecemos un cupón de bienvenida con un 15% de descuento en su próxima compra:\n\n" +
+                "Código de cupón: " + couponDTO.code() + "\n\n" +
+                "Este cupón es válido por 30 días y solo puede ser utilizado una vez.\n\n" +
+                "Si tiene alguna duda, por favor contáctenos.\n\n" +
+                "Atentamente,\n" +
+                "El equipo de UniEventos";
+
+        // Enviar el correo con el código de cupón
+        emailService.sendMail(new EmailDTO(account.getEmail(), "\"Cupón de Bienvenida\"", plainTextMessage));
+
+        // Activar la cuenta y eliminar el código de validación
         account.setRegistrationValidationCode(null);
         account.setStatus(AccountStatus.ACTIVE);
         cuentaRepo.save(account);
 
-        return "Cuenta activada exitosamente";
+        return "Cuenta activada exitosamente y cupón enviado por correo";
     }
 
-
+    // Método auxiliar para generar un código de cupón aleatorio
+    public String generateRandomCouponCode() {
+        return UUID.randomUUID().toString().substring(0, 8).toUpperCase();  // Código aleatorio de 8 caracteres
+    }
 }
