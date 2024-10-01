@@ -32,13 +32,13 @@ class EventTest {
         // Crear DTO para el nuevo evento con datos de prueba
         createDTOEvent crearEventoDTO = new createDTOEvent(
                 "rutaImg2.png",                   // Imagen del evento
-                "Evento prueba 2",                // Nombre del evento
+                "Evento prueba 3",                // Nombre del evento
                 EventStatus.ACTIVE,               // Estado del evento
-                "Prueba Creación de Evento 2",    // Descripción del evento
+                "Prueba Creación de Evento 3",    // Descripción del evento
                 "updated_image_localities.jpg",   // Imagen de localidades
                 EventType.CONCERT,                // Tipo de evento
                 LocalDateTime.of(2024, 10, 20, 18, 0), // Fecha y hora del evento
-                "Armenia",                        // Ciudad del evento
+                "Bogota",                        // Ciudad del evento
                 "crr 20 # 1-23",                  // Dirección del evento
                 600,                              // Capacidad total
                 Arrays.asList(                    // Lista de localidades

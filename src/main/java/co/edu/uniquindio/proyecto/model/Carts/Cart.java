@@ -23,7 +23,6 @@ public class Cart {
     private String id;
     private LocalDateTime date;
     private List<CartDetail> items;
-    private ObjectId accountId;
 
 
 }
