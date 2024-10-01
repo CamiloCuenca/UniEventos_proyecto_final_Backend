@@ -11,7 +11,6 @@ import org.bson.types.ObjectId;
 @Builder
 @AllArgsConstructor
 public class CartDetail {
-
     private int amount;
     private int capacity;
     private String localityName;

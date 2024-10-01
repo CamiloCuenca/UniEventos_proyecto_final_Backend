@@ -2,8 +2,6 @@ package co.edu.uniquindio.proyecto.service.Implementation;
 
 import co.edu.uniquindio.proyecto.dto.Carts.CartDetailDTO;
 import co.edu.uniquindio.proyecto.exception.Cart.CartNotFoundException;
-import co.edu.uniquindio.proyecto.exception.EventNtFoundException;
-import co.edu.uniquindio.proyecto.exception.account.InvalidadEmailException;
 import co.edu.uniquindio.proyecto.exception.event.EventNotFoundException;
 import co.edu.uniquindio.proyecto.model.Carts.Cart;
 import co.edu.uniquindio.proyecto.model.Carts.CartDetail;
@@ -12,104 +10,119 @@ import co.edu.uniquindio.proyecto.model.Events.Locality;
 import co.edu.uniquindio.proyecto.repository.CartRepository;
 import co.edu.uniquindio.proyecto.repository.EventRepository;
 import co.edu.uniquindio.proyecto.service.Interfaces.CartService;
-import co.edu.uniquindio.proyecto.service.Interfaces.EventService;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 public class CartServiceImp implements CartService {
 
+    // Repositorios para interactuar con la base de datos
     private final CartRepository cartRepository;
     private final EventRepository eventRepository;
 
     /**
-     * This method add items to the account cart.
+     * Crea un nuevo carrito para un usuario dado su ID de cuenta.
      *
-     * @param accountId
-     * @param cartDetailDTO
-     * @throws Exception
+     * @param accountId ID de la cuenta del usuario.
+     * @return El carrito creado.
+     * @throws Exception En caso de error al crear el carrito.
      */
     @Override
-    public void addItemToCart(String accountId, CartDetailDTO cartDetailDTO) throws EventNotFoundException {
-        // Buscar si el carrito ya existe para esta cuenta
-        Optional<Cart> cartOptional = cartRepository.findByIdAccount(accountId);
-        Cart cart;
-        if (cartOptional.isPresent()) {
-            cart = cartOptional.get();
-        } else {
-            cart = new Cart();
-            cart.setAccountId(new ObjectId(accountId));
-            cart.setDate(LocalDateTime.now());
-            cart.setItems(new ArrayList<>());
-        }
-
-        // Buscar el evento por ID
-        Optional<Event> optionalEvent = eventRepository.findById(cartDetailDTO.eventId());
-        Event event = optionalEvent.orElseThrow(() -> new EventNotFoundException("No se encontró el evento"));
-
-        // Comprobar si la localidad existe
-        Locality locality = event.findByName(cartDetailDTO.localityName());
-        if (locality == null) {
-            throw new EventNotFoundException("No se encontró la localidad especificada");
-        }
-
-        // Usamos el Builder para crear el CartDetail a partir del DTO (record)
-        CartDetail cartDetail = CartDetail.builder()
-                .amount(cartDetailDTO.amount()) // cantidad de boletas que va comprar
-                .capacity(cartDetailDTO.capacity()) // capacidad de personas
-                .localityName(cartDetailDTO.localityName())
-                .idEvent(event.getId())
-                .build();
-
-        // Añadimos el detalle del carrito a la lista de items
-        cart.getItems().add(cartDetail);
-
-        // Guardamos el carrito actualizado en MongoDB
-        cartRepository.save(cart);
+    public Cart createNewCart(String accountId) throws Exception {
+        Cart newCart = new Cart();
+        newCart.setId(accountId); // Asigna el ID de la cuenta al carrito
+        newCart.setDate(LocalDateTime.now()); // Establece la fecha de creación del carrito
+        newCart.setItems(new ArrayList<>()); // Inicializa la lista de ítems del carrito
+        return cartRepository.save(newCart); // Guarda el carrito en el repositorio
     }
 
     /**
-     * This method remove item to the account cart.
+     * Agrega un ítem al carrito de un usuario dado su ID de cuenta.
      *
-     * @param accountId
-     * @param eventId
-     * @throws Exception
+     * @param accountId     ID de la cuenta del usuario.
+     * @param cartDetailDTO Datos del ítem a agregar.
+     * @throws Exception En caso de error al agregar el ítem.
      */
     @Override
-    public void removeItemFromCart(String accountId, String eventId) throws CartNotFoundException, EventNotFoundException {
-        // Obtener el carrito del repositorio
+    public void addItemToCart(String accountId, CartDetailDTO cartDetailDTO) throws Exception {
+        // Buscar o crear el carrito
         Cart cart = cartRepository.findByIdAccount(accountId)
-                .orElseThrow(() -> new CartNotFoundException("No existe un carrito para el usuario con ID: " + accountId));
+                .orElseGet(() -> {
+                    try {
+                        return createNewCart(accountId); // Crea un nuevo carrito si no existe
+                    } catch (Exception e) {
+                        throw new RuntimeException("Error al crear el carrito: " + e.getMessage());
+                    }
+                });
 
-        // Verificar si el evento está presente en el carrito y eliminarlo
+        // Buscar el evento por ID
+        Event event = eventRepository.findById(cartDetailDTO.eventId())
+                .orElseThrow(() -> new EventNotFoundException("No se encontró el evento con el ID: " + cartDetailDTO.eventId()));
+
+        // Verificar la localidad
+        Locality locality = event.findByName(cartDetailDTO.localityName());
+        if (locality == null) {
+            throw new EventNotFoundException("No se encontró la localidad: " + cartDetailDTO.localityName());
+        }
+
+        // Verificar si el ítem ya existe en el carrito
+        boolean itemExists = cart.getItems().stream()
+                .anyMatch(item -> item.getIdEvent().equals(event.getId()) && item.getLocalityName().equals(cartDetailDTO.localityName()));
+
+        if (itemExists) {
+            throw new IllegalArgumentException("El evento ya está en el carrito para la localidad especificada.");
+        }
+
+        // Agregar el ítem al carrito
+        addItemToCart(cart, cartDetailDTO, event);
+    }
+
+    /**
+     * Método auxiliar para agregar el ítem al carrito.
+     *
+     * @param cart          El carrito donde se va a agregar el ítem.
+     * @param cartDetailDTO Datos del ítem a agregar.
+     * @param event         El evento asociado al ítem.
+     */
+    private void addItemToCart(Cart cart, CartDetailDTO cartDetailDTO, Event event) {
+        // Crear un nuevo detalle del carrito
+        CartDetail cartDetail = CartDetail.builder()
+                .amount(cartDetailDTO.amount()) // Establecer la cantidad del ítem
+                .capacity(cartDetailDTO.capacity()) // Establecer la capacidad del ítem
+                .localityName(cartDetailDTO.localityName()) // Establecer el nombre de la localidad
+                .idEvent(event.getId()) // Establecer el ID del evento
+                .build();
+
+        cart.getItems().add(cartDetail); // Agregar el ítem a la lista de ítems
+        cartRepository.save(cart); // Guardar el carrito actualizado
+    }
+
+    /**
+     * Elimina un ítem del carrito de un usuario dado su ID de cuenta y el ID del evento.
+     *
+     * @param accountId ID de la cuenta del usuario.
+     * @param eventId   ID del evento a eliminar.
+     * @throws Exception En caso de error al eliminar el ítem.
+     */
+    @Override
+    public void removeItemFromCart(String accountId, String eventId) throws Exception {
+        // Buscar el carrito para la cuenta
+        Cart cart = cartRepository.findByIdAccount(accountId)
+                .orElseThrow(() -> new CartNotFoundException("No se encontró el carrito para la cuenta: " + accountId));
+
+        // Verificar y eliminar el ítem del carrito
         boolean itemRemoved = cart.getItems().removeIf(item -> item.getIdEvent().equals(eventId));
-
-        // Lanzar excepción si el item no fue encontrado
         if (!itemRemoved) {
             throw new EventNotFoundException("No se encontró el evento con ID: " + eventId + " en el carrito.");
         }
 
-        // Guardar el carrito actualizado en MongoDB
+        // Guardar los cambios en el carrito
         cartRepository.save(cart);
-
-    }
-
-    /**
-     * this method return the account cart
-     *
-     * @param accountId
-     * @return
-     */
-    @Override
-    public void updateItemFromCart(String accountId, String eventId) throws Exception {
-
     }
 }

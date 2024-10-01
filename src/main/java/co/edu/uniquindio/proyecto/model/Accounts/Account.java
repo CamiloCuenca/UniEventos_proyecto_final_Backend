@@ -3,6 +3,7 @@ package co.edu.uniquindio.proyecto.model.Accounts;
 import co.edu.uniquindio.proyecto.Enum.AccountStatus;
 import co.edu.uniquindio.proyecto.Enum.Rol;
 import co.edu.uniquindio.proyecto.model.Accounts.ValidationCode;
+import co.edu.uniquindio.proyecto.model.Carts.Cart;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.bson.types.ObjectId;
@@ -32,5 +33,6 @@ public class Account {
     private AccountStatus status;
     private ValidationCodePassword passwordValidationCode;
     private User user;
+    private Cart cart;
 
 }
