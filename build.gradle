@@ -40,8 +40,11 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
     implementation 'com.google.firebase:firebase-admin:9.2.0'
-
+    implementation 'com.itextpdf:itext7-core:7.2.2' // Verifica si hay una versión más reciente
+    implementation 'com.itextpdf:itextpdf:5.5.13.2'
 }
+
+
 
 test {
     useJUnitPlatform()

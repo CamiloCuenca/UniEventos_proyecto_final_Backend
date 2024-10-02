@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.repository;
 
+import co.edu.uniquindio.proyecto.Enum.EventStatus;
 import co.edu.uniquindio.proyecto.Enum.EventType;
 import co.edu.uniquindio.proyecto.model.Accounts.Account;
 import co.edu.uniquindio.proyecto.model.Events.Event;
@@ -27,7 +28,7 @@ public interface EventRepository extends MongoRepository<Event,String> {
     @Query("{'name': ?0}"+"{'date': ?1}")
     Optional<Account> findAllByNameAndDate(String name, LocalDateTime date);
 
-
+    long countByStatus(EventStatus status);
 
 
 
