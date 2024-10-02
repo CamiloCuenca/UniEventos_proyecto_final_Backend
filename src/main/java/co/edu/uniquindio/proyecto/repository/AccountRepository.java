@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.repository;
 
+import co.edu.uniquindio.proyecto.Enum.AccountStatus;
 import co.edu.uniquindio.proyecto.model.Accounts.Account;
 import co.edu.uniquindio.proyecto.model.Accounts.User;
 import co.edu.uniquindio.proyecto.model.Accounts.ValidationCodePassword;
@@ -16,5 +17,6 @@ public interface AccountRepository extends MongoRepository<Account, String> {
     @Query("{'_id': ?0}")
     Optional<Account> findByIdnumber(String accountId);
 
+    long countByStatus(AccountStatus status);
 }
 
