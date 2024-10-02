@@ -18,5 +18,9 @@ public interface AccountRepository extends MongoRepository<Account, String> {
     Optional<Account> findByIdnumber(String accountId);
 
     long countByStatus(AccountStatus status);
+
+    @Query(value = "{ '_id' : ?0 }", fields = "{ 'email' : 1 }")
+    Optional<Account> findEmailById(String accountId);
+
 }
 

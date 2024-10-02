@@ -54,7 +54,7 @@ public class OrderTest {
                 orderDetails,
                 paymentDTO,
                 13.000,
-                "ROCK2024"
+                null
         );
 
         orderService.createOrder(orderDTO);
