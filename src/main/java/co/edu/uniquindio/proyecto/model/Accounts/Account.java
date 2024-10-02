@@ -30,7 +30,7 @@ public class Account {
     private Rol rol;
     private LocalDateTime registrationDate;
     private String password;
-    private AccountStatus status;
+    private AccountStatus status;  // ACTIVE, INACTIVE, ELIMINATED
     private ValidationCodePassword passwordValidationCode;
     private User user;
     private Cart cart;
