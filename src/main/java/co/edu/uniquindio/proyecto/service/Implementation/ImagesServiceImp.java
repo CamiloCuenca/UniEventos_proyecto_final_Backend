@@ -41,4 +41,17 @@ public class ImagesServiceImp implements ImagesService {
         Blob blob = bucket.get(nombreImagen);
         blob.delete();
     }
+
+    @Override
+    // Método para subir el QR a Firebase
+    public String uploadQR(byte[] qrBytes, String fileName) throws Exception {
+        Bucket bucket = StorageClient.getInstance().bucket();
+        Blob blob = bucket.create(fileName, qrBytes, "image/png");
+
+        return String.format(
+                "https://firebasestorage.googleapis.com/v0/b/%s/o/%s?alt=media",
+                bucket.getName(),
+                blob.getName()
+        );
+    }
 }

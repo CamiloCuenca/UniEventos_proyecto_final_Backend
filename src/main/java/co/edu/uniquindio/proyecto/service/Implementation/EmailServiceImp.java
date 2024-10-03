@@ -10,48 +10,44 @@ import org.simplejavamail.mailer.MailerBuilder;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
-
-import static org.simplejavamail.config.ConfigLoader.Property.SMTP_PORT;
-
-
 @Service
-
 public class EmailServiceImp implements EmailService {
     private final String SMTP_USERNAME = "unieventosproyect@gmail.com";
-    private final String  SMTP_PASSWORD ="fyncswwbtqwubuja";
+    private final String SMTP_PASSWORD = "fyncswwbtqwubuja";
 
-
-    /**
-     * Metodo encargado de crear la estrucutra o el cuerpo del correo.
-     * @param emailDTO
-     * @throws Exception
-     */
     @Override
     @Async
     public void sendMail(EmailDTO emailDTO) throws Exception {
-
         Email email = EmailBuilder.startingBlank()
                 .from(SMTP_USERNAME)
                 .to(emailDTO.recipient())
                 .withSubject(emailDTO.issue())
-                .withPlainText(emailDTO.body())
+                .withHTMLText(emailDTO.body())
                 .buildEmail();
-
 
         try (Mailer mailer = MailerBuilder
                 .withSMTPServer("smtp.gmail.com", 587, SMTP_USERNAME, SMTP_PASSWORD)
                 .withTransportStrategy(TransportStrategy.SMTP_TLS)
                 .withDebugLogging(true)
                 .buildMailer()) {
-
-
             mailer.sendMail(email);
         }
-
-
     }
 
+    @Override
+    @Async
+    public void sendQrByEmail(String email, String qrUrl) {
+        String htmlMessage = "<html><body>" +
+                "<p>Estimado usuario,</p>" +
+                "<p>Gracias por su compra. A continuación encontrará el código QR de su orden:</p>" +
+                "<img src=\"" + qrUrl + "\" alt=\"Código QR\" style=\"display:block; max-width:100%; height:auto;\" />" +
+                "<p>Atentamente,<br/>El equipo de UniEventos</p>" +
+                "</body></html>";
 
+        try {
+            sendMail(new EmailDTO(email, "Código QR de su Orden", htmlMessage));
+        } catch (Exception e) {
+            e.printStackTrace(); // Manejo de excepciones, podrías usar un logger aquí
+        }
+    }
 }

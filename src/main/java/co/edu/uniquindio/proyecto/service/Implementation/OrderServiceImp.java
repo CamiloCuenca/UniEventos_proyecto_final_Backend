@@ -13,12 +13,14 @@ import co.edu.uniquindio.proyecto.repository.EventRepository;
 import co.edu.uniquindio.proyecto.repository.OrderRepository;
 import co.edu.uniquindio.proyecto.service.Interfaces.CouponService;
 import co.edu.uniquindio.proyecto.service.Interfaces.EmailService;
+import co.edu.uniquindio.proyecto.service.Interfaces.ImagesService;
 import co.edu.uniquindio.proyecto.service.Interfaces.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +36,10 @@ public class OrderServiceImp implements OrderService {
     private final CouponRepository  couponRepository;
     private final CouponServiceImp couponServiceImp;
     private final EmailService emailService;
+    private final QRCodeService qrCodeService;
+    private final ImagesService imagesService;
+
+
 
     @Override
     public Order createOrder(OrderDTO orderDTO) throws Exception {
@@ -65,6 +71,7 @@ public class OrderServiceImp implements OrderService {
 
         // Verificar si es la primera orden de la cuenta
         List<Order> ordersByAccount = orderRepository.findByAccountId(orderDTO.idAccount());
+        System.out.println("aaaaaaaaaaaaa"+ordersByAccount);
         if (ordersByAccount.isEmpty()) {
             // Esta es la primera orden para la cuenta
             System.out.println("¡Esta es la primera orden para la cuenta: " + orderDTO.idAccount() + "!");
@@ -81,6 +88,27 @@ public class OrderServiceImp implements OrderService {
             // Aquí puedes invocar el servicio de aplicar el cupón
             couponServiceImp.applyCoupon(orderDTO.CodeCoupon(), savedOrder.getId());
         }
+
+
+        // Generar el QR en base64
+        String qrBase64 = qrCodeService.generateQRCode(order.getId());
+
+        // Convertir la base64 a byte array
+        byte[] qrBytes = Base64.getDecoder().decode(qrBase64);
+
+        // Subir el QR como imagen a Firebase
+        String qrUrl = imagesService.uploadQR(qrBytes, "order-" + order.getId() + "-qr.png");
+
+        // Enviar el QR por email
+        Optional<Account> account = cuentaRepo.findEmailById(String.valueOf(order.getIdAccount()));
+        if (account.isPresent()) {
+            String email = account.get().getEmail();
+            emailService.sendQrByEmail(email, qrUrl);
+        } else {
+            // Manejo de caso en que no se encuentre la cuenta
+            throw new Exception("El email no existe");
+        }
+
 
         return savedOrder;
     }
