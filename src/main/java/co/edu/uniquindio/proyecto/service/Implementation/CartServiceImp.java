@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -40,6 +41,23 @@ public class CartServiceImp implements CartService {
         newCart.setDate(LocalDateTime.now()); // Establece la fecha de creación del carrito
         newCart.setItems(new ArrayList<>()); // Inicializa la lista de ítems del carrito
         return cartRepository.save(newCart); // Guarda el carrito en el repositorio
+    }
+
+    @Override
+    public void updateCart(String accountId, CartDetailDTO cartDetailDTO) throws CartNotFoundException {
+        Optional<Cart> cartOptional = cartRepository.findByIdAccount(accountId);
+        if (cartOptional.isPresent()) {
+            throw  new CartNotFoundException("Carro de compra no Encontrado.");
+        }
+
+        Cart cartUpdate = cartOptional.get();
+        CartDetail cartDetail = CartDetail.builder()
+                .amount(cartDetailDTO.amount())
+                .localityName(cartDetailDTO.localityName())
+                .build();
+
+        cartUpdate.setItems(List.of(cartDetail));
+        cartRepository.save(cartUpdate);
     }
 
     /**

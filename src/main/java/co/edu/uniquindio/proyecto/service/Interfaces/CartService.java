@@ -3,10 +3,12 @@ package co.edu.uniquindio.proyecto.service.Interfaces;
 import co.edu.uniquindio.proyecto.dto.Carts.CartDetailDTO;
 import co.edu.uniquindio.proyecto.exception.event.EventNotFoundException;
 import co.edu.uniquindio.proyecto.model.Carts.Cart;
+import co.edu.uniquindio.proyecto.model.Carts.CartDetail;
 import co.edu.uniquindio.proyecto.model.Events.Event;
 import co.edu.uniquindio.proyecto.model.Events.Locality;
 import org.bson.types.ObjectId;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface CartService {
@@ -16,6 +18,8 @@ public interface CartService {
     void removeItemFromCart(String accountId,  String eventId) throws Exception;
 
     Cart createNewCart(String accountId)throws Exception;
+
+    void updateCart(String accountId, CartDetailDTO cartDetailDTO) throws Exception;
 
 
 
