@@ -32,9 +32,9 @@ class EventTest {
         // Crear DTO para el nuevo evento con datos de prueba
         createDTOEvent crearEventoDTO = new createDTOEvent(
                 "rutaImg2.png",                   // Imagen del evento
-                "Evento prueba 4",                // Nombre del evento
+                "Evento prueba 1",                // Nombre del evento
                 EventStatus.ACTIVE,               // Estado del evento
-                "Prueba Creación de Evento 4",    // Descripción del evento
+                "Prueba Creación de Evento 1",    // Descripción del evento
                 "updated_image_localities.jpg",   // Imagen de localidades
                 EventType.CONCERT,                // Tipo de evento
                 LocalDateTime.of(2024, 10, 20, 18, 0), // Fecha y hora del evento
@@ -122,5 +122,14 @@ class EventTest {
     public void ListEvents() throws Exception {
         // Imprimir la lista de todos los eventos
         System.out.println(eventService.listEvents());
+    }
+
+    @Test
+    public void calculateTotalTestPrice() throws Exception{
+        String idEvent = "66fe4a3d6e8bef16ed873d70";
+        eventService.calculateTotal(idEvent);
+
+
+
     }
 }
