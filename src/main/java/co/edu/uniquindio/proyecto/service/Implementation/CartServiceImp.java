@@ -47,7 +47,7 @@ public class CartServiceImp implements CartService {
     public void updateCart(String accountId, CartDetailDTO cartDetailDTO) throws CartNotFoundException {
         Optional<Cart> cartOptional = cartRepository.findByIdAccount(accountId);
         if (cartOptional.isPresent()) {
-            throw  new CartNotFoundException("Carro de compra no Encontrado.");
+            throw new CartNotFoundException("Carro de compra no Encontrado.");
         }
 
         Cart cartUpdate = cartOptional.get();
@@ -58,6 +58,27 @@ public class CartServiceImp implements CartService {
 
         cartUpdate.setItems(List.of(cartDetail));
         cartRepository.save(cartUpdate);
+    }
+
+    @Override
+    public void clearCart(String accountId) throws CartNotFoundException {
+        Cart cart = cartRepository.findByIdAccount(accountId)
+                .orElseThrow(() -> new CartNotFoundException("No se encontró el carrito para la cuenta: " + accountId));
+        cart.setItems(new ArrayList<>());
+        cartRepository.save(cart);
+    }
+
+    @Override
+    public List<CartDetail> getCartItems(String accountId) throws CartNotFoundException {
+        Cart cart = cartRepository.findByIdAccount(accountId)
+                .orElseThrow(() -> new CartNotFoundException("No se encontró el carrito para la cuenta: " + accountId));
+
+        // Obtener la lista de ítems del carrito
+        List<CartDetail> cartItems = cart.getItems();
+
+        // Imprimir los detalles de cada ítem usando toString()
+        cartItems.forEach(item -> System.out.println(item.toString()));
+        return cartItems;
     }
 
     /**

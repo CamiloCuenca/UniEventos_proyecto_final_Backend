@@ -21,6 +21,10 @@ public interface CartService {
 
     void updateCart(String accountId, CartDetailDTO cartDetailDTO) throws Exception;
 
+    void clearCart(String accountId) throws Exception;
+
+    List<CartDetail> getCartItems(String accountId) throws Exception;
+
 
 
 
