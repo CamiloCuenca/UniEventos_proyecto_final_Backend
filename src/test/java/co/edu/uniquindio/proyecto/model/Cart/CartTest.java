@@ -25,9 +25,9 @@ public class CartTest {
 
     @Test
     public void addItemToCartTest() throws Exception {
-        String accountId = "66fc426f64eff50b3f24ef3d"; // ID de prueba
-        String idEvent1 = "66fc42f82ec16c3574caaf16";
-        String idEvent2 = "66fc4859e26def327e823367";
+        String accountId = "66fdd93716b38c3e6e9d6259"; // ID de prueba
+        String idEvent1 = "66fdd980c4075e0792201e6f";
+        String idEvent2 = "66fdd9c2665fe83cd883838c";
 
         // Crear los DTOs de los ítems
         CartDetailDTO item1 = new CartDetailDTO(idEvent1, "Evento 1", "General", "Ciudad A", 100.0, 2, 100);
@@ -48,9 +48,15 @@ public class CartTest {
 
     @Test
     public void removeItemFromCart() throws Exception {
-        String idAccount = "66fc426f64eff50b3f24ef3d";
-        String idEvent = "66fc42f82ec16c3574caaf16";
+        String idAccount = "66fdd93716b38c3e6e9d6259";
+        String idEvent = "66fdd9c2665fe83cd883838c";
         cartService.removeItemFromCart(idAccount, idEvent);
+    }
+
+    @Test
+    public void updateCartTest() throws Exception {
+        String idAccount = "66fdd93716b38c3e6e9d6259";
+
     }
 
 
