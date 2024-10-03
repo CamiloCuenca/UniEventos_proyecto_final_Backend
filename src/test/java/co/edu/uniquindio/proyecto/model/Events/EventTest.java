@@ -123,4 +123,13 @@ class EventTest {
         // Imprimir la lista de todos los eventos
         System.out.println(eventService.listEvents());
     }
+
+    @Test
+    public void calculateTotalTestPrice() throws Exception{
+        String idEvent = "66fe4a3d6e8bef16ed873d70";
+        eventService.calculateTotal(idEvent);
+
+
+
+    }
 }

@@ -1,7 +1,6 @@
 package co.edu.uniquindio.proyecto.service.Interfaces;
 
 import co.edu.uniquindio.proyecto.dto.Event.*;
-import co.edu.uniquindio.proyecto.model.Events.Event;
 
 import java.util.List;
 
@@ -23,7 +22,7 @@ public interface EventService {
     // Parámetros: String con el ID del evento que se desea eliminar.
     // Retorno: String con un mensaje de confirmación de la eliminación.
     // Excepción: Lanza una excepción si no se puede eliminar el evento.
-    String deleteEvent(String id) throws Exception;
+    String deleteEvent(String idEvent) throws Exception;
 
     // Método para obtener la información de un evento por su ID
     // Parámetros: String con el ID del evento.
@@ -39,4 +38,6 @@ public interface EventService {
     // Parámetros: dtoEventFilter que contiene los criterios de filtrado (ej. fecha, categoría, etc.).
     // Retorno: Lista de ItemEventDTO que contiene los eventos que cumplen con el filtro aplicado.
     List<ItemEventDTO> filterEvents(dtoEventFilter filtroEventoDTO);
+
+    double calculateTotal(String idEvent) throws Exception;
 }

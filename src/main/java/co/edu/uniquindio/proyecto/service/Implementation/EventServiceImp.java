@@ -1,8 +1,10 @@
 package co.edu.uniquindio.proyecto.service.Implementation;
 
 import co.edu.uniquindio.proyecto.dto.Event.*;
+import co.edu.uniquindio.proyecto.exception.Cart.CartNotFoundException;
 import co.edu.uniquindio.proyecto.exception.event.*;
 import co.edu.uniquindio.proyecto.model.Events.Event;
+import co.edu.uniquindio.proyecto.model.Events.Locality;
 import co.edu.uniquindio.proyecto.repository.EventRepository;
 import co.edu.uniquindio.proyecto.service.Interfaces.EventService;
 import lombok.RequiredArgsConstructor;
@@ -100,22 +102,22 @@ public class EventServiceImp implements EventService {
     /**
      * This method is the service of delete a event
      *
-     * @param id
+     * @param idEvent
      * @return
      * @throws Exception
      */
     @Override
-    public String deleteEvent(String id) throws EventNotFoundException {
-        Optional<Event> optionalEvent = eventRepository.findById(id);
+    public String deleteEvent(String idEvent) throws EventNotFoundException {
+        Optional<Event> optionalEvent = eventRepository.findById(idEvent);
         if (optionalEvent.isEmpty()) {
-            throw new EventNotFoundException(id);
+            throw new EventNotFoundException(idEvent);
         }
 
         // Eliminar el evento si se encuentra
         Event deletedEvent = optionalEvent.get();
         eventRepository.delete(deletedEvent);  // no eliminarlos cambiarlos a INACTIVOS
 
-        return "El evento con id " + id + " fue eliminado correctamente.";
+        return "El evento con id " + idEvent + " fue eliminado correctamente.";
     }
 
 
@@ -196,6 +198,36 @@ public class EventServiceImp implements EventService {
                 ))
                 .collect(Collectors.toList());
     }
+
+    /**
+     * Metodo para calcular el total de tickets vendios.
+     * @param idEvent
+     * @return
+     * @throws EventNotFoundException
+     */
+    @Override
+    public double calculateTotal(String idEvent) throws EventNotFoundException {
+        Event event = eventRepository.findById(idEvent)
+                .orElseThrow(() -> new EventNotFoundException("No se encontró el evento con ID: " + idEvent));
+
+        double total = 0.0;
+
+        // Comprobar si las localidades no son nulas
+        if (event.getLocalities() != null) {
+            for (Locality locality : event.getLocalities()) {
+                double priceUnit = locality.getPrice();
+                int ticketSold = locality.getTicketsSold();
+                total += priceUnit * ticketSold; // Sumar el total
+            }
+        }
+
+        // Mostrar el total en la consola
+        System.out.println("El total calculado para el evento con ID " + idEvent + " es: " + total);
+
+        // Retornar el total calculado
+        return total;
+    }
+
 
     public Event getById(String id) throws Exception {
         return eventRepository.findById(id).orElseThrow(() -> new Exception("El evento No existe"));
