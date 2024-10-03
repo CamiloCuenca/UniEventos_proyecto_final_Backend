@@ -41,8 +41,6 @@ public class EmailServiceImp implements EmailService {
                 "<p>Estimado usuario,</p>" +
                 "<p>Gracias por su compra. A continuación encontrará el código QR de su orden:</p>" +
                 "<img src=\"" + qrUrl + "\" alt=\"Código QR\" style=\"display:block; max-width:100%; height:auto;\" />" +
-                "<p>Si no puede ver el código QR, haga clic en el siguiente enlace para visualizarlo:</p>" +
-                "<a href=\"" + qrUrl + "\">Ver Código QR</a>" +
                 "<p>Atentamente,<br/>El equipo de UniEventos</p>" +
                 "</body></html>";
 

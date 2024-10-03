@@ -71,6 +71,7 @@ public class OrderServiceImp implements OrderService {
 
         // Verificar si es la primera orden de la cuenta
         List<Order> ordersByAccount = orderRepository.findByAccountId(orderDTO.idAccount());
+        System.out.println("aaaaaaaaaaaaa"+ordersByAccount);
         if (ordersByAccount.isEmpty()) {
             // Esta es la primera orden para la cuenta
             System.out.println("¡Esta es la primera orden para la cuenta: " + orderDTO.idAccount() + "!");
@@ -88,7 +89,7 @@ public class OrderServiceImp implements OrderService {
             couponServiceImp.applyCoupon(orderDTO.CodeCoupon(), savedOrder.getId());
         }
 
-        // Generar y enviar el codigo QR
+
         // Generar el QR en base64
         String qrBase64 = qrCodeService.generateQRCode(order.getId());
 
