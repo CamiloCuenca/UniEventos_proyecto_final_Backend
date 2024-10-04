@@ -15,7 +15,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
 @Document ("Cart")
 public class Cart {
 
@@ -23,6 +22,17 @@ public class Cart {
     private String id;
     private LocalDateTime date;
     private List<CartDetail> items;
+    private double total;
+
+    public void calculateTotal() {
+        if (items != null) {
+            this.total = items.stream()
+                    .mapToDouble(detail -> detail.getPrice() * detail.getQuantity())
+                    .sum();
+        } else {
+            this.total = 0;
+        }
+    }
 
 
 }

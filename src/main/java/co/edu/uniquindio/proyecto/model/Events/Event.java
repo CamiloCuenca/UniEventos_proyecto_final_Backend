@@ -34,4 +34,5 @@ public class Event {
         return localities.stream().filter(locality -> locality.getName().equals(name)).findFirst().orElse(null);
     }
 
+
 }
