@@ -4,6 +4,7 @@ import co.edu.uniquindio.proyecto.dto.Coupon.CouponDTO;
 import co.edu.uniquindio.proyecto.model.Coupons.Coupon;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface CouponService {
     /**
@@ -65,6 +66,12 @@ public interface CouponService {
      * @throws Exception If the coupon could not be updated
      */
     void updateCoupon(String couponId, CouponDTO couponDTO) throws Exception;
+
+
+    // Método auxiliar para generar un código de cupón aleatorio
+    static String generateRandomCouponCode() throws Exception {
+        return null;
+    }
 
 
 }

@@ -48,8 +48,6 @@ public class AccountServiceimp implements AccountService {
 
     private final EmailService emailService;
 
-
-
     /**
      * Metodo encargado validar que el Email no este en uso
      *
@@ -130,7 +128,6 @@ public class AccountServiceimp implements AccountService {
         return new TokenDTO(jwtUtils.generateToken(account.getEmail(), map));
     }
 
-
     /**
      * Método createAccount(): Crea una nueva cuenta, encripta la contraseña con BCryptPasswordEncoder, genera un código de validación, y envía un correo electrónico al usuario para activar la cuenta.
      * Valida que el correo y el número de identificación no existan previamente en la base de datos.
@@ -174,15 +171,8 @@ public class AccountServiceimp implements AccountService {
 
         Account createdAccount = cuentaRepo.save(newAccount);
 
-        String plainTextMessage = "Estimado usuario,\n\n" +
-                "Gracias por registrarse en nuestra plataforma. Para activar su cuenta, por favor utilice el siguiente código de activación:\n\n" +
-                "Código de activación: " + validationCode + "\n\n" +
-                "Este código es válido por 15 minutos.\n\n" +
-                "Si usted no solicitó este registro, por favor ignore este correo.\n\n" +
-                "Atentamente,\n" +
-                "El equipo de UniEventos";
-
-        emailService.sendMail(new EmailDTO(newAccount.getEmail(), "\"Activación de cuenta\"", plainTextMessage));
+        // Enviar el codigo de validacion por correo
+        emailService.sendCodevalidation(createdAccount.getEmail(),validationCode);
 
 
         return createdAccount.getAccountId();
@@ -315,21 +305,13 @@ public class AccountServiceimp implements AccountService {
         }
         Account account = optionalAccount.get();
 
-        String passwordValidationCOde = generateValidationCode();
+        String passwordValidationCode = generateValidationCode();
         ValidationCodePassword validationCodePassword = new ValidationCodePassword(generateValidationCode());
         account.setPasswordValidationCode(validationCodePassword);
         cuentaRepo.save(account);
-        // Crear el mensaje a enviar por correo
-        String plainTextMessage = "Estimado usuario,\n\n" +
-                "Ha solicitado recuperar su contraseña. Utilice el siguiente código de recuperación para restablecer su contraseña:\n\n" +
-                "Código de recuperación: " + passwordValidationCOde + "\n\n" +
-                "Este código es válido por 15 minutos.\n\n" +
-                "Si usted no solicitó esta recuperación, por favor ignore este correo.\n\n" +
-                "Atentamente,\n" +
-                "El equipo de UniEventos";
 
-        // Enviar el correo electrónico con el código de recuperación
-        emailService.sendMail(new EmailDTO(account.getEmail(), "Recuperación de contraseña", plainTextMessage));
+        // Enviar por email el codigo de recuperaciòn
+        emailService.sendRecoveryCode(account.getEmail(),passwordValidationCode);
 
         return "Código de recuperación enviado al correo " + account.getEmail();
     }
@@ -414,32 +396,13 @@ public class AccountServiceimp implements AccountService {
             throw new InvalidValidationCodeException("El código de validación es inválido.");
         }
 
-        CouponDTO couponDTO = new CouponDTO(
-                "Cupón de Bienvenida",              // Nombre del cupón
-                generateRandomCouponCode(),         // Código único de cupón
-                "15",                               // Descuento del 15%
-                LocalDateTime.now().plusDays(30),   // Fecha de expiración (30 días a partir de ahora)
-                CouponStatus.AVAILABLE,             // Estado disponible
-                TypeCoupon.ONLY,                     // Tipo de cupón: uso único
-                null,                                 // ID del evento: (en este caso no es requerido)
-                LocalDateTime.now()                 // Fecha de inicio: hoy
-        );
-
 
         // Crear el cupón usando el servicio de cupones
-        String couponId = couponService.createCoupon(couponDTO);
+        CouponDTO couponDTO =  generateWelcomeCoupon();
+        couponService.createCoupon(couponDTO);
 
-        // Preparar el cuerpo del correo que incluye el código del cupón
-        String plainTextMessage = "Estimado usuario,\n\n" +
-                "Gracias por registrarse en nuestra plataforma. Para celebrar su registro, le ofrecemos un cupón de bienvenida con un 15% de descuento en su próxima compra:\n\n" +
-                "Código de cupón: " + couponDTO.code() + "\n\n" +
-                "Este cupón es válido por 30 días y solo puede ser utilizado una vez.\n\n" +
-                "Si tiene alguna duda, por favor contáctenos.\n\n" +
-                "Atentamente,\n" +
-                "El equipo de UniEventos";
-
-        // Enviar el correo con el código de cupón
-        emailService.sendMail(new EmailDTO(account.getEmail(), "\"Cupón de Bienvenida\"", plainTextMessage));
+        // Enviar por email el cupon de bienvenida
+        emailService.sendWelcomeCoupon(account.getEmail(),couponDTO.code());
 
         // Activar la cuenta y eliminar el código de validación
         account.setRegistrationValidationCode(null);
@@ -449,8 +412,27 @@ public class AccountServiceimp implements AccountService {
         return "Cuenta activada exitosamente y cupón enviado por correo";
     }
 
-    // Método auxiliar para generar un código de cupón aleatorio
-    public String generateRandomCouponCode() {
-        return UUID.randomUUID().toString().substring(0, 8).toUpperCase();  // Código aleatorio de 8 caracteres
+
+
+
+    /**
+     *  Mètodo para generar el cupon de bienvenida de un 15% de descuento
+     * @return cupon de bienvenida
+     */
+    public CouponDTO generateWelcomeCoupon() throws Exception {
+       // Creamos el cupon de 15% de descueto
+        CouponDTO couponDTO = new CouponDTO(
+                "Cupón de Bienvenida",              // Nombre del cupón
+                CouponService.generateRandomCouponCode(),         // Código único de cupón
+                "15",                               // Descuento del 15%
+                LocalDateTime.now().plusDays(30),   // Fecha de expiración (30 días a partir de ahora)
+                CouponStatus.AVAILABLE,             // Estado disponible
+                TypeCoupon.ONLY,                     // Tipo de cupón: uso único
+                null,                                 // ID del evento: (en este caso no es requerido)
+                LocalDateTime.now()                 // Fecha de inicio: hoy
+        );
+        return couponDTO;
     }
+
+
 }
