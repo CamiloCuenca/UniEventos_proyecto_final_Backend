@@ -4,6 +4,7 @@ import co.edu.uniquindio.proyecto.Enum.EventStatus;
 import co.edu.uniquindio.proyecto.Enum.EventType;
 import co.edu.uniquindio.proyecto.model.Accounts.Account;
 import co.edu.uniquindio.proyecto.model.Events.Event;
+import co.edu.uniquindio.proyecto.model.Events.Locality;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
@@ -29,6 +30,9 @@ public interface EventRepository extends MongoRepository<Event,String> {
     Optional<Account> findAllByNameAndDate(String name, LocalDateTime date);
 
     long countByStatus(EventStatus status);
+
+
+    Optional<Locality> findByName(String name);
 
 
 

@@ -4,8 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import org.hibernate.validator.constraints.Length;
 
-public record updateCartDTO(
-        @Positive int amount,
+public record UpdateCarDTO(
+        @Positive int quantity, // Cambiado a quantity
         @NotBlank @Length(max = 100) String localityName
 ) {
 

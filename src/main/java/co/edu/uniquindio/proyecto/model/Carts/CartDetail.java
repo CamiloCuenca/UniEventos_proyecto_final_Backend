@@ -1,8 +1,6 @@
 package co.edu.uniquindio.proyecto.model.Carts;
 
-import co.edu.uniquindio.proyecto.Enum.EventType;
 import lombok.*;
-import org.bson.types.ObjectId;
 
 @Getter
 @Setter
@@ -11,10 +9,11 @@ import org.bson.types.ObjectId;
 @Builder
 @AllArgsConstructor
 public class CartDetail {
-    private int amount;
-    private int capacity;
-    private String localityName;
     private String idEvent;
-
+    private String eventName;
+    private String localityName;
+    private double price;
+    private int quantity;
+    private double subtotal;
 
 }
