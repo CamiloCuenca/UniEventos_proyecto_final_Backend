@@ -30,17 +30,21 @@ public class OrderServiceImp implements OrderService {
 
     private final OrderRepository orderRepository;
     private final AccountRepository cuentaRepo;
-    private final AccountServiceimp accountServiceimp;
     private final CouponService couponService;
     private final EventRepository eventRepository;
-    private final CouponRepository  couponRepository;
     private final CouponServiceImp couponServiceImp;
     private final EmailService emailService;
     private final QRCodeService qrCodeService;
     private final ImagesService imagesService;
 
 
-
+    /**
+     * Este mètodo crea un orden de compra segun los datos de orderDTO
+     *
+     * @param orderDTO
+     * @return Order
+     * @throws Exception
+     */
     @Override
     public Order createOrder(OrderDTO orderDTO) throws Exception {
         if (orderDTO == null) {
@@ -71,7 +75,6 @@ public class OrderServiceImp implements OrderService {
 
         // Verificar si es la primera orden de la cuenta
         List<Order> ordersByAccount = orderRepository.findByAccountId(orderDTO.idAccount());
-        System.out.println("aaaaaaaaaaaaa"+ordersByAccount);
         if (ordersByAccount.isEmpty()) {
             // Esta es la primera orden para la cuenta
             System.out.println("¡Esta es la primera orden para la cuenta: " + orderDTO.idAccount() + "!");
@@ -90,7 +93,7 @@ public class OrderServiceImp implements OrderService {
         }
 
 
-        // Generar el QR en base64
+        // Generar el QR de la orden en base64
         String qrBase64 = qrCodeService.generateQRCode(order.getId());
 
         // Convertir la base64 a byte array
@@ -116,7 +119,7 @@ public class OrderServiceImp implements OrderService {
     private void sendCupon(String email) throws Exception {
         CouponDTO couponDTO = new CouponDTO(
                 "Cupón de Bienvenida",              // Nombre del cupón
-               accountServiceimp.generateRandomCouponCode(),         // Código único de cupón
+               CouponService.generateRandomCouponCode(),         // Código único de cupón
                 "15",                               // Descuento del 15%
                 LocalDateTime.now().plusDays(30),   // Fecha de expiración (30 días a partir de ahora)
                 CouponStatus.AVAILABLE,             // Estado disponible

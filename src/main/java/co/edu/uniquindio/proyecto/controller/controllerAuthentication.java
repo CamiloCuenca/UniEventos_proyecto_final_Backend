@@ -1,6 +1,7 @@
 package co.edu.uniquindio.proyecto.controller;
 
 import co.edu.uniquindio.proyecto.dto.Account.LoginDTO;
+import co.edu.uniquindio.proyecto.dto.Account.createAccountDTO;
 import co.edu.uniquindio.proyecto.dto.JWT.TokenDTO;
 import co.edu.uniquindio.proyecto.dto.JWT.dtoMessage;
 import co.edu.uniquindio.proyecto.service.Interfaces.AccountService;
@@ -18,6 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class controllerAuthentication {
 
     private final AccountService accountService;
+
+    @PostMapping("/crear-cuenta")
+    public ResponseEntity<dtoMessage<String>> crearCuenta(@Valid @RequestBody createAccountDTO cuenta) throws Exception{
+        accountService.createAccount(cuenta);
+        return ResponseEntity.ok(new dtoMessage<>(false, "Cuenta creada exitosamente"));
+    }
+
 
 
     @PostMapping("/iniciar-sesion")

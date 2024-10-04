@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -209,6 +210,11 @@ public class CouponServiceImp implements CouponService {
 
 
         return discountAmount;
+    }
+
+    // Método auxiliar para generar un código de cupón aleatorio
+    public String generateRandomCouponCode() {
+        return UUID.randomUUID().toString().substring(0, 8).toUpperCase();  // Código aleatorio de 8 caracteres
     }
 
 }
