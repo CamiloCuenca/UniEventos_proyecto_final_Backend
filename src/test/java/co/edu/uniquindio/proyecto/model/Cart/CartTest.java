@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.model.Cart;
 
+import co.edu.uniquindio.proyecto.Enum.Localities;
 import co.edu.uniquindio.proyecto.dto.Carts.CartDetailDTO;
 import co.edu.uniquindio.proyecto.dto.Carts.UpdateCartItemDTO;
 import co.edu.uniquindio.proyecto.repository.CartRepository;
@@ -30,8 +31,8 @@ public class CartTest {
         String idEvent1 = "66f5c5a0de22e82833106d92";
         String idEvent2 = "66f5c5a0de22e82833106d93";
 
-        CartDetailDTO item1 = new CartDetailDTO("", idEvent1, "Bogota", 5); // Verifica que la cantidad sea 5
-        CartDetailDTO item2 = new CartDetailDTO("", idEvent2, "Santander", 5); // Verifica que la cantidad sea 5
+        CartDetailDTO item1 = new CartDetailDTO("", idEvent1, Localities.GENERAL, 5); // Verifica que la cantidad sea 5
+        CartDetailDTO item2 = new CartDetailDTO("", idEvent2, Localities.VIP, 5); // Verifica que la cantidad sea 5
 
 
         // Agregar ítems al carrito
@@ -49,7 +50,7 @@ public class CartTest {
     public void upgradeItemToCartTest() throws Exception {
         String accountId = "66f8db70c1ce3939dbcbe1e0";
         String itemId = "c524ca22-aded-4584-8f68-bd5f014051bf";
-        UpdateCartItemDTO updateCartItemDTO = new UpdateCartItemDTO(5, "Santander");
+        UpdateCartItemDTO updateCartItemDTO = new UpdateCartItemDTO(5, Localities.VIP);
         cartService.updateCartItem(accountId, itemId, updateCartItemDTO);
 
     }

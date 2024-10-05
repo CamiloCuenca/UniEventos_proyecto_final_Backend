@@ -99,6 +99,7 @@ db.Account.insertMany([
     }
 ]);
 // EVent
+// EVent
 db.Event.insertMany([
     {
         _id: ObjectId("66f5c5a0de22e82833106d92"),
@@ -115,13 +116,13 @@ db.Event.insertMany([
         localities: [
             {
                 price: 50,
-                name: "Bogota",
+                name: "GENERAL",
                 ticketsSold: 100,
                 maximumCapacity: 200
             },
             {
                 price: 150,
-                name: "Pereira",
+                name: "VIP",
                 ticketsSold: 50,
                 maximumCapacity: 100
             }
@@ -143,13 +144,13 @@ db.Event.insertMany([
         localities: [
             {
                 price: 40,
-                name: "Santander",
+                name: "GENERAL",
                 ticketsSold: 80,
                 maximumCapacity: 300
             },
             {
                 price: 100,
-                name: "Cauca",
+                name: "VIP",
                 ticketsSold: 20,
                 maximumCapacity: 50
             }
@@ -171,13 +172,13 @@ db.Event.insertMany([
         localities: [
             {
                 price: 30,
-                name: "Saminar",
+                name: "GENERAL",
                 ticketsSold: 30,
                 maximumCapacity: 100
             },
             {
                 price: 60,
-                name: "Manizales",
+                name: "VIP",
                 ticketsSold: 10,
                 maximumCapacity: 50
             }
@@ -199,13 +200,13 @@ db.Event.insertMany([
         localities: [
             {
                 price: 25,
-                name: "Medellin",
+                name: "GENERAL",
                 ticketsSold: 150,
                 maximumCapacity: 200
             },
             {
                 price: 75,
-                name: "Cartagena",
+                name: "VIP",
                 ticketsSold: 50,
                 maximumCapacity: 100
             }
@@ -227,13 +228,13 @@ db.Event.insertMany([
         localities: [
             {
                 price: 80,
-                name: "BuenaAventura",
+                name: "GENERAL",
                 ticketsSold: 50,
                 maximumCapacity: 100
             },
             {
                 price: 200,
-                name: "Pasto",
+                name: "VIP",
                 ticketsSold: 20,
                 maximumCapacity: 50
             }

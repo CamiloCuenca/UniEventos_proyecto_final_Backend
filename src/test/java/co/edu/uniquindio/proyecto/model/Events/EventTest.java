@@ -2,6 +2,7 @@ package co.edu.uniquindio.proyecto.model.Events;
 
 import co.edu.uniquindio.proyecto.Enum.EventStatus;
 import co.edu.uniquindio.proyecto.Enum.EventType;
+import co.edu.uniquindio.proyecto.Enum.Localities;
 import co.edu.uniquindio.proyecto.dto.Event.createDTOEvent;
 import co.edu.uniquindio.proyecto.dto.Event.editDTOEvent;
 import co.edu.uniquindio.proyecto.dto.Event.dtoEventFilter;
@@ -42,8 +43,8 @@ class EventTest {
                 "crr 20 # 1-23",                  // Dirección del evento
                 600,                              // Capacidad total
                 Arrays.asList(                    // Lista de localidades
-                        new Locality(50.0, "General", 100, 200),
-                        new Locality(150.0, "VIP", 50, 100)
+                        new Locality(50.0, Localities.GENERAL, 100, 200),
+                        new Locality(150.0, Localities.VIP, 50, 100)
                 )
         );
 
@@ -71,8 +72,8 @@ class EventTest {
                 "crr 20 # 1-23",                  // Dirección actualizada
                 600,                              // Capacidad total
                 Arrays.asList(                    // Lista de localidades actualizadas
-                        new Locality(75.0, "General", 150, 250),
-                        new Locality(200.0, "VIP", 80, 150)
+                        new Locality(75.0, Localities.GENERAL, 150, 250),
+                        new Locality(200.0, Localities.VIP, 80, 150)
                 )
         );
 
