@@ -242,7 +242,3 @@ db.Event.insertMany([
         _class: "co.edu.uniquindio.proyecto.model.Events.Event"
     }
 ]);
-
-// Coupon
-
-// Order

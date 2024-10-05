@@ -4,6 +4,7 @@ import co.edu.uniquindio.proyecto.Enum.Localities;
 import co.edu.uniquindio.proyecto.dto.Carts.CartDetailDTO;
 import co.edu.uniquindio.proyecto.dto.Carts.UpdateCartItemDTO;
 import co.edu.uniquindio.proyecto.repository.CartRepository;
+import co.edu.uniquindio.proyecto.service.Implementation.CartServiceImp;
 import co.edu.uniquindio.proyecto.service.Interfaces.CartService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ public class CartTest {
 
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private CartServiceImp cartServiceImp;
 
     @Autowired
     private CartRepository cartRepository;
@@ -89,6 +93,19 @@ public class CartTest {
     public void getCartItemsTest() throws Exception {
         String idAccount = "66fe49c4f50c1b290ba159d8";
         cartService.getCartItems(idAccount);
+    }
+
+    @Test
+    public void validateCartBeforePaymentTest() throws Exception {
+        String idAccount = "66f8db70c1ce3939dbcbe1e0";
+        cartService.validateCartBeforePayment(idAccount);
+    }
+
+    @Test
+    public void getCartItemSummaryTest() throws  Exception{
+        String idAccount = "66f8db70c1ce3939dbcbe1e0";
+        cartService.getCartItemSummary(idAccount);
+        cartServiceImp.printCartSummary(idAccount);
     }
 
 
