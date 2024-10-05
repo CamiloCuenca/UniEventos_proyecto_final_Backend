@@ -1,7 +1,7 @@
 package co.edu.uniquindio.proyecto.service.Interfaces;
 
 import co.edu.uniquindio.proyecto.dto.Carts.CartDetailDTO;
-import co.edu.uniquindio.proyecto.dto.Carts.UpdateCarDTO;
+import co.edu.uniquindio.proyecto.dto.Carts.UpdateCartItemDTO;
 import co.edu.uniquindio.proyecto.model.Carts.Cart;
 import co.edu.uniquindio.proyecto.model.Carts.CartDetail;
 
@@ -19,8 +19,7 @@ public interface CartService {
 
     List<CartDetail> getCartItems(String accountId) throws Exception;
 
-    void updateCartItem (String accountId, String eventId, String currentLocalityName, UpdateCarDTO UpdateCarDTO);
-
+    void updateCartItem (String accountId, String itemId, UpdateCartItemDTO UpdateCartItemDTO);
 
 
 }

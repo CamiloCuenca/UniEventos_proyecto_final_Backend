@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@Document ("Cart")
+@Document("Cart")
 public class Cart {
 
     @Id
