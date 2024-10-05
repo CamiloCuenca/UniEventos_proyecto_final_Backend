@@ -1,6 +1,6 @@
 db = connect('mongodb://localhost:27017/proyecto');
 
-db.Eventos.insertMany([
+db.Event.insertMany([
     {
         _id: ObjectId('66dcf9d99b293d0c2aba1372'),
         coverImage: 'image4.jpg',
@@ -40,13 +40,13 @@ db.Eventos.insertMany([
         localities: [
             {
                 price: 150,
-                name: 'General',
+                name: 'Armenia',
                 ticketsSold: 300,
                 maximumCapacity: 500
             },
             {
                 price: 400,
-                name: 'VIP',
+                name: 'Bogota',
                 ticketsSold: 100,
                 maximumCapacity: 150
             }
@@ -66,13 +66,13 @@ db.Eventos.insertMany([
         localities: [
             {
                 price: 80,
-                name: 'General',
+                name: 'Ibague',
                 ticketsSold: 100,
                 maximumCapacity: 250
             },
             {
                 price: 300,
-                name: 'VIP',
+                name: 'Cartagena',
                 ticketsSold: 75,
                 maximumCapacity: 100
             }
@@ -92,13 +92,13 @@ db.Eventos.insertMany([
         localities: [
             {
                 price: 200,
-                name: 'General',
+                name: 'Villao',
                 ticketsSold: 250,
                 maximumCapacity: 400
             },
             {
                 price: 500,
-                name: 'VIP',
+                name: 'Valle',
                 ticketsSold: 50,
                 maximumCapacity: 100
             }
@@ -118,13 +118,13 @@ db.Eventos.insertMany([
         localities: [
             {
                 price: 30,
-                name: 'General',
+                name: 'Tolima',
                 ticketsSold: 350,
                 maximumCapacity: 500
             },
             {
                 price: 100,
-                name: 'VIP',
+                name: 'Pereira',
                 ticketsSold: 100,
                 maximumCapacity: 200
             }

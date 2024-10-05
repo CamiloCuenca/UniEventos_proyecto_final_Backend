@@ -32,8 +32,5 @@ public interface EventRepository extends MongoRepository<Event,String> {
     long countByStatus(EventStatus status);
 
 
-    Optional<Locality> findByName(String name);
-
-
 
 }

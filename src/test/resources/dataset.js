@@ -115,13 +115,13 @@ db.Event.insertMany([
         localities: [
             {
                 price: 50,
-                name: "General",
+                name: "Bogota",
                 ticketsSold: 100,
                 maximumCapacity: 200
             },
             {
                 price: 150,
-                name: "VIP",
+                name: "Pereira",
                 ticketsSold: 50,
                 maximumCapacity: 100
             }
@@ -143,13 +143,13 @@ db.Event.insertMany([
         localities: [
             {
                 price: 40,
-                name: "General",
+                name: "Santander",
                 ticketsSold: 80,
                 maximumCapacity: 300
             },
             {
                 price: 100,
-                name: "VIP",
+                name: "Cauca",
                 ticketsSold: 20,
                 maximumCapacity: 50
             }
@@ -171,13 +171,13 @@ db.Event.insertMany([
         localities: [
             {
                 price: 30,
-                name: "Stand Básico",
+                name: "Saminar",
                 ticketsSold: 30,
                 maximumCapacity: 100
             },
             {
                 price: 60,
-                name: "Stand Premium",
+                name: "Manizales",
                 ticketsSold: 10,
                 maximumCapacity: 50
             }
@@ -199,13 +199,13 @@ db.Event.insertMany([
         localities: [
             {
                 price: 25,
-                name: "General",
+                name: "Medellin",
                 ticketsSold: 150,
                 maximumCapacity: 200
             },
             {
                 price: 75,
-                name: "VIP",
+                name: "Cartagena",
                 ticketsSold: 50,
                 maximumCapacity: 100
             }
@@ -227,91 +227,18 @@ db.Event.insertMany([
         localities: [
             {
                 price: 80,
-                name: "General",
+                name: "BuenaAventura",
                 ticketsSold: 50,
                 maximumCapacity: 100
             },
             {
                 price: 200,
-                name: "VIP",
+                name: "Pasto",
                 ticketsSold: 20,
                 maximumCapacity: 50
             }
         ],
         _class: "co.edu.uniquindio.proyecto.model.Events.Event"
-    }
-]);
-// Cart
-db.Cart.insertMany([
-    {
-        _id: ObjectId("66f7112588751406573dcef9"),
-        date: new Date(),
-        items: [
-            {
-                amount: 2,
-                capacity: 250,
-                localityName: "General",
-                idEvent: ObjectId("66f5c5a0de22e82833106d92") // Evento de prueba
-            }
-        ],
-        accountId: ObjectId("66f70c5a0000000000ae1ccf"), // Juan Perez
-        _class: "co.edu.uniquindio.proyecto.model.Carts.Cart"
-    },
-    {
-        _id: ObjectId("66f7112588751406573dcefa"),
-        date: new Date(),
-        items: [
-            {
-                amount: 1,
-                capacity: 150,
-                localityName: "VIP",
-                idEvent: ObjectId("66f5c5a0de22e82833106d93") // Evento de "Music Fest 2024"
-            }
-        ],
-        accountId: ObjectId("66f70c5a0000000000ae1cd0"), // Ana Lopez
-        _class: "co.edu.uniquindio.proyecto.model.Carts.Cart"
-    },
-    {
-        _id: ObjectId("66f7112588751406573dcefb"),
-        date: new Date(),
-        items: [
-            {
-                amount: 3,
-                capacity: 100,
-                localityName: "Palco",
-                idEvent: ObjectId("66f5c5a0de22e82833106d94") // Evento de "Art Expo 2024"
-            }
-        ],
-        accountId: ObjectId("66f70c5a0000000000ae1cd1"), // Carlos Martinez
-        _class: "co.edu.uniquindio.proyecto.model.Carts.Cart"
-    },
-    {
-        _id: ObjectId("66f7112588751406573dcefc"),
-        date: new Date(),
-        items: [
-            {
-                amount: 4,
-                capacity: 300,
-                localityName: "Preferencial",
-                idEvent: ObjectId("66f5c5a0de22e82833106d95") // Evento de "Startup Summit 2024"
-            }
-        ],
-        accountId: ObjectId("66f70c5a0000000000ae1cd2"), // Laura Gomez
-        _class: "co.edu.uniquindio.proyecto.model.Carts.Cart"
-    },
-    {
-        _id: ObjectId("66f7112588751406573dcefd"),
-        date: new Date(),
-        items: [
-            {
-                amount: 5,
-                capacity: 500,
-                localityName: "General",
-                idEvent: ObjectId("66f5c5a0de22e82833106d96") // Evento de "Science Fair 2024"
-            }
-        ],
-        accountId: ObjectId("66f70c5a0000000000ae1cd3"), // Brandon Montealegre
-        _class: "co.edu.uniquindio.proyecto.model.Carts.Cart"
     }
 ]);
 

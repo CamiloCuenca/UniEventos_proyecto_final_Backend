@@ -9,11 +9,13 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 public class CartDetail {
-    private String idEvent;
+    private String eventId;
+    private String itemId; // ID único para el ítem del carrito
     private String eventName;
     private String localityName;
-    private double price;
+    private Double price;
     private int quantity;
-    private double subtotal;
+    private Double subtotal;
+
 
 }

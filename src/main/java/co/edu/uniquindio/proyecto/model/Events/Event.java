@@ -30,9 +30,6 @@ public class Event {
     private int amount;
     private List<Locality> localities;
 
-    public Locality findByName(String name) {
-        return localities.stream().filter(locality -> locality.getName().equals(name)).findFirst().orElse(null);
-    }
 
 
 }
