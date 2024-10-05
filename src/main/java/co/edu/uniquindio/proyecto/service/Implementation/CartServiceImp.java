@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.service.Implementation;
 
+import co.edu.uniquindio.proyecto.Enum.Localities;
 import co.edu.uniquindio.proyecto.dto.Carts.CartDetailDTO;
 import co.edu.uniquindio.proyecto.dto.Carts.UpdateCartItemDTO;
 import co.edu.uniquindio.proyecto.exception.Cart.CartNotFoundException;
@@ -63,10 +64,10 @@ public class CartServiceImp implements CartService {
         Event event = findEventById(cartDetailDTO.eventId());
 
         // Verificar y obtener la localidad
-        Locality locality = findLocalityInEvent(event, cartDetailDTO.localityName());
+        Locality locality = findLocalityInEvent(event, (cartDetailDTO.localityName()));
 
         // Verificar si el ítem ya existe en el carrito
-        checkIfItemExistsInCart(cart, event, cartDetailDTO.localityName());
+        checkIfItemExistsInCart(cart, event, String.valueOf(cartDetailDTO.localityName()));
 
         // Crear y agregar el nuevo ítem al carrito
         CartDetail newItem = createCartItem(cartDetailDTO, event, locality);
@@ -93,7 +94,7 @@ public class CartServiceImp implements CartService {
                 .orElseThrow(() -> new EventNotFoundException("No se encontró el evento con el ID: " + eventId));
     }
 
-    private Locality findLocalityInEvent(Event event, String localityName) throws LocalityNotFoundException {
+    private Locality findLocalityInEvent(Event event, Localities localityName) throws LocalityNotFoundException {
         return event.getLocalities().stream()
                 .filter(loc -> loc.getName().equals(localityName))
                 .findFirst()
@@ -113,7 +114,7 @@ public class CartServiceImp implements CartService {
                 .itemId(UUID.randomUUID().toString()) // Asigna un ID único al ítem
                 .eventId(cartDetailDTO.eventId())
                 .eventName(event.getName())
-                .localityName(cartDetailDTO.localityName())
+                .localityName(Localities.valueOf(String.valueOf(cartDetailDTO.localityName())))
                 .price(locality.getPrice())
                 .quantity(cartDetailDTO.quantity()) // Establecer la cantidad
                 .subtotal(locality.getPrice() * cartDetailDTO.quantity()) // Calcular subtotal
@@ -170,7 +171,7 @@ public class CartServiceImp implements CartService {
 
     private void updateCartItemDetails(CartDetail item, UpdateCartItemDTO updateCartItemDTO) throws EventNotFoundException, LocalityNotFoundException {
         // Verificar si la localidad ha cambiado
-        if (!item.getLocalityName().equalsIgnoreCase(updateCartItemDTO.localityName())) {
+        if (!item.getLocalityName().equals(updateCartItemDTO.localityName())) {
             // Buscar el evento para obtener las localidades disponibles
             Event event = eventRepository.findById(item.getEventId())
                     .orElseThrow(() -> new EventNotFoundException("Evento no encontrado con ID: " + item.getEventId()));
