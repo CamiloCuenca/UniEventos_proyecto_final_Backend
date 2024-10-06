@@ -1,5 +1,5 @@
+![logo-Claro.svg](logo-Claro.svg)
 # UniEventos - Ticket Selling Platform
-
 
 ## Table of Contents
 - [Project Overview](#project-overview)
