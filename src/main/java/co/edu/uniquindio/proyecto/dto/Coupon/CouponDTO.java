@@ -16,7 +16,7 @@ public record CouponDTO(
         @NotNull CouponStatus status,
         @NotNull TypeCoupon type,
         // Nuevo campo para el evento específico
-        @NotBlank String eventId,
+        String eventId,
 
         // Nuevos campos para el rango de fechas
         @NotNull LocalDateTime startDate

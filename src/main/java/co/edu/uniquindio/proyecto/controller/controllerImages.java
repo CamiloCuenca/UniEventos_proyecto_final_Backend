@@ -22,7 +22,7 @@ public class controllerImages {
         return ResponseEntity.ok().body(new MessageDTO<>(false, respuesta));
     }
 
-    @DeleteMapping("/remove")
+    @DeleteMapping("/remove-imagen")
     public ResponseEntity<MessageDTO<String>> eliminar(@RequestParam("idImagen") String idImagen)  throws Exception{
         imagesService.deleteImage( idImagen );
         return ResponseEntity.ok().body(new MessageDTO<>(false, "La imagen fue eliminada correctamente"));

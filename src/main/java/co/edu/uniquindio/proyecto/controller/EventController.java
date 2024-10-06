@@ -18,26 +18,7 @@ public class EventController {
     private final EventService eventService;
 
 
-    // Obtener información de un evento por su ID
-    @GetMapping("/obtener-info/{id}")
-    public ResponseEntity<MessageDTO<dtoEventInformation>> obtainEventInformation(@PathVariable String id) throws Exception {
-        dtoEventInformation eventInfo = eventService.obtainEventInformation(id);
-        return ResponseEntity.ok(new MessageDTO<>(false, eventInfo));
-    }
 
-    // Listar todos los eventos
-    @GetMapping("/listar-eventos")
-    public ResponseEntity<MessageDTO<List<ItemEventDTO>>> listEvents() {
-        List<ItemEventDTO> events = eventService.listEvents();
-        return ResponseEntity.ok(new MessageDTO<>(false, events));
-    }
-
-    // Filtrar eventos según ciertos criterios
-    @PostMapping("/filtrar-eventos")
-    public ResponseEntity<MessageDTO<List<ItemEventDTO>>> filterEvents(@Valid @RequestBody dtoEventFilter filtroEventoDTO) {
-        List<ItemEventDTO> filteredEvents = eventService.filterEvents(filtroEventoDTO);
-        return ResponseEntity.ok(new MessageDTO<>(false, filteredEvents));
-    }
 
 
 }
