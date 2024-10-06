@@ -92,7 +92,7 @@ class AccountServiceTest {
     public void updateTestAccount() {
         String idCuenta = "66f79539c15bdf6a1c74cb2d"; // ID de la cuenta existente
         editAccountDTO editAccountDTO = new editAccountDTO(
-                idCuenta, // ID de la cuenta a modificar
+
                 "brandon", // Nombre actualizado
                 "12121", // Teléfono
                 "Nueva dirección", // Dirección actualizada
@@ -101,7 +101,7 @@ class AccountServiceTest {
 
         // Se espera que no se lance ninguna excepción al editar la cuenta
         assertDoesNotThrow(() -> {
-            accountService.editAccount(editAccountDTO); // Actualiza la cuenta
+            accountService.editAccount(editAccountDTO,idCuenta); // Actualiza la cuenta
 
             // Verifica que los cambios se han reflejado correctamente
             dtoAccountInformation detalle = accountService.obtainAccountInformation(idCuenta);
@@ -208,10 +208,10 @@ class AccountServiceTest {
         String code = "774445fe";
         String newPassword = "M@mahermosa123";
         String confirmatePassword = "M@mahermosa123";
-        changePasswordDTO changePasswordDTO = new changePasswordDTO(newPassword, confirmatePassword);
+        changePasswordDTO changePasswordDTO = new changePasswordDTO(newPassword, confirmatePassword,code);
 
         // Llamar al método a probar
-        accountService.changePassword(changePasswordDTO, correo, code);
+        accountService.changePassword(changePasswordDTO, correo);
 
         // Verificar que la cuenta fue actualizada correctamente en la base de datos
         Optional<Account> updatedAccount = accountRepository.findByEmail(correo);

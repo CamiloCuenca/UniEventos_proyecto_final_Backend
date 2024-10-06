@@ -17,7 +17,7 @@ public interface AccountService {
 // Parámetros: editAccountDTO con la información de la cuenta a modificar.
 // Retorno: String con un mensaje de éxito o confirmación.
 // Excepción: Lanza una excepción si no se puede editar la cuenta.
-    String editAccount(editAccountDTO cuenta) throws Exception;
+    String editAccount(editAccountDTO cuenta, String id) throws Exception;
 
     // Método para eliminar una cuenta
 // Parámetros: String con el ID de la cuenta a eliminar.
@@ -45,7 +45,7 @@ public interface AccountService {
 // Parámetros: changePasswordDTO con la nueva contraseña, String con el correo, y String con el código de verificación.
 // Retorno: String con un mensaje de éxito.
 // Excepción: Lanza una excepción si no se puede cambiar la contraseña.
-    String changePassword(changePasswordDTO changePasswordDTO, String correo, String code) throws Exception;
+    String changePassword(changePasswordDTO changePasswordDTO, String correo) throws Exception;
 
     // Método para iniciar sesión
 // Parámetros: LoginDTO con la información de inicio de sesión (correo y contraseña).

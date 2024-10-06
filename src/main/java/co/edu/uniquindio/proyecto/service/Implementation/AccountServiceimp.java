@@ -195,11 +195,12 @@ public class AccountServiceimp implements AccountService {
      * @throws Exception
      */
     @Override
-    public String editAccount(editAccountDTO cuenta) throws AccountNtFoundException {
-        Optional<Account> optionalAccount = cuentaRepo.findById(cuenta.id());
+    public String editAccount(editAccountDTO cuenta , String id) throws AccountNtFoundException {
+        Optional<Account> optionalAccount = cuentaRepo.findById(id);
 
         if (optionalAccount.isEmpty()) {
-            throw new AccountNtFoundException(cuenta.id());
+
+            throw new AccountNtFoundException(id);
         }
 
         Account cuentaActualizada = optionalAccount.get();
@@ -325,7 +326,7 @@ public class AccountServiceimp implements AccountService {
      */
 
     @Override
-    public String changePassword(changePasswordDTO changePasswordDTO, String correo, String code) throws Exception {
+    public String changePassword(changePasswordDTO changePasswordDTO, String correo) throws Exception {
         Optional<Account> optionalAccount = cuentaRepo.findByEmail(correo);
         if (optionalAccount.isEmpty()) {
             throw new EmailNotFoundException(correo);
@@ -338,7 +339,7 @@ public class AccountServiceimp implements AccountService {
             throw new ValidationCodeExpiredException();
         }
 
-        if (!validationCodePassword.getCode().equals(code)) {
+        if (!validationCodePassword.getCode().equals(changePasswordDTO.code())) {
             throw new InvalidValidationCodeException();
         }
 

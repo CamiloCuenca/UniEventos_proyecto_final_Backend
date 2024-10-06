@@ -1,6 +1,6 @@
 package co.edu.uniquindio.proyecto.dto.JWT;
 
-public record dtoMessage<T>(
+public record MessageDTO<T>(
         boolean error,
         T respuesta
 ) {
