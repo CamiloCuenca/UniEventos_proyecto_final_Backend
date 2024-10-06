@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Payment {
+public class Pago {
 
     private String id;
     private String currency;
@@ -21,4 +21,5 @@ public class Payment {
     private LocalDateTime date;
     private double transactionValue;
     private PaymentState state;
+    private String statusDetail;
 }

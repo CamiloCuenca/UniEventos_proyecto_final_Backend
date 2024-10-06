@@ -1,7 +1,7 @@
 package co.edu.uniquindio.proyecto.service.Implementation;
 
+import co.edu.uniquindio.proyecto.Enum.Localities;
 import co.edu.uniquindio.proyecto.dto.Event.*;
-import co.edu.uniquindio.proyecto.exception.Cart.CartNotFoundException;
 import co.edu.uniquindio.proyecto.exception.event.*;
 import co.edu.uniquindio.proyecto.model.Events.Event;
 import co.edu.uniquindio.proyecto.model.Events.Locality;
@@ -11,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
-import javax.naming.NameAlreadyBoundException;
-import javax.security.auth.login.AccountNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -198,6 +196,29 @@ public class EventServiceImp implements EventService {
                 ))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public Event obtenerEvento(String idEvent) throws Exception {
+        // Verifica que el idEvent no sea nulo o vacío
+        if (idEvent == null || idEvent.trim().isEmpty()) {
+            throw new IllegalArgumentException("El ID del evento no puede estar vacío.");
+        }
+
+        // Busca el evento en la base de datos utilizando el repositorio de eventos
+        Optional<Event> eventoOptional = eventRepository.findById(idEvent);
+
+        // Si el evento no se encuentra, lanza una excepción
+        if (eventoOptional.isEmpty()) {
+            throw new Exception("Evento no encontrado con el ID proporcionado: " + idEvent);
+        }
+
+        // Retorna el evento encontrado
+        return eventoOptional.get();
+    }
+
+
+
+
 
     /**
      * Metodo para calcular el total de tickets vendios.

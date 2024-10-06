@@ -23,7 +23,13 @@ public class Order {
     private LocalDateTime date;
     private String gatewayCode;
     private List<OrderDetail> items;
-    private Payment payment;
+    private Pago payment;
     private Double total;
     private String codeCoupon;
+
+    public void setCodigoPasarela(String codigoPasarela) {
+        this.gatewayCode = codigoPasarela;
+    }
+
+
 }
