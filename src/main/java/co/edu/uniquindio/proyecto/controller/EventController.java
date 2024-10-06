@@ -37,35 +37,6 @@ public class EventController {
 
 
 
-    @GetMapping("/active")
-    public ResponseEntity<Map<String, Object>> getActiveEvents(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
-
-        try {
-            List<Event> events = new ArrayList<>();
-            Pageable paging = PageRequest.of(page, size);
-
-            // Busca los eventos que están activos
-            Page<Event> pageEvents = eventRepository.findByStatus(EventStatus.ACTIVE, paging);
-            events = pageEvents.getContent();
-
-            if (events.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-
-            Map<String, Object> response = new HashMap<>();
-            response.put("events", events);
-            response.put("currentPage", pageEvents.getNumber());
-            response.put("totalItems", pageEvents.getTotalElements());
-            response.put("totalPages", pageEvents.getTotalPages());
-
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
 
 
 

@@ -55,6 +55,7 @@ public class AdminController {
     }
 
 
+    // Resvisar este servicio
     @GetMapping("/calcular-total/{idEvent}")
     public ResponseEntity<MessageDTO<Double>> calculateTotal(@PathVariable String idEvent) throws Exception {
         double total = eventService.calculateTotal(idEvent);
@@ -71,7 +72,7 @@ public class AdminController {
     }
 
     // Desactivar o eliminar un cupón por su ID
-    @DeleteMapping("/desactivar/{couponId}")
+    @DeleteMapping("/desactivar-cupon/{couponId}")
     public ResponseEntity<MessageDTO<String>> deactivateCoupon(@PathVariable String couponId) throws Exception {
         couponService.deactivateCoupon(couponId);
         return ResponseEntity.ok(new MessageDTO<>(false, "Cupón desactivado exitosamente."));
@@ -85,7 +86,7 @@ public class AdminController {
     }
 
     // Actualizar información de un cupón
-    @PutMapping("/update/{couponId}")
+    @PutMapping("/actualizar/{couponId}")
     public ResponseEntity<MessageDTO<String>> updateCoupon(@PathVariable String couponId, @Valid @RequestBody CouponDTO couponDTO) throws Exception {
         couponService.updateCoupon(couponId, couponDTO);
         return ResponseEntity.ok(new MessageDTO<>(false, "Cupón actualizado exitosamente."));
