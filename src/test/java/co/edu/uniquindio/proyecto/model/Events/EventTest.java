@@ -85,7 +85,7 @@ class EventTest {
     @Test
     public void DeleteEvent() throws Exception {
         // ID del evento que se asume ya existe en la base de datos
-        String eventId = "66edcacb8ea93c339b2674e7";
+        String eventId = "66f5c5a0de22e82833106d92";
 
         // Llamar al método del servicio para eliminar el evento
         String result = eventService.deleteEvent(eventId);

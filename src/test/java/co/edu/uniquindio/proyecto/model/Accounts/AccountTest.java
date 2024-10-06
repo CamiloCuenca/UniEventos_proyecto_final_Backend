@@ -61,16 +61,16 @@ class AccountServiceTest {
      */
     @Test
     public void activateAccountTest() throws Exception {
-        String correo = "juanperez@example.com";
-        String code = "b5d9ce1f";
+        String correo = "golfay123@hotmail.com";
+        String code = "8097048f";
         accountService.activateAccount(correo, code);
 
     }
 
     @Test
     public void loginAccountTest() {
-        String email = "ba5808864@gmail.com";
-        String password = "1234";  // Contraseña válida
+        String email = "golfay123@hotmail.com";
+        String password = "12345";  // Contraseña válida
 
         LoginDTO createLoginDTO = new LoginDTO(email, password);
 
