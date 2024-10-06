@@ -1,6 +1,6 @@
 package co.edu.uniquindio.proyecto.exception;
 
-import co.edu.uniquindio.proyecto.dto.JWT.dtoMessage;
+import co.edu.uniquindio.proyecto.dto.JWT.MessageDTO;
 import co.edu.uniquindio.proyecto.dto.ValidacionDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -17,13 +17,13 @@ public class ExcepcionesGlobales {
 
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<dtoMessage<String>> generalException(Exception e){
-        return ResponseEntity.internalServerError().body( new dtoMessage<>(true, e.getMessage()) );
+    public ResponseEntity<MessageDTO<String>> generalException(Exception e){
+        return ResponseEntity.internalServerError().body( new MessageDTO<>(true, e.getMessage()) );
     }
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<dtoMessage<List<ValidacionDTO>>> validationException( MethodArgumentNotValidException ex ) {
+    public ResponseEntity<MessageDTO<List<ValidacionDTO>>> validationException(MethodArgumentNotValidException ex ) {
         List<ValidacionDTO> errores = new ArrayList<>();
         BindingResult results = ex.getBindingResult();
 
@@ -33,7 +33,7 @@ public class ExcepcionesGlobales {
         }
 
 
-        return ResponseEntity.badRequest().body( new dtoMessage<>(true, errores) );
+        return ResponseEntity.badRequest().body( new MessageDTO<>(true, errores) );
     }
 
 
