@@ -31,9 +31,9 @@ public class CartTest {
      */
     @Test
     public void addItemToCartTest() throws Exception {
-        String accountId = "66f8db70c1ce3939dbcbe1e0"; // ID de prueba
-        String idEvent1 = "66f5c5a0de22e82833106d92";
-        String idEvent2 = "66f5c5a0de22e82833106d93";
+        String accountId = "67017a52adbf6e5218727100"; // ID de prueba
+        String idEvent1 = "66f5c5a0de22e82833106d95";
+        String idEvent2 = "66f5c5a0de22e82833106d96";
 
         CartDetailDTO item1 = new CartDetailDTO("", idEvent1, Localities.GENERAL, 5); // Verifica que la cantidad sea 5
         CartDetailDTO item2 = new CartDetailDTO("", idEvent2, Localities.VIP, 5); // Verifica que la cantidad sea 5

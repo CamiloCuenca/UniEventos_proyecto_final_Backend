@@ -3,6 +3,7 @@ package co.edu.uniquindio.proyecto.model.Events;
 import co.edu.uniquindio.proyecto.Enum.EventStatus;
 import co.edu.uniquindio.proyecto.Enum.EventType;
 import co.edu.uniquindio.proyecto.Enum.Localities;
+import co.edu.uniquindio.proyecto.controller.EventController;
 import co.edu.uniquindio.proyecto.dto.Event.createDTOEvent;
 import co.edu.uniquindio.proyecto.dto.Event.editDTOEvent;
 import co.edu.uniquindio.proyecto.dto.Event.dtoEventFilter;
@@ -12,11 +13,20 @@ import co.edu.uniquindio.proyecto.service.Interfaces.EventService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class EventTest {
@@ -26,6 +36,8 @@ class EventTest {
     private EventService eventService;
     @Autowired
     private EventRepository eventRepository;
+    @Autowired
+    private EventController eventController;
 
     // Prueba para crear un evento
     @Test
@@ -129,8 +141,6 @@ class EventTest {
     public void calculateTotalTestPrice() throws Exception{
         String idEvent = "66fe4a3d6e8bef16ed873d70";
         eventService.calculateTotal(idEvent);
-
-
-
     }
+
 }
