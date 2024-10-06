@@ -1,7 +1,6 @@
 package co.edu.uniquindio.proyecto.service.Implementation;
 
 import co.edu.uniquindio.proyecto.dto.Event.*;
-import co.edu.uniquindio.proyecto.exception.Cart.CartNotFoundException;
 import co.edu.uniquindio.proyecto.exception.event.*;
 import co.edu.uniquindio.proyecto.model.Events.Event;
 import co.edu.uniquindio.proyecto.model.Events.Locality;
@@ -11,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
-import javax.naming.NameAlreadyBoundException;
-import javax.security.auth.login.AccountNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -128,7 +125,7 @@ public class EventServiceImp implements EventService {
      * @return
      * @throws Exception
      */
-    public dtoEventInformation obtainEventInformation(String id) throws EventNotFoundException{
+    public dtoEventInformation obtainEventInformation(String id) throws EventNotFoundException {
         Optional<Event> optionalEvent = eventRepository.findById(id);
         if (optionalEvent.isEmpty()) {
             throw new EventNotFoundException(id);
@@ -153,9 +150,9 @@ public class EventServiceImp implements EventService {
      */
     @Override
     public List<ItemEventDTO> listEvents() {
-        try{
+        try {
             List<Event> events = eventRepository.findAll();
-            if (events.isEmpty()){
+            if (events.isEmpty()) {
                 throw new NoEventsFoundException();
             }
             List<ItemEventDTO> items = new ArrayList<>();
@@ -168,7 +165,7 @@ public class EventServiceImp implements EventService {
                 ));
             }
             return items;
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new EventRetrievalException(e.getMessage());
         }
 
@@ -186,7 +183,8 @@ public class EventServiceImp implements EventService {
         List<Event> filteredEvents = eventRepository.findByFiltros(
                 filtroEventoDTO.name(),
                 filtroEventoDTO.city(),
-                filtroEventoDTO.type()
+                filtroEventoDTO.type(),
+                filtroEventoDTO.date()
         );
 
         return filteredEvents.stream()
@@ -201,6 +199,7 @@ public class EventServiceImp implements EventService {
 
     /**
      * Metodo para calcular el total de tickets vendios.
+     *
      * @param idEvent
      * @return
      * @throws EventNotFoundException

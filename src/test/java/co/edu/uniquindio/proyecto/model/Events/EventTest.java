@@ -124,7 +124,7 @@ class EventTest {
     @Test
     public void filterTest() throws Exception {
         // Crear DTO de filtro de eventos basado en tipo de evento y otros parámetros
-        dtoEventFilter filtroEventoDTO = new dtoEventFilter("", EventType.CONCERT, "");
+        dtoEventFilter filtroEventoDTO = new dtoEventFilter("", EventType.CONCERT, "",null);
 
         // Imprimir los eventos filtrados
         System.out.println(eventService.filterEvents(filtroEventoDTO));

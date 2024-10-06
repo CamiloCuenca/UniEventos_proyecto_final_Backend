@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -21,10 +22,12 @@ public interface EventRepository extends MongoRepository<Event, String> {
             + "'$or': ["
             + "  { 'name' : { $regex: ?0, $options: 'i' } },"
             + "  { 'city' : ?1 },"
-            + "  { 'type' : ?2 }"
+            + "  { 'type' : ?2 },"
+            + "  { 'date' : ?3 }"
             + "]"
             + "}")
-    List<Event> findByFiltros(String nombre, String ciudad, EventType tipo);
+    List<Event> findByFiltros(String name, String city, EventType type, LocalDateTime date);
+
 
     Optional<Event> findAllById(String id);
 

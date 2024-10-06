@@ -31,12 +31,6 @@ public class EventController {
     @Autowired
     private EventRepository eventRepository;
 
-
-
-
-
-
-
     @GetMapping("/active")
     public ResponseEntity<Map<String, Object>> getActiveEvents(
             @RequestParam(defaultValue = "0") int page,
