@@ -1,7 +1,9 @@
 package co.edu.uniquindio.proyecto.service.Implementation;
 
 import co.edu.uniquindio.proyecto.Enum.Localities;
+import co.edu.uniquindio.proyecto.dto.Carts.CartCartSummaryDTO;
 import co.edu.uniquindio.proyecto.dto.Carts.CartDetailDTO;
+import co.edu.uniquindio.proyecto.dto.Carts.CartItemSummaryDTO;
 import co.edu.uniquindio.proyecto.dto.Carts.UpdateCartItemDTO;
 import co.edu.uniquindio.proyecto.exception.Cart.CartNotFoundException;
 import co.edu.uniquindio.proyecto.exception.Cart.ErrorCreateForCartException;
@@ -23,6 +25,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -251,5 +254,79 @@ public class CartServiceImp implements CartService {
         // Guardar los cambios en el carrito
         cart.calculateTotal();
         cartRepository.save(cart);
+    }
+
+    @Override
+    public void validateCartBeforePayment(String accountId) throws Exception {
+        // Buscar el carrito del usuario
+        Cart cart = getCartByAccountId(accountId);
+
+        // Verificar la disponibilidad de cada ítem en el carrito
+        for (CartDetail item : cart.getItems()) {
+            Event event = findEventById(item.getEventId());
+            Locality locality = findLocalityInEvent(event, item.getLocalityName());
+
+            // Comprobar la disponibilidad de boletos
+            if (locality.getMaximumCapacity() - locality.getTicketsSold() < item.getQuantity()) {
+                throw new Exception("No hay suficientes boletos disponibles para el evento: " + item.getEventName());
+            }
+        }
+
+        // Si llegamos aquí, el carrito es válido
+        System.out.println("El carrito es válido y listo para el pago.");
+
+    }
+
+    @Override
+    public List<CartItemSummaryDTO> getCartItemSummary(String accountId) throws CartNotFoundException {
+        // Buscar el carrito del usuario
+        Cart cart = getCartByAccountId(accountId);
+
+        // Obtener el resumen de los ítems en el carrito
+        List<CartItemSummaryDTO> summary = cart.getItems().stream()
+                .map(item -> new CartItemSummaryDTO(
+                        item.getEventName(),
+                        item.getLocalityName(),
+                        item.getQuantity(),
+                        item.getPrice(),
+                        item.getSubtotal()
+                ))
+                .collect(Collectors.toList());
+
+        return summary;
+    }
+
+    // ... Otros métodos
+
+    /**
+     * Método para imprimir el resumen del carrito en la consola.
+     *
+     * @param accountId ID de la cuenta del usuario.
+     * @throws CartNotFoundException Si no se encuentra el carrito.
+     */
+    public void printCartSummary(String accountId) throws CartNotFoundException {
+        // Obtener el resumen del carrito
+        List<CartItemSummaryDTO> summary = getCartItemSummary(accountId);
+
+        // Imprimir encabezado
+        System.out.println("Resumen del Carrito:");
+        System.out.printf("%-30s %-20s %-10s %-10s %-10s%n", "Evento", "Localidad", "Cantidad", "Precio", "Subtotal");
+        System.out.println("--------------------------------------------------------------");
+
+        // Imprimir cada ítem en el carrito
+        for (CartItemSummaryDTO item : summary) {
+            System.out.printf("%-30s %-20s %-10d %-10.2f %-10.2f%n",
+                    item.eventName(),
+                    item.localities(),
+                    item.quantity(),
+                    item.price(),
+                    item.subtotal());
+        }
+
+        // Imprimir total del carrito
+        double total = summary.stream()
+                .mapToDouble(CartItemSummaryDTO::subtotal)
+                .sum();
+        System.out.printf("Total del carrito: %.2f%n", total);
     }
 }
