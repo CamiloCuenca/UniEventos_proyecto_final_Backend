@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="170mm"
+   height="50mm"
+   viewBox="0 0 170 50"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3.2 (091e20ef0f, 2023-11-25, custom)"
+   sodipodi:docname="logo-Claro.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.733172"
+     inkscape:cx="396.22353"
+     inkscape:cy="233.9151"
+     inkscape:window-width="1920"
+     inkscape:window-height="1027"
+     inkscape:window-x="0"
+     inkscape:window-y="29"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <rect
+       x="167.95306"
+       y="596.59015"
+       width="32.395157"
+       height="20.555517"
+       id="rect16" />
+  </defs>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       xml:space="preserve"
+       transform="matrix(1.6379322,0,0,2.3120706,-227.38889,-1374.0803)"
+       id="text16"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12px;line-height:0;font-family:'Nimbus Sans';-inkscape-font-specification:'Nimbus Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;white-space:pre;shape-inside:url(#rect16);display:inline;fill:#18c56a;fill-opacity:1;stroke-width:2.54313;stroke-dasharray:none;paint-order:normal"><tspan
+         x="167.95312"
+         y="608.93784"
+         id="tspan4"><tspan
+           style="line-height:1.6"
+           id="tspan3">UNI </tspan></tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:20.034px;font-family:'Nimbus Sans';-inkscape-font-specification:'Nimbus Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#0a542e;fill-opacity:1;stroke-width:1.67214;stroke-dasharray:none;paint-order:normal"
+       x="112.90582"
+       y="24.965565"
+       id="text17"
+       transform="scale(0.75893309,1.3176392)"><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:20.034px;font-family:'Nimbus Sans';-inkscape-font-specification:'Nimbus Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:1.67214"
+         x="112.90582"
+         y="24.965565"
+         id="tspan18">EVENTOS</tspan></text>
+    <path
+       sodipodi:type="star"
+       style="fill:#18c76b;fill-opacity:1;stroke-width:4.94901;stroke-dasharray:none;paint-order:stroke fill markers"
+       id="path32"
+       inkscape:flatsided="true"
+       sodipodi:sides="6"
+       sodipodi:cx="14.862611"
+       sodipodi:cy="158.71632"
+       sodipodi:r1="15.682404"
+       sodipodi:r2="13.581361"
+       sodipodi:arg1="1.5483669"
+       sodipodi:arg2="2.0719657"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 15.214329,174.39478 -13.753803,-7.53463 -0.3517179,-15.67846 13.4020849,-8.14383 13.753803,7.53464 0.351718,15.67846 z"
+       inkscape:transform-center-y="-1.9995757e-06"
+       transform="translate(14.989077,-134.69268)" />
+    <g
+       style="fill:#0d5330;fill-opacity:1"
+       id="g32"
+       transform="matrix(0.03746679,0.00111885,-0.00119973,0.03494101,18.612916,14.99889)"
+       inkscape:transform-center-x="0.12884697"
+       inkscape:transform-center-y="0.74397628">
+      <path
+         d="m 206.86,245.15 c -35.88,10.45 -59.95,41.2 -57.53,74.1 11.4,-12.72 28.81,-23.7 49.9,-30.92 z M 95.81,295 64.08,115.49 c -0.29,-1.62 0.28,-2.62 0.24,-2.65 57.76,-32.06 123.12,-49.01 189.01,-49.01 1.61,0 3.23,0.17 4.85,0.19 13.95,-13.47 31.73,-22.83 51.59,-26 C 328.66,35 347.82,33.47 366.95,32.7 356.96,18.75 342.47,8.47 325.18,5.7 301.27,1.89 277.24,0 253.32,0 176.66,0 101.02,19.42 33.2,57.06 9.03,70.48 -3.92,98.48 1.05,126.58 l 31.73,179.51 c 14.23,80.52 136.33,142.08 204.45,142.08 3.59,0 6.75,-0.46 10.01,-0.8 C 233.72,430.29 218.3,406.89 207.74,379.79 160.13,366.81 101.68,328.17 95.81,295 Z m 97.55,-137.46 c -0.73,-4.12 -2.23,-7.87 -4.07,-11.4 -8.25,8.91 -20.67,15.75 -35.32,18.32 -14.65,2.58 -28.67,0.4 -39.48,-5.17 -0.52,3.94 -0.64,7.98 0.09,12.1 3.84,21.7 24.58,36.19 46.34,32.37 21.75,-3.82 36.28,-24.52 32.44,-46.22 z M 606.8,120.9 C 517.82,71.52 415.37,53.49 314.82,69.55 c -27.31,4.36 -49.08,26.26 -54.04,54.36 l -31.73,179.51 c -15.39,87.05 95.28,196.27 158.31,207.35 63.03,11.09 204.47,-53.79 219.86,-140.84 l 31.73,-179.51 c 4.97,-28.11 -7.98,-56.11 -32.15,-69.52 z m -273.24,96.8 c 3.84,-21.7 24.58,-36.19 46.34,-32.36 21.76,3.83 36.28,24.52 32.45,46.22 -0.73,4.12 -2.23,7.87 -4.07,11.4 -8.25,-8.91 -20.67,-15.75 -35.32,-18.32 -14.65,-2.58 -28.67,-0.4 -39.48,5.17 -0.53,-3.95 -0.65,-7.99 0.08,-12.11 z m 70.47,198.76 c -55.68,-9.79 -93.52,-59.27 -89.04,-112.9 20.6,25.54 56.21,46.17 99.49,53.78 43.28,7.61 83.82,0.37 111.93,-16.6 -14.18,51.94 -66.71,85.51 -122.38,75.72 z m 130.3,-151.34 c -8.25,-8.91 -20.68,-15.75 -35.33,-18.32 -14.65,-2.58 -28.67,-0.4 -39.48,5.17 -0.52,-3.94 -0.64,-7.98 0.09,-12.1 3.84,-21.7 24.58,-36.19 46.34,-32.37 21.75,3.83 36.28,24.52 32.45,46.22 -0.73,4.13 -2.23,7.88 -4.07,11.4 z"
+         id="path1-6"
+         style="fill:#0d5330;fill-opacity:1" />
+    </g>
+  </g>
+</svg>
