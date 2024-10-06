@@ -17,7 +17,7 @@ public class AccountController {
     private final AccountService accountService;
 
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/obtener-info/{id}")
     public dtoAccountInformation obtainAccountInformation(@PathVariable String id) throws Exception {
         return accountService.obtainAccountInformation(id);
     }
