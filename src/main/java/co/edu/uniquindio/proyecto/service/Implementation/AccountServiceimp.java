@@ -78,6 +78,10 @@ public class AccountServiceimp implements AccountService {
         return cuentaRepo.findByIdnumber(idNumber).isPresent();
     }
 
+    private boolean id(String id) {
+        return cuentaRepo.findByIdnumber(id).isPresent();
+    }
+
     /**
      * Metodo encargado de crear el cuerpo del token.
      *
@@ -122,9 +126,6 @@ public class AccountServiceimp implements AccountService {
 
 
         Map<String, Object> map = construirClaims(account);
-
-
-
         return new TokenDTO(jwtUtils.generateToken(account.getEmail(), map));
     }
 

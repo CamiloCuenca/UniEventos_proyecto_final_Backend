@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.service.Implementation;
 
+import co.edu.uniquindio.proyecto.Enum.AccountStatus;
 import co.edu.uniquindio.proyecto.Enum.Localities;
 import co.edu.uniquindio.proyecto.dto.Carts.CartCartSummaryDTO;
 import co.edu.uniquindio.proyecto.dto.Carts.CartDetailDTO;
@@ -9,8 +10,10 @@ import co.edu.uniquindio.proyecto.exception.Cart.CartNotFoundException;
 import co.edu.uniquindio.proyecto.exception.Cart.ErrorCreateForCartException;
 import co.edu.uniquindio.proyecto.exception.Cart.EventoAlreadyForLocalityException;
 import co.edu.uniquindio.proyecto.exception.Cart.NoItemFoundException;
+import co.edu.uniquindio.proyecto.exception.account.ActiveAccountException;
 import co.edu.uniquindio.proyecto.exception.event.EventNotFoundException;
 import co.edu.uniquindio.proyecto.exception.event.LocalityNotFoundException;
+import co.edu.uniquindio.proyecto.model.Accounts.Account;
 import co.edu.uniquindio.proyecto.model.Carts.Cart;
 import co.edu.uniquindio.proyecto.model.Carts.CartDetail;
 import co.edu.uniquindio.proyecto.model.Events.Event;
@@ -24,6 +27,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -60,6 +64,10 @@ public class CartServiceImp implements CartService {
      */
     @Override
     public void addItemToCart(String accountId, CartDetailDTO cartDetailDTO) throws Exception {
+        // Validación del ID de la cuenta
+        if (accountId == null || accountId.isEmpty()) {
+            throw new IllegalArgumentException("El ID de la cuenta no puede ser nulo o vacío");
+        }
         // Buscar o crear el carrito
         Cart cart = getOrCreateCart(accountId);
 
@@ -271,7 +279,6 @@ public class CartServiceImp implements CartService {
                 throw new Exception("No hay suficientes boletos disponibles para el evento: " + item.getEventName());
             }
         }
-
         // Si llegamos aquí, el carrito es válido
         System.out.println("El carrito es válido y listo para el pago.");
 
@@ -293,21 +300,16 @@ public class CartServiceImp implements CartService {
                 ))
                 .collect(Collectors.toList());
 
+        printCartSummary(summary); // Cambia para pasar el resumen directamente
         return summary;
     }
-
-    // ... Otros métodos
 
     /**
      * Método para imprimir el resumen del carrito en la consola.
      *
-     * @param accountId ID de la cuenta del usuario.
-     * @throws CartNotFoundException Si no se encuentra el carrito.
+     * @param summary Resumen del carrito.
      */
-    public void printCartSummary(String accountId) throws CartNotFoundException {
-        // Obtener el resumen del carrito
-        List<CartItemSummaryDTO> summary = getCartItemSummary(accountId);
-
+    public void printCartSummary(List<CartItemSummaryDTO> summary) {
         // Imprimir encabezado
         System.out.println("Resumen del Carrito:");
         System.out.printf("%-30s %-20s %-10s %-10s %-10s%n", "Evento", "Localidad", "Cantidad", "Precio", "Subtotal");

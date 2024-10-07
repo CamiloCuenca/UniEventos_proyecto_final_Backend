@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.model.Order;
 
+import co.edu.uniquindio.proyecto.Enum.Localities;
 import co.edu.uniquindio.proyecto.dto.Order.OrderDTO;
 import co.edu.uniquindio.proyecto.dto.Order.PaymentDTO;
 import co.edu.uniquindio.proyecto.model.PurchaseOrder.Order;
@@ -32,7 +33,7 @@ public class OrderTest {
         OrderDetail orderDetail1 = OrderDetail.builder()
                 .idEvent(new ObjectId("66f5c5a0de22e82833106d92"))
                 .price(13.000)
-                .localityName("General")
+                .localityName(Localities.valueOf("General"))
                 .amount(200)
                 .build();
 
@@ -69,7 +70,7 @@ public class OrderTest {
         OrderDetail orderDetail1 = OrderDetail.builder()
                 .idEvent(new ObjectId("66f5c5a0de22e82833106d93"))
                 .price(13.000)
-                .localityName("General")
+                .localityName(Localities.valueOf("General"))
                 .amount(200)
                 .build();
 
