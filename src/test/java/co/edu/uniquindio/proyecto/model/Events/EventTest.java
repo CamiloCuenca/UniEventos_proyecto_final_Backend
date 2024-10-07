@@ -9,15 +9,30 @@ import co.edu.uniquindio.proyecto.dto.Event.editDTOEvent;
 import co.edu.uniquindio.proyecto.dto.Event.dtoEventFilter;
 import co.edu.uniquindio.proyecto.dto.Event.dtoEventInformation;
 import co.edu.uniquindio.proyecto.repository.EventRepository;
+import co.edu.uniquindio.proyecto.service.Implementation.EventServiceImp;
 import co.edu.uniquindio.proyecto.service.Interfaces.EventService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import co.edu.uniquindio.proyecto.model.Events.Event;
+import co.edu.uniquindio.proyecto.Enum.EventType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Repository;
+
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -33,11 +48,13 @@ class EventTest {
 
     // Inyección de dependencias del servicio de eventos y repositorio de eventos
     @Autowired
-    private EventService eventService;
-    @Autowired
     private EventRepository eventRepository;
     @Autowired
     private EventController eventController;
+    @Autowired
+    private EventServiceImp eventService;
+
+
 
     // Prueba para crear un evento
     @Test
@@ -118,16 +135,6 @@ class EventTest {
 
         // Verificar que el DTO con la información del evento no sea nulo
         assertNotNull(informacionEventoDTO);
-    }
-
-    // Prueba para filtrar eventos
-    @Test
-    public void filterTest() throws Exception {
-        // Crear DTO de filtro de eventos basado en tipo de evento y otros parámetros
-        dtoEventFilter filtroEventoDTO = new dtoEventFilter("", EventType.CONCERT, "",null);
-
-        // Imprimir los eventos filtrados
-        System.out.println(eventService.filterEvents(filtroEventoDTO));
     }
 
     // Prueba para listar todos los eventos

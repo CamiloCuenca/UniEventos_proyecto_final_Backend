@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.service.Implementation;
 
+import co.edu.uniquindio.proyecto.Enum.EventType;
 import co.edu.uniquindio.proyecto.dto.Event.*;
 import co.edu.uniquindio.proyecto.exception.event.*;
 import co.edu.uniquindio.proyecto.model.Events.Event;
@@ -7,7 +8,18 @@ import co.edu.uniquindio.proyecto.model.Events.Locality;
 import co.edu.uniquindio.proyecto.repository.EventRepository;
 import co.edu.uniquindio.proyecto.service.Interfaces.EventService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
+
+
+import co.edu.uniquindio.proyecto.model.Events.Event;
+import co.edu.uniquindio.proyecto.Enum.EventType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Repository;
 
 
 import java.time.LocalDateTime;
@@ -20,6 +32,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class EventServiceImp implements EventService {
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     private final EventRepository eventRepository;
 
@@ -171,31 +186,6 @@ public class EventServiceImp implements EventService {
 
     }
 
-    /**
-     * This method is the service of filtering the events
-     *
-     * @param filtroEventoDTO
-     * @return dtoEventFilter
-     */
-    @Override
-    public List<ItemEventDTO> filterEvents(dtoEventFilter filtroEventoDTO) {
-
-        List<Event> filteredEvents = eventRepository.findByFiltros(
-                filtroEventoDTO.name(),
-                filtroEventoDTO.city(),
-                filtroEventoDTO.type(),
-                filtroEventoDTO.date()
-        );
-
-        return filteredEvents.stream()
-                .map(event -> new ItemEventDTO(
-                        event.getCoverImage(),
-                        event.getName(),
-                        event.getDate(),
-                        event.getAddress()
-                ))
-                .collect(Collectors.toList());
-    }
 
     /**
      * Metodo para calcular el total de tickets vendios.
@@ -227,9 +217,34 @@ public class EventServiceImp implements EventService {
         return total;
     }
 
+    @Override
+    public List<Event> eventFilter(dtoEventFilter filter) {
+        Query query = new Query();
+        List<Criteria> criteriaList = new ArrayList<>();
 
-    public Event getById(String id) throws Exception {
-        return eventRepository.findById(id).orElseThrow(() -> new Exception("El evento No existe"));
+        // Agregar criterios dinámicos según los filtros proporcionados
+        if (filter.name() != null && !filter.name().isEmpty()) {
+            String normalizedName = filter.name().trim();
+            criteriaList.add(Criteria.where("name").regex(".*" + normalizedName + ".*", "i"));
+        }
+        if (filter.city() != null && !filter.city().isEmpty()) {
+            String normalizedName = filter.city().trim();
+            criteriaList.add(Criteria.where("city").regex(".*" + normalizedName + ".*", "i"));
+        }
+        if (filter.type() != null) {
+            criteriaList.add(Criteria.where("type").is(filter.type()));
+        }
+        if (filter.date() != null) {
+            criteriaList.add(Criteria.where("date").is(filter.date()));
+        }
+
+        // Si hay criterios, agrégarlos a la consulta
+        if (!criteriaList.isEmpty()) {
+            query.addCriteria(new Criteria().andOperator(criteriaList.toArray(new Criteria[0])));
+        }
+
+        return mongoTemplate.find(query, Event.class);
     }
+
 
 }

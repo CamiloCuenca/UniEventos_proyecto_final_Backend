@@ -1,12 +1,11 @@
 package co.edu.uniquindio.proyecto.controller;
 
 import co.edu.uniquindio.proyecto.Enum.EventStatus;
+import co.edu.uniquindio.proyecto.Enum.EventType;
 import co.edu.uniquindio.proyecto.dto.Account.*;
-import co.edu.uniquindio.proyecto.dto.Coupon.CouponDTO;
 import co.edu.uniquindio.proyecto.dto.Event.*;
 import co.edu.uniquindio.proyecto.dto.JWT.TokenDTO;
 import co.edu.uniquindio.proyecto.dto.JWT.MessageDTO;
-import co.edu.uniquindio.proyecto.model.Coupons.Coupon;
 import co.edu.uniquindio.proyecto.model.Events.Event;
 import co.edu.uniquindio.proyecto.repository.EventRepository;
 import co.edu.uniquindio.proyecto.service.Interfaces.AccountService;
@@ -21,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +39,7 @@ public class ControllerAuthentication {
     // Account
 
     @PostMapping("/crear-cuenta")
-    public ResponseEntity<MessageDTO<String>> crearCuenta(@Valid @RequestBody createAccountDTO cuenta) throws Exception{
+    public ResponseEntity<MessageDTO<String>> crearCuenta(@Valid @RequestBody createAccountDTO cuenta) throws Exception {
         accountService.createAccount(cuenta);
         return ResponseEntity.ok(new MessageDTO<>(false, "Cuenta creada exitosamente"));
     }
@@ -52,7 +52,7 @@ public class ControllerAuthentication {
 
 
     @PostMapping("/iniciar-sesion")
-    public ResponseEntity<MessageDTO<TokenDTO>> iniciarSesion(@Valid @RequestBody LoginDTO loginDTO) throws Exception{
+    public ResponseEntity<MessageDTO<TokenDTO>> iniciarSesion(@Valid @RequestBody LoginDTO loginDTO) throws Exception {
         TokenDTO token = accountService.login(loginDTO);
         return ResponseEntity.ok(new MessageDTO<>(false, token));
     }
@@ -69,13 +69,6 @@ public class ControllerAuthentication {
     public ResponseEntity<MessageDTO<List<ItemEventDTO>>> listEvents() {
         List<ItemEventDTO> events = eventService.listEvents();
         return ResponseEntity.ok(new MessageDTO<>(false, events));
-    }
-
-    // Filtrar eventos según ciertos criterios
-    @PostMapping("/filtrar-eventos")
-    public ResponseEntity<MessageDTO<List<ItemEventDTO>>> filterEvents(@Valid @RequestBody dtoEventFilter filtroEventoDTO) {
-        List<ItemEventDTO> filteredEvents = eventService.filterEvents(filtroEventoDTO);
-        return ResponseEntity.ok(new MessageDTO<>(false, filteredEvents));
     }
 
 
@@ -109,13 +102,20 @@ public class ControllerAuthentication {
     }
 
 
+    @GetMapping("/filter")
+    public List<Event> filterEvents(@RequestParam(required = false) String name,
+                                    @RequestParam(required = false) String city,
+                                    @RequestParam(required = false) EventType type,
+                                    @RequestParam(required = false) LocalDateTime date) {
+        // Crear el DTO con los parámetros recibidos
+        dtoEventFilter filter = new dtoEventFilter(name, type, city, date);
 
+        // Imprimir los parámetros recibidos para depuración
+        System.out.println("Parámetros recibidos - Name: " + filter.name() + ", City: " + filter.city() + ", Type: " + filter.type() + ", Date: " + filter.date());
 
-
-
-
-
-
+        // Llamar al servicio con el DTO y retornar los resultados
+        return eventService.eventFilter(filter);
+    }
 
 
 }
