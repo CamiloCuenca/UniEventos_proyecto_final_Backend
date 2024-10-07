@@ -2,6 +2,7 @@ package co.edu.uniquindio.proyecto.model.Events;
 
 import co.edu.uniquindio.proyecto.Enum.EventStatus;
 import co.edu.uniquindio.proyecto.Enum.EventType;
+import co.edu.uniquindio.proyecto.Enum.Localities;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -29,6 +30,19 @@ public class Event {
     private String address;
     private int amount;
     private List<Locality> localities;
+
+    public Locality obtenerLocalidad(Localities nombreLocalidad) throws Exception {
+        // Verificar que el nombre de la localidad no sea nulo
+        if (nombreLocalidad == null) {
+            throw new IllegalArgumentException("El nombre de la localidad no puede ser nulo.");
+        }
+
+        // Buscar la localidad en la lista de localidades del evento
+        return localities.stream()
+                .filter(locality -> locality.getName() == nombreLocalidad) // Comparación correcta
+                .findFirst()
+                .orElseThrow(() -> new Exception("No se encontró la localidad con el nombre: " + nombreLocalidad));
+    }
 
 
 

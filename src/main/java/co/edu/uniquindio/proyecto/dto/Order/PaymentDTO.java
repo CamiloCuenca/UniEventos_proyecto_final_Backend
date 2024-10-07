@@ -2,7 +2,7 @@ package co.edu.uniquindio.proyecto.dto.Order;
 
 import co.edu.uniquindio.proyecto.Enum.PaymentType;
 import co.edu.uniquindio.proyecto.Enum.PaymentState;
-import co.edu.uniquindio.proyecto.model.PurchaseOrder.Payment;
+import co.edu.uniquindio.proyecto.model.PurchaseOrder.Pago;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
@@ -15,8 +15,8 @@ public record PaymentDTO(
         @NotNull double transactionValue,
         @NotNull PaymentState state         // Usar el Enum PaymentState
 ) {
-    public Payment toEntity() {
-        return Payment.builder()
+    public Pago toEntity() {
+        return Pago.builder()
                 .currency(this.currency)
                 .typePayment(this.typePayment)
                 .authorizationCode(this.authorizationCode)

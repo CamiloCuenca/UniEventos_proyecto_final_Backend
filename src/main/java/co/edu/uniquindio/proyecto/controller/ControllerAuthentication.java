@@ -12,6 +12,7 @@ import co.edu.uniquindio.proyecto.repository.EventRepository;
 import co.edu.uniquindio.proyecto.service.Interfaces.AccountService;
 import co.edu.uniquindio.proyecto.service.Interfaces.CouponService;
 import co.edu.uniquindio.proyecto.service.Interfaces.EventService;
+import co.edu.uniquindio.proyecto.service.Interfaces.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,6 +36,7 @@ public class ControllerAuthentication {
     private final EventService eventService;
     private final CouponService couponService;
     private final EventRepository eventRepository;
+    private final OrderService orderService;
 
     // Account
 
@@ -108,6 +110,11 @@ public class ControllerAuthentication {
         }
     }
 
+    @PostMapping("/orden/recibir-notificacion")
+    public void recibirNotificacionMercadoPago(@RequestBody Map<String, Object> request){
+
+        orderService.recibirNotificacionMercadoPago(request);
+    }
 
 
 

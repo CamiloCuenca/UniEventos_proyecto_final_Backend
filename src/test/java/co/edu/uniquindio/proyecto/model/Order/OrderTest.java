@@ -48,7 +48,7 @@ public class OrderTest {
         );
 
         OrderDTO orderDTO = new OrderDTO(
-                "66f8db70c1ce3939dbcbe1e0",
+                "67020240653239785780116b",
                 LocalDateTime.now(),
                 "12345",
                 orderDetails,
