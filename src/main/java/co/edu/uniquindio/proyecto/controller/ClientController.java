@@ -8,6 +8,7 @@ import co.edu.uniquindio.proyecto.service.Interfaces.AccountService;
 import co.edu.uniquindio.proyecto.service.Interfaces.CouponService;
 import co.edu.uniquindio.proyecto.service.Interfaces.EventService;
 import co.edu.uniquindio.proyecto.service.Interfaces.OrderService;
+import com.mercadopago.resources.preference.Preference;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -66,13 +67,6 @@ public class ClientController {
         double discount = couponService.applyCoupon(code, orderId);
         return ResponseEntity.ok(new MessageDTO<>(false, discount));
     }
-
-    @PostMapping("/realizar-pago/{idOrden}")
-    public ResponseEntity<MessageDTO<String>> realizarPago(@PathVariable String idOrden)throws Exception {
-        orderService.realizarPago(idOrden);
-        return ResponseEntity.ok(new MessageDTO<>(false,"pago exitoso"));
-    }
-
 
 
 
