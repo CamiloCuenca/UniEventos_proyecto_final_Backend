@@ -62,6 +62,12 @@ public class OrderServiceImp implements OrderService {
             throw new Exception("No se puede crear una orden");
         }
 
+        // Calcular el total de la orden
+        double total = 0;
+        for (OrderDetail item : orderDTO.items()) {
+            total += item.getPrice() * item.getAmount();
+        }
+
         // Convertir el DTO a una entidad Order
         Order order = Order.builder()
                 .id(ObjectId.get().toString())  // Generar ID automáticamente
@@ -237,6 +243,8 @@ public class OrderServiceImp implements OrderService {
 
 
             itemsPasarela.add(itemRequest);
+            System.out.println("Precio unitario de la localidad: " + localidad.getPrice());
+
         }
 
 
@@ -256,8 +264,8 @@ public class OrderServiceImp implements OrderService {
         PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                 .backUrls(backUrls)
                 .items(itemsPasarela)
-                .metadata(Map.of("_id", ordenGuardada.getId()))
-                .notificationUrl(" https://0154-2800-e2-7180-1775-00-2.ngrok-free.app/api/auth/orden/recibir-notificacion")
+                .metadata(Map.of("id_orden", ordenGuardada.getId()))
+                .notificationUrl("https://3c0c-2800-e2-7180-1775-00-2.ngrok-free.app/api/orden/notificacion-pago")
                 .build();
 
 
@@ -334,7 +342,7 @@ public class OrderServiceImp implements OrderService {
         pago.setDate( payment.getDateCreated().toLocalDateTime() );
         pago.setState(PaymentState.valueOf(payment.getStatus()));
         pago.setStatusDetail(payment.getStatusDetail());
-        pago.setTypePayment(PaymentType.valueOf(payment.getPaymentTypeId()));
+        pago.setState(PaymentState.valueOf(payment.getStatus().toLowerCase()));
         pago.setCurrency(payment.getCurrencyId());
         pago.setAuthorizationCode(payment.getAuthorizationCode());
         pago.setTransactionValue(payment.getTransactionAmount().floatValue());
