@@ -44,6 +44,7 @@ dependencies {
     implementation 'com.itextpdf:itextpdf:5.5.13.2'
     implementation 'com.google.zxing:core:3.4.1'
     implementation 'com.google.zxing:javase:3.4.1'
+    implementation 'com.mercadopago:sdk-java:2.1.27'
 }
 
 

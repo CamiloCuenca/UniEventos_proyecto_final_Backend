@@ -1,7 +1,11 @@
 package co.edu.uniquindio.proyecto.service.Interfaces;
 
+import co.edu.uniquindio.proyecto.Enum.Localities;
 import co.edu.uniquindio.proyecto.dto.Event.*;
 import co.edu.uniquindio.proyecto.model.Events.Event;
+
+import co.edu.uniquindio.proyecto.model.Events.Locality;
+
 
 import java.util.List;
 
@@ -38,6 +42,8 @@ public interface EventService {
     // Método para filtrar eventos según ciertos criterios
     // Parámetros: dtoEventFilter que contiene los criterios de filtrado (ej. fecha, categoría, etc.).
     // Retorno: Lista de ItemEventDTO que contiene los eventos que cumplen con el filtro aplicado.
+
+    Event obtenerEvento(String idEvent) throws Exception;
 
     double calculateTotal(String idEvent) throws Exception;
 

@@ -2,8 +2,10 @@ package co.edu.uniquindio.proyecto.service.Interfaces;
 
 import co.edu.uniquindio.proyecto.dto.Order.OrderDTO;
 import co.edu.uniquindio.proyecto.model.PurchaseOrder.Order;
+import com.mercadopago.resources.preference.Preference;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OrderService {
 
@@ -24,4 +26,9 @@ public interface OrderService {
 
     // Listar todas las órdenes
     List<Order> getAllOrders() throws Exception;
+
+    Preference realizarPago(String idOrden) throws Exception;
+    void recibirNotificacionMercadoPago(Map<String, Object> request);
+
+    public Order obtenerOrden(String idOrden) throws Exception;
 }

@@ -1,28 +1,38 @@
 package co.edu.uniquindio.proyecto.service.Implementation;
 
 import co.edu.uniquindio.proyecto.Enum.CouponStatus;
+import co.edu.uniquindio.proyecto.Enum.PaymentState;
+import co.edu.uniquindio.proyecto.Enum.PaymentType;
 import co.edu.uniquindio.proyecto.Enum.TypeCoupon;
 import co.edu.uniquindio.proyecto.dto.Coupon.CouponDTO;
 import co.edu.uniquindio.proyecto.dto.EmailDTO;
 import co.edu.uniquindio.proyecto.dto.Order.OrderDTO;
 import co.edu.uniquindio.proyecto.model.Accounts.Account;
+import co.edu.uniquindio.proyecto.model.Events.Event;
+import co.edu.uniquindio.proyecto.model.Events.Locality;
 import co.edu.uniquindio.proyecto.model.PurchaseOrder.Order;
+import co.edu.uniquindio.proyecto.model.PurchaseOrder.OrderDetail;
+import co.edu.uniquindio.proyecto.model.PurchaseOrder.Pago;
 import co.edu.uniquindio.proyecto.repository.AccountRepository;
-import co.edu.uniquindio.proyecto.repository.CouponRepository;
 import co.edu.uniquindio.proyecto.repository.EventRepository;
 import co.edu.uniquindio.proyecto.repository.OrderRepository;
-import co.edu.uniquindio.proyecto.service.Interfaces.CouponService;
-import co.edu.uniquindio.proyecto.service.Interfaces.EmailService;
-import co.edu.uniquindio.proyecto.service.Interfaces.ImagesService;
-import co.edu.uniquindio.proyecto.service.Interfaces.OrderService;
+import co.edu.uniquindio.proyecto.service.Interfaces.*;
+import com.mercadopago.client.preference.PreferenceClient;
+import com.mercadopago.client.preference.PreferenceItemRequest;
+import com.mercadopago.client.preference.PreferenceRequest;
+import com.mercadopago.resources.preference.Preference;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
+import com.mercadopago.MercadoPagoConfig;
+import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
+import com.mercadopago.client.payment.PaymentClient;
+import com.mercadopago.resources.payment.Payment;
 
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +46,7 @@ public class OrderServiceImp implements OrderService {
     private final EmailService emailService;
     private final QRCodeService qrCodeService;
     private final ImagesService imagesService;
+    private final EventService eventService;
 
 
     /**
@@ -192,4 +203,144 @@ public class OrderServiceImp implements OrderService {
     public List<Order> getAllOrders() throws Exception {
         return orderRepository.findAll();
     }
+
+    @Override
+    public Preference realizarPago(String idOrden) throws Exception {
+
+
+        // Obtener la orden guardada en la base de datos y los ítems de la orden
+        Order ordenGuardada = getOrderById(idOrden);
+        List<PreferenceItemRequest> itemsPasarela = new ArrayList<>();
+
+
+        // Recorrer los items de la orden y crea los ítems de la pasarela
+        for(OrderDetail item : ordenGuardada.getItems()){
+
+
+            // Obtener el evento y la localidad del ítem
+            Event evento = eventService.obtenerEvento(item.getIdEvent().toString());
+            Locality localidad = evento.obtenerLocalidad(item.getLocalityName());
+
+
+
+            // Crear el item de la pasarela
+            PreferenceItemRequest itemRequest =
+                    PreferenceItemRequest.builder()
+                            .id(evento.getId())
+                            .title(evento.getName())
+                            .pictureUrl(evento.getCoverImage())
+                            .categoryId(evento.getType().name())
+                            .quantity(item.getAmount())
+                            .currencyId("COP")
+                            .unitPrice(BigDecimal.valueOf(localidad.getPrice()))
+                            .build();
+
+
+            itemsPasarela.add(itemRequest);
+        }
+
+
+        // Configurar las credenciales de MercadoPago
+        MercadoPagoConfig.setAccessToken("APP_USR-1074363858207208-100622-1c36028d107a18a9507c21ceadc5069e-2021909487");
+
+
+        // Configurar las urls de retorno de la pasarela (Frontend)
+        PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
+                .success("URL PAGO EXITOSO")
+                .failure("URL PAGO FALLIDO")
+                .pending("URL PAGO PENDIENTE")
+                .build();
+
+
+        // Construir la preferencia de la pasarela con los ítems, metadatos y urls de retorno
+        PreferenceRequest preferenceRequest = PreferenceRequest.builder()
+                .backUrls(backUrls)
+                .items(itemsPasarela)
+                .metadata(Map.of("_id", ordenGuardada.getId()))
+                .notificationUrl(" https://0154-2800-e2-7180-1775-00-2.ngrok-free.app/api/auth/orden/recibir-notificacion")
+                .build();
+
+
+        // Crear la preferencia en la pasarela de MercadoPago
+        PreferenceClient client = new PreferenceClient();
+        Preference preference = client.create(preferenceRequest);
+
+
+        // Guardar el código de la pasarela en la orden
+        ordenGuardada.setCodigoPasarela( preference.getId() );
+        orderRepository.save(ordenGuardada);
+
+
+        return preference;
+    }
+
+    @Override
+    public void recibirNotificacionMercadoPago(Map<String, Object> request) {
+        try {
+
+
+            // Obtener el tipo de notificación
+            Object tipo = request.get("type");
+
+
+            // Si la notificación es de un pago entonces obtener el pago y la orden asociada
+            if ("payment".equals(tipo)) {
+
+
+                // Capturamos el JSON que viene en el request y lo convertimos a un String
+                String input = request.get("data").toString();
+
+
+                // Extraemos los números de la cadena, es decir, el id del pago
+                String idPago = input.replaceAll("\\D+", "");
+
+
+                // Se crea el cliente de MercadoPago y se obtiene el pago con el id
+                PaymentClient client = new PaymentClient();
+                Payment payment = client.get( Long.parseLong(idPago) );
+
+
+                // Obtener el id de la orden asociada al pago que viene en los metadatos
+                String idOrden = payment.getMetadata().get("id_orden").toString();
+
+
+                // Se obtiene la orden guardada en la base de datos y se le asigna el pago
+                Order orden = obtenerOrden(idOrden);
+                Pago pago = crearPago(payment);
+                orden.setPayment(pago);
+                orderRepository.save(orden);
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public Order obtenerOrden(String idOrden) throws Exception {
+        Optional<Order> orderOptional = orderRepository.findById(idOrden);
+        if (orderOptional.isPresent()) {
+            return orderOptional.get();
+        } else {
+            throw new Exception("Orden no encontrada con ID: " + idOrden);
+        }
+    }
+
+
+    private Pago crearPago(Payment payment) {
+        Pago pago = new Pago();
+        pago.setId(payment.getId().toString());
+        pago.setDate( payment.getDateCreated().toLocalDateTime() );
+        pago.setState(PaymentState.valueOf(payment.getStatus()));
+        pago.setStatusDetail(payment.getStatusDetail());
+        pago.setTypePayment(PaymentType.valueOf(payment.getPaymentTypeId()));
+        pago.setCurrency(payment.getCurrencyId());
+        pago.setAuthorizationCode(payment.getAuthorizationCode());
+        pago.setTransactionValue(payment.getTransactionAmount().floatValue());
+        return pago;
+    }
+
+
+
 }
