@@ -44,7 +44,7 @@ public class ReportService {
         Map<String, Double> salesByLocation = new HashMap<>();
         for (Order order : orders) {
             for (OrderDetail detail : order.getItems()) {
-                String location = detail.getLocalityName();
+                String location = String.valueOf(detail.getLocalityName());
                 double totalSales = detail.getPrice() * detail.getAmount();
                 salesByLocation.put(location, salesByLocation.getOrDefault(location, 0.0) + totalSales);
             }
