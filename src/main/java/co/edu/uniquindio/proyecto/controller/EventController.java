@@ -1,6 +1,7 @@
 package co.edu.uniquindio.proyecto.controller;
 
 import co.edu.uniquindio.proyecto.Enum.EventStatus;
+import co.edu.uniquindio.proyecto.Enum.EventType;
 import co.edu.uniquindio.proyecto.dto.Event.*;
 import co.edu.uniquindio.proyecto.dto.JWT.MessageDTO;
 import co.edu.uniquindio.proyecto.model.Events.Event;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +32,9 @@ public class EventController {
 
     @Autowired
     private EventRepository eventRepository;
+
+
+
 
 
 
