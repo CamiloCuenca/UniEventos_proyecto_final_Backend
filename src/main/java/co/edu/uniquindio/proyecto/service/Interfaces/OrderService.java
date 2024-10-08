@@ -1,10 +1,8 @@
 package co.edu.uniquindio.proyecto.service.Interfaces;
 
-import co.edu.uniquindio.proyecto.Enum.PaymentState;
 import co.edu.uniquindio.proyecto.dto.Order.OrderDTO;
 import co.edu.uniquindio.proyecto.dto.Order.dtoOrderFilter;
 import co.edu.uniquindio.proyecto.model.PurchaseOrder.Order;
-import co.edu.uniquindio.proyecto.model.PurchaseOrder.Pago;
 import com.mercadopago.resources.preference.Preference;
 
 import java.util.List;

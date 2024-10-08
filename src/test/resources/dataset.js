@@ -66,7 +66,7 @@ db.Account.insertMany([
             creationDate: new Date(),
             code: "688105d8"
         },
-        rol: "CUSTOMER",
+        rol: "ADMINISTRATOR",
         registrationDate: new Date(),
         password: "$2a$10$loCyyJkz7w/khWvxcgkKDeaMbZ91itumuL.spnAZIfl3Brj98BzuC", // Contraseña sin encriptar: passwordLuisaFernandez
         status: "INACTIVE",
@@ -85,7 +85,7 @@ db.Account.insertMany([
             creationDate: new Date(),
             code: "39110253"
         },
-        rol: "CUSTOMER",
+        rol: "ADMINISTRATOR",
         registrationDate: new Date(),
         password: "$2a$10$lDWLG6Zc6jkxo/ZPYyTxW.bC0yePHF8gRPyBbynYknktkIfxwM6uy", // Contraseña sin encriptar: passwordAnaMartinez
         status: "INACTIVE",
@@ -98,8 +98,8 @@ db.Account.insertMany([
         _class: "co.edu.uniquindio.proyecto.model.Accounts.Account"
     }
 ]);
-// EVent
-// EVent
+
+// Event
 db.Event.insertMany([
     {
         _id: ObjectId("66f5c5a0de22e82833106d92"),
@@ -112,18 +112,18 @@ db.Event.insertMany([
         date: ISODate("2024-10-20T23:00:00.000Z"),
         city: "Armenia",
         address: "crr 20 # 1-23",
-        amount: 600,
+        amount: 200,
         localities: [
             {
                 price: 50,
                 name: "GENERAL",
-                ticketsSold: 100,
+                ticketsSold: 1,
                 maximumCapacity: 200
             },
             {
                 price: 150,
                 name: "VIP",
-                ticketsSold: 50,
+                ticketsSold: 2,
                 maximumCapacity: 100
             }
         ],
@@ -145,13 +145,13 @@ db.Event.insertMany([
             {
                 price: 40,
                 name: "GENERAL",
-                ticketsSold: 80,
+                ticketsSold: 8,
                 maximumCapacity: 300
             },
             {
                 price: 100,
                 name: "VIP",
-                ticketsSold: 20,
+                ticketsSold: 2,
                 maximumCapacity: 50
             }
         ],
@@ -173,13 +173,13 @@ db.Event.insertMany([
             {
                 price: 30,
                 name: "GENERAL",
-                ticketsSold: 30,
+                ticketsSold: 3,
                 maximumCapacity: 100
             },
             {
                 price: 60,
                 name: "VIP",
-                ticketsSold: 10,
+                ticketsSold: 1,
                 maximumCapacity: 50
             }
         ],
@@ -199,7 +199,7 @@ db.Event.insertMany([
         amount: 700,
         localities: [
             {
-                price: 25,
+                price: 2,
                 name: "GENERAL",
                 ticketsSold: 150,
                 maximumCapacity: 200
@@ -207,7 +207,7 @@ db.Event.insertMany([
             {
                 price: 75,
                 name: "VIP",
-                ticketsSold: 50,
+                ticketsSold: 5,
                 maximumCapacity: 100
             }
         ],
@@ -229,16 +229,146 @@ db.Event.insertMany([
             {
                 price: 80,
                 name: "GENERAL",
-                ticketsSold: 50,
+                ticketsSold: 5,
                 maximumCapacity: 100
             },
             {
                 price: 200,
                 name: "VIP",
-                ticketsSold: 20,
+                ticketsSold: 2,
                 maximumCapacity: 50
             }
         ],
         _class: "co.edu.uniquindio.proyecto.model.Events.Event"
     }
 ]);
+
+// Order
+db.Order.insertMany([
+    {
+        "_id": ObjectId("67020240653239785780116c"),
+        "idAccount": ObjectId("66f8db70c1ce3939dbcbe1e0"),
+        "date": ISODate("2024-10-08T10:30:00.000Z"),
+        "gatewayCode": "2021909487-2a3b4c5d-6e7f-8g9h-0i1j2k3l4m5n",
+        "items": [
+            {
+                "_id": 1,
+                "idEvent": ObjectId("66f5c5a0de22e82833106d93"),
+                "price": 40,
+                "localityName": "GENERAL",
+                "amount": 3
+            }
+        ],
+        "payment": {
+            "currency": "COP",
+            "typePayment": "CREDIT_CARD",
+            "authorizationCode": "",
+            "date": ISODate("2024-10-08T10:30:00.000Z"),
+            "transactionValue": 120,
+            "state": "approved"
+        },
+        "total": 120,
+        "_class": "co.edu.uniquindio.proyecto.model.PurchaseOrder.Order"
+    },
+    {
+        "_id": ObjectId("67020240653239785780116d"),
+        "idAccount": ObjectId("66f8dbbb4b350424b236bddb"),
+        "date": ISODate("2024-10-09T14:20:00.000Z"),
+        "gatewayCode": "2021909487-a1b2c3d4-e5f6-7g8h-9i0j1k2l3m4n",
+        "items": [
+            {
+                "_id": 2,
+                "idEvent": ObjectId("66f5c5a0de22e82833106d94"),
+                "price": 30,
+                "localityName": "GENERAL",
+                "amount": 4
+            }
+        ],
+        "payment": {
+            "currency": "COP",
+            "typePayment": "PSE",
+            "authorizationCode": "",
+            "date": ISODate("2024-10-09T14:20:00.000Z"),
+            "transactionValue": 120,
+            "state": "in_process"
+        },
+        "total": 120,
+        "_class": "co.edu.uniquindio.proyecto.model.PurchaseOrder.Order"
+    },
+    {
+        "_id": ObjectId("67020240653239785780116e"),
+        "idAccount": ObjectId("66f8dbfb12c88b4846e60860"),
+        "date": ISODate("2024-10-10T16:45:00.000Z"),
+        "gatewayCode": "2021909487-0a1b2c3d-4e5f-6g7h-8i9j0k1l2m3n",
+        "items": [
+            {
+                "_id": 3,
+                "idEvent": ObjectId("66f5c5a0de22e82833106d95"),
+                "price": 75,
+                "localityName": "VIP",
+                "amount": 1
+            }
+        ],
+        "payment": {
+            "currency": "COP",
+            "typePayment": "CREDIT_CARD",
+            "authorizationCode": "",
+            "date": ISODate("2024-10-10T16:45:00.000Z"),
+            "transactionValue": 75,
+            "state": "approved"
+        },
+        "total": 75,
+        "_class": "co.edu.uniquindio.proyecto.model.PurchaseOrder.Order"
+    },
+    {
+        "_id": ObjectId("67020240653239785780116f"),
+        "idAccount": ObjectId("66f8db70c1ce3939dbcbe1e0"),
+        "date": ISODate("2024-10-11T09:15:00.000Z"),
+        "gatewayCode": "2021909487-z9y8x7w6-v5u4-t3s2-r1p0o9n8m7l",
+        "items": [
+            {
+                "_id": 4,
+                "idEvent": ObjectId("66f5c5a0de22e82833106d96"),
+                "price": 80,
+                "localityName": "GENERAL",
+                "amount": 2
+            }
+        ],
+        "payment": {
+            "currency": "COP",
+            "typePayment": "PSE",
+            "authorizationCode": "",
+            "date": ISODate("2024-10-11T09:15:00.000Z"),
+            "transactionValue": 160,
+            "state": "in_process"
+        },
+        "total": 160,
+        "_class": "co.edu.uniquindio.proyecto.model.PurchaseOrder.Order"
+    },
+    {
+        "_id": ObjectId("670202406532397857801170"),
+        "idAccount": ObjectId("66f8dbbb4b350424b236bddb"),
+        "date": ISODate("2024-10-12T18:30:00.000Z"),
+        "gatewayCode": "2021909487-q1w2e3r4-t5y6-u7i8-o9p0a1s2d3f4",
+        "items": [
+            {
+                "_id": 5,
+                "idEvent": ObjectId("66f5c5a0de22e82833106d94"),
+                "price": 60,
+                "localityName": "VIP",
+                "amount": 1
+            }
+        ],
+        "payment": {
+            "currency": "COP",
+            "typePayment": "CREDIT_CARD",
+            "authorizationCode": "",
+            "date": ISODate("2024-10-12T18:30:00.000Z"),
+            "transactionValue": 60,
+            "state": "approved"
+        },
+        "total": 60,
+        "_class": "co.edu.uniquindio.proyecto.model.PurchaseOrder.Order"
+    }
+]);
+

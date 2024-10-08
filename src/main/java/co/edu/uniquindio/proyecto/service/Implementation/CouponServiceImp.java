@@ -35,7 +35,7 @@ public class CouponServiceImp implements CouponService {
     public String createCoupon(CouponDTO couponDTO) throws Exception {
         Coupon newCoupon = new Coupon();
         newCoupon.setName(couponDTO.name());
-        newCoupon.setCode(couponDTO.code());
+        newCoupon.setCode(generateRandomCouponCode());
         newCoupon.setDiscount(couponDTO.discount());
         newCoupon.setExpirationDate(couponDTO.expirationDate());
         newCoupon.setStatus(couponDTO.status());

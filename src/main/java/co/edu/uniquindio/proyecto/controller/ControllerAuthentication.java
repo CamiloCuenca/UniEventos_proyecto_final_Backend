@@ -40,41 +40,41 @@ public class ControllerAuthentication {
 
     // Account
 
-    @PostMapping("/crear-cuenta")
+    @PostMapping("/cuenta/crear-cuenta")
     public ResponseEntity<MessageDTO<String>> crearCuenta(@Valid @RequestBody createAccountDTO cuenta) throws Exception {
         accountService.createAccount(cuenta);
         return ResponseEntity.ok(new MessageDTO<>(false, "Cuenta creada exitosamente"));
     }
 
-    @PostMapping("/activar-cuenta")
+    @PostMapping("/cuenta/activar-cuenta")
     public ResponseEntity<MessageDTO<String>> activateAccount(@Valid @RequestBody ActivateAccountDTO activateAccountDTO) throws Exception {
         accountService.activateAccount(activateAccountDTO.getCorreo(), activateAccountDTO.getCode());
         return ResponseEntity.ok(new MessageDTO<>(false, "La cuenta se activó exitosamente"));
     }
 
 
-    @PostMapping("/iniciar-sesion")
+    @PostMapping("/cuenta/iniciar-sesion")
     public ResponseEntity<MessageDTO<TokenDTO>> iniciarSesion(@Valid @RequestBody LoginDTO loginDTO) throws Exception {
         TokenDTO token = accountService.login(loginDTO);
         return ResponseEntity.ok(new MessageDTO<>(false, token));
     }
 
     // Obtener información de un evento por su ID
-    @GetMapping("/obtener-info/{id}")
+    @GetMapping("/evento/obtener-info/{id}")
     public ResponseEntity<MessageDTO<dtoEventInformation>> obtainEventInformation(@PathVariable String id) throws Exception {
         dtoEventInformation eventInfo = eventService.obtainEventInformation(id);
         return ResponseEntity.ok(new MessageDTO<>(false, eventInfo));
     }
 
     // Listar todos los eventos
-    @GetMapping("/listar-eventos")
+    @GetMapping("/evento/listar-eventos")
     public ResponseEntity<MessageDTO<List<ItemEventDTO>>> listEvents() {
         List<ItemEventDTO> events = eventService.listEvents();
         return ResponseEntity.ok(new MessageDTO<>(false, events));
     }
 
 
-    @GetMapping("/eventos-activos")
+    @GetMapping("/evento/eventos-activos")
     public ResponseEntity<Map<String, Object>> getActiveEvents(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
@@ -109,7 +109,7 @@ public class ControllerAuthentication {
         orderService.recibirNotificacionMercadoPago(request);
     }
 
-    @GetMapping("/filter")
+    @GetMapping("/evento/filter")
     public List<Event> filterEvents(@RequestParam(required = false) String name,
                                     @RequestParam(required = false) String city,
                                     @RequestParam(required = false) EventType type,

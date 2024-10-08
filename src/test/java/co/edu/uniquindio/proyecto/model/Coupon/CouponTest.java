@@ -30,13 +30,13 @@ public class CouponTest {
         // Crear un nuevo objeto CouponDTO con nombre, código, descuento, fecha de expiración, estado y tipo
         LocalDateTime expirationDate = LocalDateTime.now().plusDays(30); // La fecha de expiración es en 30 días
         CouponDTO couponDTO = new CouponDTO(
-                "Amor y la Amistad",     // Nombre del cupón
-                "12345",                 // Código del cupón
+                "Emprendimiento",     // Nombre del cupón
+                null,                 // Código del cupón
                 "10",                    // Descuento del cupón
                 expirationDate,          // Fecha de expiración
                 CouponStatus.NOT_AVAILABLE, // Estado del cupón
                 TypeCoupon.MULTIPLE,     // Tipo de cupón
-                null,                    // El cupon no está asociado a un evento específico
+                "66f5c5a0de22e82833106d94",                    // El cupon no está asociado a un evento específico
                 expirationDate           // Se usa expirationDate como endDate
         );
 
