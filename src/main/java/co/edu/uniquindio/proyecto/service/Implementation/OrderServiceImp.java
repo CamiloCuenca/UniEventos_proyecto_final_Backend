@@ -58,11 +58,10 @@ public class OrderServiceImp implements OrderService {
     private final EventService eventService;
 
 
-    /**
-     * Este mètodo crea un orden de compra segun los datos de orderDTO
+    /** Este mètodo crea un orden de compra segun los datos de orderDTO
      *
-     * @param orderDTO
-     * @return Order
+     * @param orderDTO Objeto OrderDTO que contiene los detalles de la nueva orden.
+     * @return orden creada
      * @throws Exception
      */
     @Override
@@ -142,6 +141,11 @@ public class OrderServiceImp implements OrderService {
         return savedOrder;
     }
 
+    /** Mètodo auxiliar para crear el cupon de bienvenida ( tiene parametros fijos)
+     *
+     * @param email
+     * @throws Exception
+     */
     private void sendCupon(String email) throws Exception {
         CouponDTO couponDTO = new CouponDTO(
                 "Cupón de Bienvenida",              // Nombre del cupón
@@ -172,6 +176,13 @@ public class OrderServiceImp implements OrderService {
         emailService.sendMail(new EmailDTO(email, "\"Cupón de Bienvenida\"", plainTextMessage));
     }
 
+    /** Este mètodo actualiza una orden existente.
+     *
+     * @param orderId ID de la orden que se desea actualizar.
+     * @param updatedOrderDTO Objeto OrderDTO que contiene los datos actualizados de la orden.
+     * @return
+     * @throws Exception
+     */
     @Override
     public Order updateOrder(String orderId, OrderDTO updatedOrderDTO) throws Exception {
         Optional<Order> existingOrder = orderRepository.findById(orderId);
@@ -192,8 +203,11 @@ public class OrderServiceImp implements OrderService {
         return orderRepository.save(order);
     }
 
-
-
+    /** Este mètodo elimina una orden de compra
+     *
+     * @param orderId ID de la orden que se desea eliminar.
+     * @throws Exception
+     */
     @Override
     public void deleteOrder(String orderId) throws Exception {
         Optional<Order> order = orderRepository.findById(orderId);
@@ -203,28 +217,41 @@ public class OrderServiceImp implements OrderService {
         orderRepository.deleteById(orderId);
     }
 
-    @Override
-    public Order getOrderById(String orderId) throws Exception {
-        return orderRepository.findById(orderId)
-                .orElseThrow(() -> new Exception("La orden no existe"));
-    }
 
+
+    /** Listar todas las órdenes de una cuenta específica.
+     *
+     * @param accountId ID de la cuenta del usuario.
+     * @return
+     * @throws Exception
+     */
     @Override
     public List<Order> getOrdersByUser(String accountId) throws Exception {
         return orderRepository.findByAccountId(accountId);
     }
 
+    /** Listar todas las órdenes.
+     *
+     * @return lista de todas las ordenes
+     * @throws Exception
+     */
     @Override
     public List<Order> getAllOrders() throws Exception {
         return orderRepository.findAll();
     }
 
+    /** Realizar el pago de una orden mediante MercadoPago.
+     *
+     * @param idOrden ID de la orden para la cual se realiza el pago.
+     * @return Preference que contiene los detalles de la preferencia de pago creada.
+     * @throws Exception
+     */
     @Override
     public Preference realizarPago(String idOrden) throws Exception {
 
 
         // Obtener la orden guardada en la base de datos y los ítems de la orden
-        Order ordenGuardada = getOrderById(idOrden);
+        Order ordenGuardada = obtenerOrden(idOrden);
         List<PreferenceItemRequest> itemsPasarela = new ArrayList<>();
 
 
@@ -291,6 +318,10 @@ public class OrderServiceImp implements OrderService {
         return preference;
     }
 
+    /** Recibir y manejar la notificación de MercadoPago.
+     *
+     * @param request Mapa que contiene la información de la notificación recibida.
+     */
     @Override
     public void recibirNotificacionMercadoPago(Map<String, Object> request) {
         try {
@@ -334,6 +365,12 @@ public class OrderServiceImp implements OrderService {
         }
     }
 
+    /** Obtener una orden por su ID.
+     *
+     * @param idOrden ID de la orden que se desea obtener.
+     * @return
+     * @throws Exception
+     */
     @Override
     public Order obtenerOrden(String idOrden) throws Exception {
         Optional<Order> orderOptional = orderRepository.findById(idOrden);
@@ -344,6 +381,11 @@ public class OrderServiceImp implements OrderService {
         }
     }
 
+    /** Filtrar órdenes según su estado de pago.
+     *
+     * @param filter Objeto dtoOrderFilter que contiene los criterios de filtrado.
+     * @return
+     */
     @Override
     public List<Order> paymentFilterByState(dtoOrderFilter filter) {
         Query query = new Query();
@@ -359,7 +401,11 @@ public class OrderServiceImp implements OrderService {
     }
 
 
-
+    /** Este mètodo crea el pago segun los datos resividos por mercado pago
+     *
+     * @param payment
+     * @return
+     */
     private Pago crearPago(Payment payment) {
         Pago pago = new Pago();
         pago.setId(payment.getId().toString());

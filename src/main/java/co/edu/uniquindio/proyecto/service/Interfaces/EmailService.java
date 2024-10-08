@@ -31,7 +31,7 @@ public interface EmailService {
     void sendCodevalidation(String email, String validationCode) throws Exception;
 
     /**
-     * Envía un código de recuperación por correo electrónico.
+     * Envía un código de recuperación de contraseña por correo electrónico.
      *
      * @param email La dirección de correo electrónico a la que se enviará el código de recuperación.
      * @param passwordValidationCode El código de validación de la contraseña a enviar.

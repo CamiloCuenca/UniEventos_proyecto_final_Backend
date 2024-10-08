@@ -10,9 +10,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.UUID;
 @Service
 public class ImagesServiceImp implements ImagesService {
-    /**
-     * Metodo que se encarga de subir la imagen.
-     * @param imagen
+
+    /** Metodo que se encarga de subir la imagen.
+     *
+     * @param imagen Objeto MultipartFile que contiene la imagen a subir.
      * @return
      * @throws Exception
      */
@@ -35,6 +36,12 @@ public class ImagesServiceImp implements ImagesService {
             );
 
         }
+
+    /** Eliminar una imagen del sistema de almacenamiento.
+     *
+      * @param nombreImagen Nombre o identificador de la imagen que se desea eliminar.
+     * @throws Exception
+     */
     @Override
     public void deleteImage(String nombreImagen) throws Exception {
         Bucket bucket = StorageClient.getInstance().bucket();
@@ -42,8 +49,14 @@ public class ImagesServiceImp implements ImagesService {
         blob.delete();
     }
 
+    /** Subir un código QR generado al sistema de almacenamiento.
+     *
+     * @param qrBytes Array de bytes que representa el código QR.
+     * @param fileName Nombre del archivo que se usará para almacenar el código QR.
+     * @return
+     * @throws Exception
+     */
     @Override
-    // Método para subir el QR a Firebase
     public String uploadQR(byte[] qrBytes, String fileName) throws Exception {
         Bucket bucket = StorageClient.getInstance().bucket();
         Blob blob = bucket.create(fileName, qrBytes, "image/png");

@@ -13,6 +13,13 @@ import java.util.Base64;
 @Service
 public class QRCodeService {
 
+    /** Este mètodo genera el codigo QR para la orden
+     *
+     * @param orderCode
+     * @return QR en Strin
+     * @throws WriterException
+     * @throws IOException
+     */
     public String generateQRCode(String orderCode) throws WriterException, IOException {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = qrCodeWriter.encode(orderCode, BarcodeFormat.QR_CODE, 200, 200);

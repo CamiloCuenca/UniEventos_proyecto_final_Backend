@@ -38,15 +38,6 @@ public interface OrderService {
     void deleteOrder(String orderId) throws Exception;
 
     /**
-     * Obtener una orden por su ID.
-     *
-     * @param orderId ID de la orden que se desea obtener.
-     * @return Objeto Order que representa la orden solicitada.
-     * @throws Exception Si no se encuentra la orden con el ID proporcionado.
-     */
-    Order getOrderById(String orderId) throws Exception;
-
-    /**
      * Listar todas las órdenes de una cuenta específica.
      *
      * @param accountId ID de la cuenta del usuario.
