@@ -7,57 +7,86 @@ import java.util.List;
 
 public interface AccountService {
 
-    // Método para crear una cuenta
-// Parámetros: createAccountDTO con la información de la cuenta.
-// Retorno: String con el ID de la cuenta creada o un mensaje de éxito.
-// Excepción: Lanza una excepción si no se puede crear la cuenta.
+    /**
+     * Crea una nueva cuenta de usuario.
+     *
+     * @param cuenta El objeto createAccountDTO que contiene la información de la cuenta a crear.
+     * @return El ID de la cuenta creada como un String o un mensaje de éxito.
+     * @throws Exception Si ocurre un error durante la creación de la cuenta.
+     */
     String createAccount(createAccountDTO cuenta) throws Exception;
 
-    // Método para editar una cuenta
-// Parámetros: editAccountDTO con la información de la cuenta a modificar.
-// Retorno: String con un mensaje de éxito o confirmación.
-// Excepción: Lanza una excepción si no se puede editar la cuenta.
+    /**
+     * Edita la información de una cuenta existente.
+     *
+     * @param cuenta El objeto editAccountDTO con los datos actualizados de la cuenta.
+     * @param id El ID de la cuenta que se desea modificar.
+     * @return Un mensaje de confirmación indicando el éxito de la operación.
+     * @throws Exception Si ocurre un error al intentar editar la cuenta.
+     */
     String editAccount(editAccountDTO cuenta, String id) throws Exception;
 
-    // Método para eliminar una cuenta
-// Parámetros: String con el ID de la cuenta a eliminar.
-// Retorno: String con un mensaje de confirmación de eliminación.
-// Excepción: Lanza una excepción si no se puede eliminar la cuenta.
+    /**
+     * Elimina una cuenta basada en su ID.
+     *
+     * @param id El ID de la cuenta que se desea eliminar.
+     * @return Un mensaje de confirmación de la eliminación.
+     * @throws Exception Si ocurre un error durante la eliminación de la cuenta.
+     */
     String deleteAccount(String id) throws Exception;
 
-    // Método para obtener la información de una cuenta
-// Parámetros: String con el ID de la cuenta.
-// Retorno: dtoAccountInformation con los detalles de la cuenta.
-// Excepción: Lanza una excepción si no se encuentra la cuenta.
+    /**
+     * Obtiene la información completa de una cuenta.
+     *
+     * @param id El ID de la cuenta.
+     * @return Un objeto dtoAccountInformation con los detalles de la cuenta.
+     * @throws Exception Si la cuenta no se encuentra o hay un error durante la consulta.
+     */
     dtoAccountInformation obtainAccountInformation(String id) throws Exception;
 
-    // Método para listar todas las cuentas
-// Retorno: Lista de dtoAccountItem con información resumida de las cuentas.
+    /**
+     * Lista todas las cuentas existentes.
+     *
+     * @return Una lista de objetos dtoAccountItem que contienen información resumida de las cuentas.
+     */
     List<dtoAccountItem> listAccounts();
 
-    // Método para enviar el código de recuperación de contraseña
-// Parámetros: String con el correo electrónico del usuario.
-// Retorno: String con un mensaje de confirmación.
-// Excepción: Lanza una excepción si no se puede enviar el código de recuperación.
+    /**
+     * Envía un código de recuperación de contraseña al correo electrónico del usuario.
+     *
+     * @param correo El correo electrónico del usuario al que se enviará el código de recuperación.
+     * @return Un mensaje de confirmación indicando que el código ha sido enviado.
+     * @throws Exception Si ocurre un error al intentar enviar el código de recuperación.
+     */
     String sendPasswordRecoveryCode(String correo) throws Exception;
 
-    // Método para cambiar la contraseña de una cuenta
-// Parámetros: changePasswordDTO con la nueva contraseña, String con el correo, y String con el código de verificación.
-// Retorno: String con un mensaje de éxito.
-// Excepción: Lanza una excepción si no se puede cambiar la contraseña.
+    /**
+     * Cambia la contraseña de una cuenta de usuario.
+     *
+     * @param changePasswordDTO El objeto que contiene la nueva contraseña y otros datos necesarios.
+     * @param correo El correo electrónico del usuario que solicita el cambio.
+     * @return Un mensaje de confirmación indicando que la contraseña ha sido cambiada.
+     * @throws Exception Si ocurre un error al cambiar la contraseña.
+     */
     String changePassword(changePasswordDTO changePasswordDTO, String correo) throws Exception;
 
-    // Método para iniciar sesión
-// Parámetros: LoginDTO con la información de inicio de sesión (correo y contraseña).
-// Retorno: TokenDTO con el token de autenticación.
-// Excepción: Lanza una excepción si las credenciales son incorrectas o hay un error durante el inicio de sesión.
+    /**
+     * Inicia sesión en el sistema.
+     *
+     * @param loginDTO El objeto LoginDTO que contiene el correo y la contraseña del usuario.
+     * @return Un objeto TokenDTO que contiene el token de autenticación.
+     * @throws Exception Si las credenciales son incorrectas o si hay un error durante el inicio de sesión.
+     */
     TokenDTO login(LoginDTO loginDTO) throws Exception;
 
-    // Método para activar una cuenta
-// Parámetros: String con el correo electrónico del usuario y String con el código de activación.
-// Retorno: String con un mensaje de confirmación de activación.
-// Excepción: Lanza una excepción si no se puede activar la cuenta.
+    /**
+     * Activa una cuenta de usuario.
+     *
+     * @param correo El correo electrónico del usuario cuya cuenta se va a activar.
+     * @param code El código de activación necesario para activar la cuenta.
+     * @return Un mensaje de confirmación indicando que la cuenta ha sido activada.
+     * @throws Exception Si ocurre un error al activar la cuenta.
+     */
     String activateAccount(String correo, String code) throws Exception;
-
 
 }
