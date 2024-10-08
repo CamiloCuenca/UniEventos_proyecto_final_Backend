@@ -71,7 +71,7 @@ public class CouponServiceImp implements CouponService {
 
         Coupon newCoupon = new Coupon();
         newCoupon.setName(couponDTO.name());
-        newCoupon.setCode(couponDTO.code());
+        newCoupon.setCode(generateRandomCouponCode());
         newCoupon.setDiscount(couponDTO.discount());
         newCoupon.setExpirationDate(couponDTO.expirationDate());
         newCoupon.setStatus(couponDTO.status());
@@ -169,6 +169,10 @@ public class CouponServiceImp implements CouponService {
         return discount;
     }
 
+    /** metodo que retorna una lista de los cupones activos
+     *
+     * @return lista de cupones activos
+     */
     @Override
     public List<Coupon> getAvailableCoupons() {
         return couponRepository.findAvailableCoupons();
@@ -259,7 +263,11 @@ public class CouponServiceImp implements CouponService {
         return discountAmount;
     }
 
-    // Método auxiliar para generar un código de cupón aleatorio
+
+    /** Método auxiliar para generar un código de cupón aleatorio
+     *
+     * @return codigo generado aleatoriamente
+     */
     public String generateRandomCouponCode() {
         return UUID.randomUUID().toString().substring(0, 8).toUpperCase();  // Código aleatorio de 8 caracteres
     }

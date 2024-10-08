@@ -59,7 +59,10 @@ public class ReportService {
         return reportData;
     }
 
-    // Método para generar el PDF
+    /** Mètodo para generar el PDF
+     *
+     * @return
+     */
     public byte[] generateSalesReportPDF() {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
@@ -134,7 +137,10 @@ public class ReportService {
         return byteArrayOutputStream.toByteArray();
     }
 
-    // Métodos para obtener datos adicionales
+    /** Métodos para obtener datos adicionales
+     *
+     * @return
+     */
     private Map<String, Integer> generateTopSellingEvents() {
         List<Order> orders = orderRepository.findAll();
         Map<String, Integer> eventSales = new HashMap<>();
@@ -148,10 +154,18 @@ public class ReportService {
         return eventSales;
     }
 
+    /** Mètodo que cuanta los usuarios activos en la aplicaciòn.
+     *
+     * @return
+     */
     private long countActiveUsers() {
         return accountRepository.countByStatus(AccountStatus.ACTIVE);  // Cuenta los usuarios activos
     }
 
+    /** Mètodo que cuenta los eventos activos en la aplicaciòn.
+     *
+     * @return
+     */
     private long countActiveEvents() {
         return eventRepository.countByStatus(EventStatus.ACTIVE);  // Cuenta los eventos activos
     }

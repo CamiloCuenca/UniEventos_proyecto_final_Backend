@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 public record CouponDTO(
         @NotBlank @Length(max = 100) String name,
-        @NotBlank @Length(min = 5, max = 5) String code,
+         @Length(min = 5, max = 5) String code,
         @NotBlank String discount,
         @NotNull LocalDateTime expirationDate,
         @NotNull CouponStatus status,

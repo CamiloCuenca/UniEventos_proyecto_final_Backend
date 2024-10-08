@@ -143,7 +143,6 @@ public class CartServiceImp implements CartService {
 
     // Fin del bloque.
 
-
     /**
      * Metodo para actualizar los items del carrito.
      *

@@ -7,71 +7,74 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CouponService {
+
     /**
-     * Create a new coupon
+     * Crear un nuevo cupón
      *
-     * @param couponDTO Data Transfer Object containing coupon details
-     * @return The created Coupon ID
-     * @throws Exception If the coupon could not be created
+     * @param couponDTO Data Transfer Object que contiene los detalles del cupón
+     * @return El ID del cupón creado
+     * @throws Exception Si no se pudo crear el cupón
      */
     String createCoupon(CouponDTO couponDTO) throws Exception;
 
     /**
-     * Validate a coupon by its code and check if it is not expired
+     * Validar un cupón por su código y comprobar si no está expirado
      *
-     * @param code Coupon code
-     * @return True if the coupon is valid, false otherwise
-     * @throws Exception If the coupon does not exist or is invalid
+     * @param code Código del cupón
+     * @return True si el cupón es válido, false en caso contrario
+     * @throws Exception Si el cupón no existe o es inválido
      */
     boolean validateCoupon(String code) throws Exception;
 
     /**
-     * Apply a coupon to an order
+     * Aplicar un cupón a una orden
      *
-     * @param code Coupon code
-     * @param orderId The ID of the order to apply the coupon to
-     * @return Discount amount applied
-     * @throws Exception If the coupon is invalid or expired
+     * @param code Código del cupón
+     * @param orderId El ID de la orden a la cual se aplicará el cupón
+     * @return Monto del descuento aplicado
+     * @throws Exception Si el cupón es inválido o está expirado
      */
     double applyCoupon(String code, String orderId) throws Exception;
 
     /**
-     * Get all available (active) coupons
+     * Obtener todos los cupones disponibles (activos)
      *
-     * @return List of active coupons
+     * @return Lista de cupones activos
      */
     List<Coupon> getAvailableCoupons();
 
     /**
-     * Deactivate or delete a coupon by its ID
+     * Desactivar o eliminar un cupón por su ID
      *
-     * @param couponId The ID of the coupon to deactivate
-     * @throws Exception If the coupon could not be found or deactivated
+     * @param couponId El ID del cupón a desactivar
+     * @throws Exception Si no se pudo encontrar o desactivar el cupón
      */
     void deactivateCoupon(String couponId) throws Exception;
 
-
-    /** Activate a coupon by its ID
+    /**
+     * Activar un cupón por su ID
      *
-     * @param couponId
-     * @throws Exception
+     * @param couponId El ID del cupón a activar
+     * @throws Exception Si no se pudo activar el cupón
      */
     void activateCoupon(String couponId) throws Exception;
 
     /**
-     * Update coupon information
+     * Actualizar la información de un cupón
      *
-     * @param couponId The ID of the coupon to update
-     * @param couponDTO The new coupon information to update
-     * @throws Exception If the coupon could not be updated
+     * @param couponId El ID del cupón a actualizar
+     * @param couponDTO La nueva información del cupón para actualizar
+     * @throws Exception Si no se pudo actualizar el cupón
      */
     void updateCoupon(String couponId, CouponDTO couponDTO) throws Exception;
 
-
-    // Método auxiliar para generar un código de cupón aleatorio
+    /**
+     * Método auxiliar para generar un código de cupón aleatorio
+     *
+     * @return Un código de cupón aleatorio
+     * @throws Exception Si no se puede generar el código de cupón
+     */
     static String generateRandomCouponCode() throws Exception {
         return null;
     }
-
-
 }

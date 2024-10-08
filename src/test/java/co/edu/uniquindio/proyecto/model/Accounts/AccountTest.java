@@ -38,12 +38,12 @@ class AccountServiceTest {
     @Test
     public void createAccountTest() {
         createAccountDTO createAccountDTO = new createAccountDTO(
-                "123", // Identificación
-                "Brandon Montealegre", // Nombre
-                "3245478525", // Número de teléfono
-                "Crr 22 # 7-12", // Dirección
-                "golfay2@hotmail.com", // Correo   (para que funcione el envio de correo electronico se debe colocar un email real)
-                "123456" // Contraseña
+                "1004667809", // Identificación
+                "Juan Carlos Aguilar", // Nombre
+                "3245478325", // Número de teléfono
+                "Crr 12 # 12-2", // Dirección
+                "JuanCarlAg@hotmail.com", // Correo   (para que funcione el envio de correo electronico se debe colocar un email real)
+                "122100" // Contraseña
         );
 
         // Se espera que no se lance ninguna excepción al crear la cuenta

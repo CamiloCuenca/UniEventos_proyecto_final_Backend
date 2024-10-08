@@ -12,9 +12,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EmailServiceImp implements EmailService {
+
     private final String SMTP_USERNAME = "unieventosproyect@gmail.com";
     private final String SMTP_PASSWORD = "fyncswwbtqwubuja";
 
+    /**  Envía un correo electrónico.
+     *
+     * @param emailDTO Data Transfer Object que contiene la información del correo electrónico a enviar.
+     * @throws Exception
+     */
     @Override
     @Async
     public void sendMail(EmailDTO emailDTO) throws Exception {
@@ -34,6 +40,11 @@ public class EmailServiceImp implements EmailService {
         }
     }
 
+    /** Envía un código QR por correo electrónico.
+     *
+     * @param email La dirección de correo electrónico a la que se enviará el QR.
+     * @param qrUrl La URL de la imagen del código QR.
+     */
     @Override
     @Async
     public void sendQrByEmail(String email, String qrUrl) {
@@ -51,7 +62,14 @@ public class EmailServiceImp implements EmailService {
         }
     }
 
+    /** Envía un código de validación por correo electrónico.
+     *
+     * @param email La dirección de correo electrónico a la que se enviará el código de validación.
+     * @param validationCode El código de validación a enviar.
+     * @throws Exception
+     */
     @Async
+    @Override
     public void sendCodevalidation(String email, String validationCode) throws Exception {
 
         String plainTextMessage = "Estimado usuario,\n\n" +
@@ -66,7 +84,15 @@ public class EmailServiceImp implements EmailService {
 
     }
 
+
+    /** Envía un código de recuperación de contraseña por correo electrónico.
+     *
+     * @param email La dirección de correo electrónico a la que se enviará el código de recuperación.
+     * @param passwordValidationCode El código de validación de la contraseña a enviar.
+     * @throws Exception
+     */
     @Override
+    @Async
     public void sendRecoveryCode(String email, String passwordValidationCode) throws Exception {
         // Crear el mensaje a enviar por correo
         String plainTextMessage = "Estimado usuario,\n\n" +
@@ -81,6 +107,13 @@ public class EmailServiceImp implements EmailService {
         sendMail(new EmailDTO(email, "Recuperación de contraseña", plainTextMessage));
     }
 
+    /** Envía un cupón de bienvenida por correo electrónico.
+     *
+     * @param email La dirección de correo electrónico a la que se enviará el cupón.
+     * @param couponCode El código del cupón de bienvenida a enviar.
+     * @throws Exception
+     */
+    @Async
     @Override
     public void sendWelcomeCoupon(String email, String couponCode) throws Exception {
         // Preparar el cuerpo del correo que incluye el código del cupón
