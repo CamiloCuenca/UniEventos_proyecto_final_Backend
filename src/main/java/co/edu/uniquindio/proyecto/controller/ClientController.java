@@ -1,12 +1,15 @@
 package co.edu.uniquindio.proyecto.controller;
 
+import co.edu.uniquindio.proyecto.Enum.PaymentState;
 import co.edu.uniquindio.proyecto.dto.Account.changePasswordDTO;
 import co.edu.uniquindio.proyecto.dto.Account.dtoAccountInformation;
 import co.edu.uniquindio.proyecto.dto.Account.editAccountDTO;
 import co.edu.uniquindio.proyecto.dto.Carts.CartDetailDTO;
 import co.edu.uniquindio.proyecto.dto.Carts.UpdateCartItemDTO;
 import co.edu.uniquindio.proyecto.dto.JWT.MessageDTO;
+import co.edu.uniquindio.proyecto.dto.Order.dtoOrderFilter;
 import co.edu.uniquindio.proyecto.exception.Cart.CartNotFoundException;
+import co.edu.uniquindio.proyecto.model.PurchaseOrder.Order;
 import co.edu.uniquindio.proyecto.service.Interfaces.*;
 import com.mercadopago.resources.preference.Preference;
 import jakarta.validation.Valid;
@@ -15,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -126,6 +130,16 @@ public class ClientController {
     public ResponseEntity<MessageDTO<Double>> applyCoupon(@RequestParam String code, @RequestParam String orderId) throws Exception {
         double discount = couponService.applyCoupon(code, orderId);
         return ResponseEntity.ok(new MessageDTO<>(false, discount));
+    }
+
+
+    @GetMapping("/filter")
+    public List<Order> filterOrdersByPaymentState(@RequestParam(required = false) PaymentState state) throws Exception {
+        // Crear el DTO con los parámetros recibidos
+        dtoOrderFilter filter1 = new dtoOrderFilter(state);
+
+        // Llamar al servicio con el DTO y retornar los resultados
+        return orderService.paymentFilterByState(filter1);
     }
 
 

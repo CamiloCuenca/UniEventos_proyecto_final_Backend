@@ -1,14 +1,18 @@
 package co.edu.uniquindio.proyecto.controller;
+import co.edu.uniquindio.proyecto.Enum.PaymentState;
 import co.edu.uniquindio.proyecto.dto.Account.dtoAccountInformation;
 import co.edu.uniquindio.proyecto.dto.Account.dtoAccountItem;
 import co.edu.uniquindio.proyecto.dto.Coupon.CouponDTO;
 import co.edu.uniquindio.proyecto.dto.Event.createDTOEvent;
 import co.edu.uniquindio.proyecto.dto.Event.editDTOEvent;
 import co.edu.uniquindio.proyecto.dto.JWT.MessageDTO;
+import co.edu.uniquindio.proyecto.dto.Order.dtoOrderFilter;
 import co.edu.uniquindio.proyecto.model.Coupons.Coupon;
+import co.edu.uniquindio.proyecto.model.PurchaseOrder.Order;
 import co.edu.uniquindio.proyecto.service.Interfaces.AccountService;
 import co.edu.uniquindio.proyecto.service.Interfaces.CouponService;
 import co.edu.uniquindio.proyecto.service.Interfaces.EventService;
+import co.edu.uniquindio.proyecto.service.Interfaces.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +29,7 @@ public class AdminController {
     private final AccountService accountService;
     private final EventService eventService;
     private final CouponService couponService;
+    private final OrderService orderService;
 
     // Account
 
@@ -90,6 +95,16 @@ public class AdminController {
     public ResponseEntity<MessageDTO<String>> updateCoupon(@PathVariable String couponId, @Valid @RequestBody CouponDTO couponDTO) throws Exception {
         couponService.updateCoupon(couponId, couponDTO);
         return ResponseEntity.ok(new MessageDTO<>(false, "Cupón actualizado exitosamente."));
+    }
+
+
+    @GetMapping("/filter")
+    public List<Order> filterOrdersByPaymentState(@RequestParam(required = false) PaymentState state) throws Exception {
+        // Crear el DTO con los parámetros recibidos
+        dtoOrderFilter filter1 = new dtoOrderFilter(state);
+
+        // Llamar al servicio con el DTO y retornar los resultados
+        return orderService.paymentFilterByState(filter1);
     }
 
 }

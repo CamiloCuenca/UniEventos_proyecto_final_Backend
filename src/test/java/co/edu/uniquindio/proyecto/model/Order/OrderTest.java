@@ -36,7 +36,7 @@ public class OrderTest {
     @Test
     public void createOrderTest() throws Exception {
         // Obtener el evento desde la base de datos para asegurar que los datos estén actualizados
-        ObjectId eventId = new ObjectId("66f5c5a0de22e82833106d92");
+        ObjectId eventId = new ObjectId("66f5c5a0de22e82833106d93");
 
         // Buscar el evento por su ID en la base de datos
         Optional<Event> eventOptional = eventRepository.findById(eventId.toHexString());
@@ -78,7 +78,7 @@ public class OrderTest {
         );
 
         OrderDTO orderDTO = new OrderDTO(
-                "67020240653239785780116b",
+                "66f8db70c1ce3939dbcbe1e0",
                 LocalDateTime.now(),
                 "",
                 orderDetails,

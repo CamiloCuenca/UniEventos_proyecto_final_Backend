@@ -39,8 +39,8 @@ public class CartTest {
         String idEvent2 = "66f5c5a0de22e82833106d94";
 
 
-        CartDetailDTO item1 = new CartDetailDTO("",idEvent1,Localities.VIP,5);
-        CartDetailDTO item2 = new CartDetailDTO("",idEvent2,Localities.VIP,5);
+        CartDetailDTO item1 = new CartDetailDTO("", idEvent1, Localities.VIP, 5);
+        CartDetailDTO item2 = new CartDetailDTO("", idEvent2, Localities.VIP, 5);
 
 
         // Agregar ítems al carrito
@@ -106,7 +106,7 @@ public class CartTest {
     }
 
     @Test
-    public void getCartItemSummaryTest() throws  Exception{
+    public void getCartItemSummaryTest() throws Exception {
         String idAccount = "66f8db70c1ce3939dbcbe1e0";
         cartService.getCartItemSummary(idAccount);
     }
