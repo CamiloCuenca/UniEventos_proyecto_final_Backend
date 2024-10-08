@@ -13,7 +13,7 @@ public interface OrderService {
     Order createOrder(OrderDTO orderDTO) throws Exception;
 
     // Actualizar una orden existente
-    Order updateOrder(String orderId, OrderDTO updatedOrderDTO ) throws Exception;
+    Order updateOrder(String orderId, OrderDTO updatedOrderDTO) throws Exception;
 
     // Eliminar una orden
     void deleteOrder(String orderId) throws Exception;
@@ -22,12 +22,13 @@ public interface OrderService {
     Order getOrderById(String orderId) throws Exception;
 
     // Listar todas las órdenes de una cuenta específica
-    List<Order> getOrdersByUser(String accountId ) throws Exception;
+    List<Order> getOrdersByUser(String accountId) throws Exception;
 
     // Listar todas las órdenes
     List<Order> getAllOrders() throws Exception;
 
     Preference realizarPago(String idOrden) throws Exception;
+
     void recibirNotificacionMercadoPago(Map<String, Object> request);
 
     public Order obtenerOrden(String idOrden) throws Exception;
