@@ -1,6 +1,7 @@
 package co.edu.uniquindio.proyecto.model.Coupon;
 
 import co.edu.uniquindio.proyecto.Enum.CouponStatus;
+import co.edu.uniquindio.proyecto.Enum.EventStatus;
 import co.edu.uniquindio.proyecto.Enum.TypeCoupon;
 import co.edu.uniquindio.proyecto.dto.Coupon.CouponDTO;
 import co.edu.uniquindio.proyecto.model.Coupons.Coupon;
@@ -48,8 +49,7 @@ public class CouponTest {
     @Test
     public void createEventSpecificCouponTest() throws Exception {
         // ID y nombre del evento específico
-        String eventId = "66f5c5a0de22e82833106d93";
-        String eventName = "Concierto Rock 2024";
+        String eventId = "66f5c5a0de22e82833106d94";
 
         // Crear un nuevo objeto CouponDTO con nombre, código, descuento, fecha de expiración, estado, tipo y evento asociado
         LocalDateTime expirationDate = LocalDateTime.now().plusDays(30); // La fecha de expiración es en 30 días
@@ -60,7 +60,7 @@ public class CouponTest {
                 expirationDate,              // Fecha de expiración
                 CouponStatus.AVAILABLE,      // Estado del cupón
                 TypeCoupon.ONLY,           // Tipo de cupón ONLY
-                eventId,                     // ID del evento asociado
+                eventId,// ID del evento asociado
                 expirationDate               // Se usa expirationDate como endDate
         );
 
