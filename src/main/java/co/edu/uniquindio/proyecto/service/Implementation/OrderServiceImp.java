@@ -7,6 +7,7 @@ import co.edu.uniquindio.proyecto.Enum.TypeCoupon;
 import co.edu.uniquindio.proyecto.dto.Coupon.CouponDTO;
 import co.edu.uniquindio.proyecto.dto.EmailDTO;
 import co.edu.uniquindio.proyecto.dto.Order.OrderDTO;
+import co.edu.uniquindio.proyecto.dto.Order.dtoOrderFilter;
 import co.edu.uniquindio.proyecto.model.Accounts.Account;
 import co.edu.uniquindio.proyecto.model.Events.Event;
 import co.edu.uniquindio.proyecto.model.Events.Locality;
@@ -23,12 +24,17 @@ import com.mercadopago.client.preference.PreferenceRequest;
 import com.mercadopago.resources.preference.Preference;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
 import com.mercadopago.client.payment.PaymentClient;
 import com.mercadopago.resources.payment.Payment;
 
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -37,6 +43,9 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImp implements OrderService {
+
+    @Autowired
+    MongoTemplate mongoTemplate;
 
     private final OrderRepository orderRepository;
     private final AccountRepository cuentaRepo;
@@ -334,6 +343,21 @@ public class OrderServiceImp implements OrderService {
             throw new Exception("Orden no encontrada con ID: " + idOrden);
         }
     }
+
+    @Override
+    public List<Order> paymentFilterByState(dtoOrderFilter filter) {
+        Query query = new Query();
+
+        // Filtrar las órdenes por el estado del pago
+        if (filter.state() != null) {
+            // Usamos "payment.state" para acceder al estado del pago dentro del subdocumento payment
+            query.addCriteria(Criteria.where("payment.state").is(filter.state()));
+        }
+
+        // Retornar las órdenes que cumplen con el filtro
+        return mongoTemplate.find(query, Order.class);
+    }
+
 
 
     private Pago crearPago(Payment payment) {

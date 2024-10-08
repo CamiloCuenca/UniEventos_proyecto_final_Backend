@@ -2,6 +2,7 @@ package co.edu.uniquindio.proyecto.model.Cart;
 
 import co.edu.uniquindio.proyecto.Enum.Localities;
 import co.edu.uniquindio.proyecto.dto.Carts.CartDetailDTO;
+import co.edu.uniquindio.proyecto.dto.Carts.CartItemSummaryDTO;
 import co.edu.uniquindio.proyecto.dto.Carts.UpdateCartItemDTO;
 import co.edu.uniquindio.proyecto.repository.CartRepository;
 import co.edu.uniquindio.proyecto.service.Implementation.CartServiceImp;
@@ -9,6 +10,8 @@ import co.edu.uniquindio.proyecto.service.Interfaces.CartService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,12 +34,13 @@ public class CartTest {
      */
     @Test
     public void addItemToCartTest() throws Exception {
-        String accountId = "67017a52adbf6e5218727100"; // ID de prueba
-        String idEvent1 = "66f5c5a0de22e82833106d95";
-        String idEvent2 = "66f5c5a0de22e82833106d96";
+        String accountId = "66f8db70c1ce3939dbcbe1e0"; // ID de prueba
+        String idEvent1 = "66f5c5a0de22e82833106d93";
+        String idEvent2 = "66f5c5a0de22e82833106d94";
 
-        CartDetailDTO item1 = new CartDetailDTO("", idEvent1, Localities.GENERAL, 5); // Verifica que la cantidad sea 5
-        CartDetailDTO item2 = new CartDetailDTO("", idEvent2, Localities.VIP, 5); // Verifica que la cantidad sea 5
+
+        CartDetailDTO item1 = new CartDetailDTO("", idEvent1, Localities.VIP, 5);
+        CartDetailDTO item2 = new CartDetailDTO("", idEvent2, Localities.VIP, 5);
 
 
         // Agregar ítems al carrito
@@ -102,10 +106,9 @@ public class CartTest {
     }
 
     @Test
-    public void getCartItemSummaryTest() throws  Exception{
+    public void getCartItemSummaryTest() throws Exception {
         String idAccount = "66f8db70c1ce3939dbcbe1e0";
         cartService.getCartItemSummary(idAccount);
-        cartServiceImp.printCartSummary(idAccount);
     }
 
 
