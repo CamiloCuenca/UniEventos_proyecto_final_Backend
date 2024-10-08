@@ -34,30 +34,30 @@ public class ClientController {
 
     // Account
 
-    @GetMapping("/obtener-info/{id}")
+    @GetMapping("/cuenta/obtener-info/{id}")
     public dtoAccountInformation obtainAccountInformation(@PathVariable String id) throws Exception {
         return accountService.obtainAccountInformation(id);
     }
 
-    @PutMapping("/editar-perfil/{id}")
+    @PutMapping("/cuenta/editar-perfil/{id}")
     public ResponseEntity<MessageDTO<String>> editAccount(@Valid @RequestBody editAccountDTO cuenta , @PathVariable String id) throws Exception{
         accountService.editAccount(cuenta,id);
         return ResponseEntity.ok(new MessageDTO<>(false, "Cuenta editada exitosamente"));
     }
 
-    @DeleteMapping("/eliminar/{id}")
+    @DeleteMapping("/cuenta/eliminar/{id}")
     public ResponseEntity<MessageDTO<String>> deleteAccount(@PathVariable String id) throws Exception{
         accountService.deleteAccount(id);
         return ResponseEntity.ok(new MessageDTO<>(false, "Cuenta eliminada exitosamente"));
     }
 
-    @PostMapping("/enviar-codigo/{correo}")
+    @PostMapping("/email/enviar-codigo/{correo}")
     public ResponseEntity<MessageDTO<String>>  sendPasswordRecoveryCode(@PathVariable String correo) throws Exception{
         accountService.sendPasswordRecoveryCode(correo);
         return ResponseEntity.ok(new MessageDTO<>(true, "Se envio el codigo exitosamente"));
     }
 
-    @PutMapping("/cambiar-contrsena/{correo}")
+    @PutMapping("/cuenta/cambiar-contrsena/{correo}")
     public ResponseEntity<MessageDTO<String>> changePassword(@Valid @RequestBody changePasswordDTO changePasswordDTO, @PathVariable String correo) throws Exception{
         accountService.changePassword(changePasswordDTO, correo);
         return ResponseEntity.ok(new MessageDTO<>(true, "Se cambio la contraseña exitosamente"));
@@ -126,7 +126,7 @@ public class ClientController {
     // Coupon
 
     // Aplicar un cupón a un pedido
-    @PostMapping("/aplicar-cupon")
+    @PostMapping("/cupon/aplicar-cupon")
     public ResponseEntity<MessageDTO<Double>> applyCoupon(@RequestParam String code, @RequestParam String orderId) throws Exception {
         double discount = couponService.applyCoupon(code, orderId);
         return ResponseEntity.ok(new MessageDTO<>(false, discount));
