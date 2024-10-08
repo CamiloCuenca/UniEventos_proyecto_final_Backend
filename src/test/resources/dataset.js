@@ -66,7 +66,7 @@ db.Account.insertMany([
             creationDate: new Date(),
             code: "688105d8"
         },
-        rol: "ADMINISTRATOR",
+        rol: "CUSTOMER",
         registrationDate: new Date(),
         password: "$2a$10$loCyyJkz7w/khWvxcgkKDeaMbZ91itumuL.spnAZIfl3Brj98BzuC", // Contraseña sin encriptar: passwordLuisaFernandez
         status: "INACTIVE",
@@ -94,6 +94,24 @@ db.Account.insertMany([
             name: "Ana Martinez",
             phoneNumber: "3001234567",
             address: "Av 9 # 5-40"
+        },
+        _class: "co.edu.uniquindio.proyecto.model.Accounts.Account"
+    },{
+        _id: ObjectId("67057761165dfd74d97b6c40"),
+        email: "JuanCarlAg@hotmail.com",
+        registrationValidationCode: {
+            creationDate: new Date("2024-10-08T18:18:09.192Z"),
+            code: "1e647ade"
+        },
+        rol: "CUSTOMER",
+        registrationDate: new Date("2024-10-08T18:18:09.192Z"),
+        password: "$2a$10$Ne/VoZ/b8kPOSMRYoCHJ2ONeJY5ZDEn9c1OXYMvCxRbye.JA/S1mm", // Contraseña sin encriptar: passwordJuanCarlosAguilar
+        status: "INACTIVE",
+        user: {
+            _id: "1004667809",
+            name: "Juan Carlos Aguilar",
+            phoneNumber: "3245478325",
+            address: "Crr 12 # 12-2"
         },
         _class: "co.edu.uniquindio.proyecto.model.Accounts.Account"
     }
@@ -371,4 +389,207 @@ db.Order.insertMany([
         "_class": "co.edu.uniquindio.proyecto.model.PurchaseOrder.Order"
     }
 ]);
+
+// Coupon
+db.Coupon.insertMany([
+    {
+        "_id": ObjectId("6705714b2f45aa6768d7d410"),
+        "expirationDate": ISODate("2024-11-06T18:54:12.598Z"),
+        "status": "AVAILABLE",
+        "type": "ONLY",
+        "name": "Cupón de Bienvenida",
+        "discount": "15",
+        "startDate": ISODate("2024-10-07T18:54:12.599Z"),
+        "_class": "co.edu.uniquindio.proyecto.model.Coupons.Coupon"
+    },
+    {
+        "_id": ObjectId("6705714b2f45aa6768d7d411"),
+        "expirationDate": ISODate("2024-11-07T17:52:10.795Z"),
+        "code": "178932EE",
+        "status": "NOT_AVAILABLE",
+        "type": "MULTIPLE",
+        "name": "Emprendimiento",
+        "discount": "10",
+        "eventId": ObjectId("66f5c5a0de22e82833106d94"),
+        "startDate": ISODate("2024-11-07T17:52:10.795Z"),
+        "_class": "co.edu.uniquindio.proyecto.model.Coupons.Coupon"
+    },
+    {
+        "_id": ObjectId("6705714b2f45aa6768d7d412"),
+        "expirationDate": ISODate("2024-12-01T18:00:00.000Z"),
+        "status": "AVAILABLE",
+        "type": "ONLY",
+        "name": "Descuento de Temporada",
+        "discount": "20",
+        "startDate": ISODate("2024-10-15T08:00:00.000Z"),
+        "_class": "co.edu.uniquindio.proyecto.model.Coupons.Coupon"
+    },
+    {
+        "_id": ObjectId("6705714b2f45aa6768d7d413"),
+        "expirationDate": ISODate("2024-11-30T23:59:59.000Z"),
+        "status": "NOT_AVAILABLE",
+        "type": "MULTIPLE",
+        "name": "Cupon Evento Especial",
+        "discount": "25",
+        "eventId": ObjectId("66f5c5a0de22e82833106d93"),
+        "startDate": ISODate("2024-10-01T10:00:00.000Z"),
+        "_class": "co.edu.uniquindio.proyecto.model.Coupons.Coupon"
+    },
+    {
+        "_id": ObjectId("6705714b2f45aa6768d7d414"),
+        "expirationDate": ISODate("2024-12-15T20:00:00.000Z"),
+        "status": "AVAILABLE",
+        "type": "ONLY",
+        "name": "Descuento Navideño",
+        "discount": "30",
+        "startDate": ISODate("2024-11-01T08:00:00.000Z"),
+        "_class": "co.edu.uniquindio.proyecto.model.Coupons.Coupon"
+    },
+    {
+        "_id": ObjectId("6705714b2f45aa6768d7d415"),
+        "expirationDate": ISODate("2024-11-25T17:52:10.795Z"),
+        "status": "NOT_AVAILABLE",
+        "type": "MULTIPLE",
+        "name": "Cupon para Feria de Emprendimiento",
+        "discount": "10",
+        "eventId": ObjectId("66f5c5a0de22e82833106d94"),
+        "startDate": ISODate("2024-11-01T09:00:00.000Z"),
+        "_class": "co.edu.uniquindio.proyecto.model.Coupons.Coupon"
+    }
+]);
+
+// Cart
+db.Cart.insertMany([
+    {
+        "_id": ObjectId("66f8db70c1ce3939dbcbe1e0"),
+        "date": ISODate("2024-10-08T18:03:06.555Z"),
+        "items": [
+            {
+                "eventId": ObjectId("66f5c5a0de22e82833106d93"),
+                "itemId": "302c4038-c602-4136-9a0c-561ed473ec26",
+                "eventName": "Concierto Rock 2024",
+                "localityName": "VIP",
+                "price": 100,
+                "quantity": 5,
+                "subtotal": 500
+            },
+            {
+                "eventId": ObjectId("66f5c5a0de22e82833106d94"),
+                "itemId": "98a97479-827a-42a7-9fa2-0a51baedc209",
+                "eventName": "Feria de Emprendimiento",
+                "localityName": "VIP",
+                "price": 60,
+                "quantity": 5,
+                "subtotal": 300
+            }
+        ],
+        "total": 800,
+        "_class": "co.edu.uniquindio.proyecto.model.Carts.Cart"
+    },
+    {
+        "_id": ObjectId("66f8dbbb4b350424b236bddb"),
+        "date": ISODate("2024-10-08T18:10:06.229Z"),
+        "items": [
+            {
+                "eventId": ObjectId("66f5c5a0de22e82833106d93"),
+                "itemId": "63f210ab-c7d7-4027-a12e-c765751a99a3",
+                "eventName": "Concierto Rock 2024",
+                "localityName": "VIP",
+                "price": 100,
+                "quantity": 5,
+                "subtotal": 500
+            },
+            {
+                "eventId": ObjectId("66f5c5a0de22e82833106d95"),
+                "itemId": "a208355d-7f27-4929-b6a9-25e1b2abd9df",
+                "eventName": "Festival de Cine 2024",
+                "localityName": "VIP",
+                "price": 75,
+                "quantity": 5,
+                "subtotal": 375
+            }
+        ],
+        "total": 875,
+        "_class": "co.edu.uniquindio.proyecto.model.Carts.Cart"
+    },
+    {
+        "_id": ObjectId("66f8dbfb12c88b4846e60860"),
+        "date": ISODate("2024-10-08T18:14:50.549Z"),
+        "items": [
+            {
+                "eventId": ObjectId("66f5c5a0de22e82833106d96"),
+                "itemId": "054011e7-5a12-49d0-8ab7-6eed5e2ae037",
+                "eventName": "Congreso de Tecnología 2024",
+                "localityName": "VIP",
+                "price": 200,
+                "quantity": 5,
+                "subtotal": 1000
+            },
+            {
+                "eventId": ObjectId("66f5c5a0de22e82833106d95"),
+                "itemId": "6199fddd-25a4-49e8-a48e-3db76671fff9",
+                "eventName": "Festival de Cine 2024",
+                "localityName": "VIP",
+                "price": 75,
+                "quantity": 5,
+                "subtotal": 375
+            }
+        ],
+        "total": 1375,
+        "_class": "co.edu.uniquindio.proyecto.model.Carts.Cart"
+    },
+    {
+        "_id": ObjectId("66f8dc576f736842f97ca0ce"),
+        "date": ISODate("2024-10-08T18:16:00.126Z"),
+        "items": [
+            {
+                "eventId": ObjectId("66f5c5a0de22e82833106d96"),
+                "itemId": "e69228ef-24db-40a1-b35a-08b2fcb76a53",
+                "eventName": "Congreso de Tecnología 2024",
+                "localityName": "VIP",
+                "price": 200,
+                "quantity": 5,
+                "subtotal": 1000
+            },
+            {
+                "eventId": ObjectId("66f5c5a0de22e82833106d94"),
+                "itemId": "ca035817-29e0-453d-804e-28a26ef38e3c",
+                "eventName": "Feria de Emprendimiento",
+                "localityName": "VIP",
+                "price": 60,
+                "quantity": 5,
+                "subtotal": 300
+            }
+        ],
+        "total": 1300,
+        "_class": "co.edu.uniquindio.proyecto.model.Carts.Cart"
+    },
+    {
+        "_id": ObjectId("67057761165dfd74d97b6c40"),
+        "date": ISODate("2024-10-08T18:19:38.846Z"),
+        "items": [
+            {
+                "eventId": ObjectId("66f5c5a0de22e82833106d96"),
+                "itemId": "bb0dbeb7-1ad8-42fe-bd3c-1b001afc3e18",
+                "eventName": "Congreso de Tecnología 2024",
+                "localityName": "VIP",
+                "price": 200,
+                "quantity": 5,
+                "subtotal": 1000
+            },
+            {
+                "eventId": ObjectId("66f5c5a0de22e82833106d94"),
+                "itemId": "6df0c2ed-e16a-444a-a2f8-1a0e7aa85ff1",
+                "eventName": "Feria de Emprendimiento",
+                "localityName": "VIP",
+                "price": 60,
+                "quantity": 5,
+                "subtotal": 300
+            }
+        ],
+        "total": 1300,
+        "_class": "co.edu.uniquindio.proyecto.model.Carts.Cart"
+    }
+]);
+
 
