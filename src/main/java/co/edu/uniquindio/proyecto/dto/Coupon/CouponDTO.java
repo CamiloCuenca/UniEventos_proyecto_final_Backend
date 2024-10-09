@@ -15,7 +15,7 @@ public record CouponDTO(
         @Size(max = 100, message = "El nombre no puede exceder los 100 caracteres") String name,
 
         @NotBlank(message = "El código no puede estar vacío")
-        @Size(min = 5, max = 5, message = "El código debe tener exactamente 5 caracteres") String code,
+        @Size(min = 10, max = 20, message = "El código debe tener exactamente 5 caracteres") String code,
 
         @NotBlank(message = "El descuento no puede estar vacío") String discount,
 

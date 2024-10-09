@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.dto.Event;
 
+import co.edu.uniquindio.proyecto.Enum.EventStatus;
 import co.edu.uniquindio.proyecto.Enum.EventType;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
@@ -24,10 +25,8 @@ public record dtoEventFilter(
         String city,
 
         @FutureOrPresent(message = "La fecha no puede ser en el pasado")
-        LocalDateTime date,
+        LocalDateTime date
 
-        @NotNull(message = "El estado del evento no puede ser nulo")
-        String status // Podrías usar un enum para los estados si es aplicable
 
         // O puedes considerar agregar startDate y endDate para rango de búsqueda
 ) {

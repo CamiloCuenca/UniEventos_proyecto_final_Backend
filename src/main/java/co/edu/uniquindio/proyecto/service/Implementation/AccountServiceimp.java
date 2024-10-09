@@ -488,7 +488,7 @@ public class AccountServiceimp implements AccountService {
         // Creamos el cupón de 15% de descuento
         CouponDTO couponDTO = new CouponDTO(
                 "Cupón de Bienvenida",              // Nombre del cupón
-                CouponService.generateRandomCouponCode(),         // Código único de cupón
+                CouponServiceImp.generateRandomCouponCode(),         // Código único de cupón
                 "15",                               // Descuento del 15%
                 LocalDateTime.now().plusDays(30),   // Fecha de expiración (30 días a partir de ahora)
                 CouponStatus.AVAILABLE,             // Estado disponible

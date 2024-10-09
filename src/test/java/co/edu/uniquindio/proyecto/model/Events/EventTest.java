@@ -6,42 +6,18 @@ import co.edu.uniquindio.proyecto.Enum.Localities;
 import co.edu.uniquindio.proyecto.controller.EventController;
 import co.edu.uniquindio.proyecto.dto.Event.createDTOEvent;
 import co.edu.uniquindio.proyecto.dto.Event.editDTOEvent;
-import co.edu.uniquindio.proyecto.dto.Event.dtoEventFilter;
 import co.edu.uniquindio.proyecto.dto.Event.dtoEventInformation;
 import co.edu.uniquindio.proyecto.repository.EventRepository;
 import co.edu.uniquindio.proyecto.service.Implementation.EventServiceImp;
-import co.edu.uniquindio.proyecto.service.Interfaces.EventService;
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import co.edu.uniquindio.proyecto.model.Events.Event;
-import co.edu.uniquindio.proyecto.Enum.EventType;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.stereotype.Repository;
-
-
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+
 
 @SpringBootTest
 class EventTest {

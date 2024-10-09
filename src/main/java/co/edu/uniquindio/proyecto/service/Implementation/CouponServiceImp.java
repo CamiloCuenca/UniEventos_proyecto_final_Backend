@@ -288,7 +288,7 @@ public class CouponServiceImp implements CouponService {
      *
      * @return codigo generado aleatoriamente
      */
-    public String generateRandomCouponCode() {
+    public static String generateRandomCouponCode() {
         return UUID.randomUUID().toString().substring(0, 8).toUpperCase();  // Código aleatorio de 8 caracteres
     }
 

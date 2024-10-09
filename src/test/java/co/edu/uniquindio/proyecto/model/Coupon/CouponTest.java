@@ -26,7 +26,6 @@ public class CouponTest {
     // Se crea un objeto CouponDTO con los datos del cupón y se llama al método createCoupon del servicio
     @Test
     public void createCouponTest() throws Exception {
-
         // Llamar al servicio para crear el cupón
         // Crear un nuevo objeto CouponDTO con nombre, código, descuento, fecha de expiración, estado y tipo
         LocalDateTime expirationDate = LocalDateTime.now().plusDays(30); // La fecha de expiración es en 30 días
@@ -37,7 +36,7 @@ public class CouponTest {
                 expirationDate,          // Fecha de expiración
                 CouponStatus.NOT_AVAILABLE, // Estado del cupón
                 TypeCoupon.MULTIPLE,     // Tipo de cupón
-                "66f5c5a0de22e82833106d94",                    // El cupon no está asociado a un evento específico
+                "66f5c5a0de22e82833106d92",                    // El cupon no está asociado a un evento específico
                 expirationDate           // Se usa expirationDate como endDate
         );
 
