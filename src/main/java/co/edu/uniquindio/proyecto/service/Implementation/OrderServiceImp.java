@@ -8,6 +8,10 @@ import co.edu.uniquindio.proyecto.dto.Coupon.CouponDTO;
 import co.edu.uniquindio.proyecto.dto.EmailDTO;
 import co.edu.uniquindio.proyecto.dto.Order.OrderDTO;
 import co.edu.uniquindio.proyecto.dto.Order.dtoOrderFilter;
+import co.edu.uniquindio.proyecto.exception.event.EventNotFoundException;
+import co.edu.uniquindio.proyecto.exception.order.FirstOrderException;
+import co.edu.uniquindio.proyecto.exception.order.InvalidOrderException;
+import co.edu.uniquindio.proyecto.exception.order.OrderNotFoundException;
 import co.edu.uniquindio.proyecto.model.Accounts.Account;
 import co.edu.uniquindio.proyecto.model.Events.Event;
 import co.edu.uniquindio.proyecto.model.Events.Locality;
@@ -36,6 +40,7 @@ import com.mercadopago.resources.payment.Payment;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
+import javax.security.auth.login.AccountNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -58,22 +63,40 @@ public class OrderServiceImp implements OrderService {
     private final EventService eventService;
 
 
-    /** Este mètodo crea un orden de compra segun los datos de orderDTO
+    /**
+     * Este mètodo crea un orden de compra segun los datos de orderDTO
      *
      * @param orderDTO Objeto OrderDTO que contiene los detalles de la nueva orden.
      * @return orden creada
      * @throws Exception
      */
     @Override
-    public Order createOrder(OrderDTO orderDTO) throws Exception {
+    public Order createOrder(OrderDTO orderDTO) throws InvalidOrderException, AccountNotFoundException, EventNotFoundException, FirstOrderException, Exception {
+        // Validar que el OrderDTO no sea nulo
         if (orderDTO == null) {
-            throw new Exception("No se puede crear una orden");
+            throw new InvalidOrderException("No se puede crear una orden: OrderDTO es nulo");
+        }
+
+        // Validar que los elementos de la orden no sean nulos ni vacíos
+        if (orderDTO.items() == null || orderDTO.items().isEmpty()) {
+            throw new InvalidOrderException("No se pueden crear órdenes sin artículos");
         }
 
         // Calcular el total de la orden
         double total = 0;
         for (OrderDetail item : orderDTO.items()) {
+            if (item.getPrice() <= 0) {
+                throw new InvalidOrderException("El precio del artículo debe ser positivo");
+            }
+            if (item.getAmount() <= 0) {
+                throw new InvalidOrderException("La cantidad del artículo debe ser positiva");
+            }
             total += item.getPrice() * item.getAmount();
+        }
+
+        // Validar que el total calculado coincida con el total proporcionado
+        if (total != orderDTO.total()) {
+            throw new InvalidOrderException("El total calculado no coincide con el total proporcionado");
         }
 
         // Convertir el DTO a una entidad Order
@@ -85,17 +108,17 @@ public class OrderServiceImp implements OrderService {
                 .items(orderDTO.items())  // Los detalles de la orden vienen directamente desde el DTO
                 .payment(orderDTO.payment().toEntity())  // Convertir el PaymentDTO a Payment
                 .total(orderDTO.total())
-                .codeCoupon(orderDTO.CodeCoupon() != null ? orderDTO.CodeCoupon() : null)  // Manejar el ID del cupón opcionalmente
+                .codeCoupon(orderDTO.codeCoupon() != null ? orderDTO.codeCoupon() : null)  // Manejar el ID del cupón opcionalmente
                 .build();
 
         // Verificar si la cuenta existe
         if (cuentaRepo.findByIdnumber(orderDTO.idAccount()).isEmpty()) {
-            throw new Exception("El id de la cuenta no existe");
+            throw new AccountNotFoundException("El ID de la cuenta no existe");
         }
 
         // Verificar si el evento existe
         if (eventRepository.findById(String.valueOf(orderDTO.items().get(0).getIdEvent())).isEmpty()) {
-            throw new Exception("El ID del evento no existe");
+            throw new EventNotFoundException("El ID del evento no existe");
         }
 
         // Verificar si es la primera orden de la cuenta
@@ -105,18 +128,17 @@ public class OrderServiceImp implements OrderService {
             System.out.println("¡Esta es la primera orden para la cuenta: " + orderDTO.idAccount() + "!");
             Optional<Account> optionalAccount = cuentaRepo.findById(orderDTO.idAccount());
             sendCupon(optionalAccount.get().getEmail());
-
+            // Lanzar excepción si es necesario (si hay lógica especial para la primera orden)
+            throw new FirstOrderException("Se ha creado la primera orden para la cuenta: " + orderDTO.idAccount());
         }
 
         // Guardar la orden en la base de datos
         Order savedOrder = orderRepository.save(order);
 
         // Aplicar cupón si está presente
-        if (orderDTO.CodeCoupon() != null) {
-            // Aquí puedes invocar el servicio de aplicar el cupón
-            couponServiceImp.applyCoupon(orderDTO.CodeCoupon(), savedOrder.getId());
+        if (orderDTO.codeCoupon() != null) {
+            couponServiceImp.applyCoupon(orderDTO.codeCoupon(), savedOrder.getId());
         }
-
 
         // Generar el QR de la orden en base64
         String qrBase64 = qrCodeService.generateQRCode(order.getId());
@@ -134,14 +156,14 @@ public class OrderServiceImp implements OrderService {
             emailService.sendQrByEmail(email, qrUrl);
         } else {
             // Manejo de caso en que no se encuentre la cuenta
-            throw new Exception("El email no existe");
+            throw new AccountNotFoundException("El email no existe para la cuenta con ID: " + order.getIdAccount());
         }
-
 
         return savedOrder;
     }
 
-    /** Mètodo auxiliar para crear el cupon de bienvenida ( tiene parametros fijos)
+    /**
+     * Mètodo auxiliar para crear el cupon de bienvenida ( tiene parametros fijos)
      *
      * @param email
      * @throws Exception
@@ -149,7 +171,7 @@ public class OrderServiceImp implements OrderService {
     private void sendCupon(String email) throws Exception {
         CouponDTO couponDTO = new CouponDTO(
                 "Cupón de Bienvenida",              // Nombre del cupón
-               CouponService.generateRandomCouponCode(),         // Código único de cupón
+                CouponService.generateRandomCouponCode(),         // Código único de cupón
                 "15",                               // Descuento del 15%
                 LocalDateTime.now().plusDays(30),   // Fecha de expiración (30 días a partir de ahora)
                 CouponStatus.AVAILABLE,             // Estado disponible
@@ -176,18 +198,35 @@ public class OrderServiceImp implements OrderService {
         emailService.sendMail(new EmailDTO(email, "\"Cupón de Bienvenida\"", plainTextMessage));
     }
 
-    /** Este mètodo actualiza una orden existente.
+    /**
+     * Este mètodo actualiza una orden existente.
      *
-     * @param orderId ID de la orden que se desea actualizar.
+     * @param orderId         ID de la orden que se desea actualizar.
      * @param updatedOrderDTO Objeto OrderDTO que contiene los datos actualizados de la orden.
      * @return
      * @throws Exception
      */
     @Override
-    public Order updateOrder(String orderId, OrderDTO updatedOrderDTO) throws Exception {
+    public Order updateOrder(String orderId, OrderDTO updatedOrderDTO) throws IllegalArgumentException, Exception {
+        // Validar orderId
+        if (orderId == null || orderId.isBlank()) {
+            throw new IllegalArgumentException("El ID de la orden no puede ser nulo o vacío");
+        }
+
+        // Validar updatedOrderDTO
+        if (updatedOrderDTO == null) {
+            throw new IllegalArgumentException("El DTO de orden actualizado no puede ser nulo");
+        }
+
+        // Validar campos de updatedOrderDTO
+        if (updatedOrderDTO.total() <= 0) {
+            throw new IllegalArgumentException("El total debe ser un valor positivo");
+        }
+
+        // Verificar si la orden existe
         Optional<Order> existingOrder = orderRepository.findById(orderId);
         if (existingOrder.isEmpty()) {
-            throw new Exception("No se puede actualizar una orden");
+            throw new Exception("No se puede actualizar una orden que no existe");
         }
 
         Order order = existingOrder.get();
@@ -196,30 +235,39 @@ public class OrderServiceImp implements OrderService {
         order.setPayment(updatedOrderDTO.payment().toEntity());  // Convertir el PaymentDTO a Payment
 
         // Aplicar el cupón si es que se proporcionó un nuevo cupón
-        if (updatedOrderDTO.CodeCoupon() != null) {
-            couponServiceImp.applyCoupon(updatedOrderDTO.CodeCoupon(), order.getId());
+        if (updatedOrderDTO.codeCoupon() != null) {
+            couponServiceImp.applyCoupon(updatedOrderDTO.codeCoupon(), order.getId());
         }
 
         return orderRepository.save(order);
     }
 
-    /** Este mètodo elimina una orden de compra
+    /**
+     * Este mètodo elimina una orden de compra
      *
      * @param orderId ID de la orden que se desea eliminar.
      * @throws Exception
      */
     @Override
-    public void deleteOrder(String orderId) throws Exception {
+    public void deleteOrder(String orderId) throws InvalidOrderException, Exception, OrderNotFoundException {
+        // Validar orderId
+        if (orderId == null || orderId.isBlank()) {
+            throw new InvalidOrderException("El ID de la orden no puede ser nulo o vacío");
+        }
+
+        // Verificar si la orden existe
         Optional<Order> order = orderRepository.findById(orderId);
         if (order.isEmpty()) {
-            throw new Exception("No se puede eliminar la orden");
+            throw new OrderNotFoundException("No se puede eliminar una orden que no existe");
         }
+
+        // Eliminar la orden
         orderRepository.deleteById(orderId);
     }
 
 
-
-    /** Listar todas las órdenes de una cuenta específica.
+    /**
+     * Listar todas las órdenes de una cuenta específica.
      *
      * @param accountId ID de la cuenta del usuario.
      * @return
@@ -230,7 +278,8 @@ public class OrderServiceImp implements OrderService {
         return orderRepository.findByAccountId(accountId);
     }
 
-    /** Listar todas las órdenes.
+    /**
+     * Listar todas las órdenes.
      *
      * @return lista de todas las ordenes
      * @throws Exception
@@ -240,7 +289,8 @@ public class OrderServiceImp implements OrderService {
         return orderRepository.findAll();
     }
 
-    /** Realizar el pago de una orden mediante MercadoPago.
+    /**
+     * Realizar el pago de una orden mediante MercadoPago.
      *
      * @param idOrden ID de la orden para la cual se realiza el pago.
      * @return Preference que contiene los detalles de la preferencia de pago creada.
@@ -256,13 +306,12 @@ public class OrderServiceImp implements OrderService {
 
 
         // Recorrer los items de la orden y crea los ítems de la pasarela
-        for(OrderDetail item : ordenGuardada.getItems()){
+        for (OrderDetail item : ordenGuardada.getItems()) {
 
 
             // Obtener el evento y la localidad del ítem
             Event evento = eventService.obtenerEvento(item.getIdEvent().toString());
             Locality localidad = evento.obtenerLocalidad(item.getLocalityName());
-
 
 
             // Crear el item de la pasarela
@@ -311,14 +360,15 @@ public class OrderServiceImp implements OrderService {
 
 
         // Guardar el código de la pasarela en la orden
-        ordenGuardada.setCodigoPasarela( preference.getId() );
+        ordenGuardada.setCodigoPasarela(preference.getId());
         orderRepository.save(ordenGuardada);
 
 
         return preference;
     }
 
-    /** Recibir y manejar la notificación de MercadoPago.
+    /**
+     * Recibir y manejar la notificación de MercadoPago.
      *
      * @param request Mapa que contiene la información de la notificación recibida.
      */
@@ -345,7 +395,7 @@ public class OrderServiceImp implements OrderService {
 
                 // Se crea el cliente de MercadoPago y se obtiene el pago con el id
                 PaymentClient client = new PaymentClient();
-                Payment payment = client.get( Long.parseLong(idPago) );
+                Payment payment = client.get(Long.parseLong(idPago));
 
 
                 // Obtener el id de la orden asociada al pago que viene en los metadatos
@@ -365,23 +415,25 @@ public class OrderServiceImp implements OrderService {
         }
     }
 
-    /** Obtener una orden por su ID.
+    /**
+     * Obtener una orden por su ID.
      *
      * @param idOrden ID de la orden que se desea obtener.
      * @return
      * @throws Exception
      */
     @Override
-    public Order obtenerOrden(String idOrden) throws Exception {
+    public Order obtenerOrden(String idOrden) throws OrderNotFoundException {
         Optional<Order> orderOptional = orderRepository.findById(idOrden);
         if (orderOptional.isPresent()) {
             return orderOptional.get();
         } else {
-            throw new Exception("Orden no encontrada con ID: " + idOrden);
+            throw new OrderNotFoundException("Orden no encontrada con ID: " + idOrden);
         }
     }
 
-    /** Filtrar órdenes según su estado de pago.
+    /**
+     * Filtrar órdenes según su estado de pago.
      *
      * @param filter Objeto dtoOrderFilter que contiene los criterios de filtrado.
      * @return
@@ -401,7 +453,8 @@ public class OrderServiceImp implements OrderService {
     }
 
 
-    /** Este mètodo crea el pago segun los datos resividos por mercado pago
+    /**
+     * Este mètodo crea el pago segun los datos resividos por mercado pago
      *
      * @param payment
      * @return
@@ -409,7 +462,7 @@ public class OrderServiceImp implements OrderService {
     private Pago crearPago(Payment payment) {
         Pago pago = new Pago();
         pago.setId(payment.getId().toString());
-        pago.setDate( payment.getDateCreated().toLocalDateTime() );
+        pago.setDate(payment.getDateCreated().toLocalDateTime());
         pago.setState(PaymentState.valueOf(payment.getStatus()));
         pago.setStatusDetail(payment.getStatusDetail());
         pago.setState(PaymentState.valueOf(payment.getStatus().toLowerCase()));
@@ -418,7 +471,6 @@ public class OrderServiceImp implements OrderService {
         pago.setTransactionValue(payment.getTransactionAmount().floatValue());
         return pago;
     }
-
 
 
 }
