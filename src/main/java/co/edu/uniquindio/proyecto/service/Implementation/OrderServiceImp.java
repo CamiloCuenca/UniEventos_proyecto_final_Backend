@@ -149,7 +149,7 @@ public class OrderServiceImp implements OrderService {
     private void sendCupon(String email) throws Exception {
         CouponDTO couponDTO = new CouponDTO(
                 "Cupón de Bienvenida",              // Nombre del cupón
-               CouponService.generateRandomCouponCode(),         // Código único de cupón
+               CouponServiceImp.generateRandomCouponCode(),         // Código único de cupón
                 "15",                               // Descuento del 15%
                 LocalDateTime.now().plusDays(30),   // Fecha de expiración (30 días a partir de ahora)
                 CouponStatus.AVAILABLE,             // Estado disponible

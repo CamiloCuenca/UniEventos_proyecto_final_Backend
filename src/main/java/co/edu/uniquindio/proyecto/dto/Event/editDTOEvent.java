@@ -18,10 +18,10 @@ public record editDTOEvent(
         @NotBlank @Length(max = 1000) String description,
         @NotBlank String imageLocalities,
         EventType type,
-        @NotBlank  @Future() LocalDateTime date,
+        @NotNull  @Future() LocalDateTime date,
         @NotBlank @Pattern(regexp = "^[a-zA-Z\\s]+$") String city,
         @NotBlank String address,
-        @NotBlank int amount,
+        int amount,
         @NotNull @Size(min = 1) List<Locality> localities
 ) {
 }
