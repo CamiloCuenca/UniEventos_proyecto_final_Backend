@@ -1,5 +1,7 @@
 package co.edu.uniquindio.proyecto.service.Implementation;
 
+import co.edu.uniquindio.proyecto.Enum.EventType;
+import co.edu.uniquindio.proyecto.Enum.Localities;
 import co.edu.uniquindio.proyecto.dto.Event.*;
 import co.edu.uniquindio.proyecto.exception.event.*;
 import co.edu.uniquindio.proyecto.model.Events.Event;
@@ -10,8 +12,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
+
+
+
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,11 +39,12 @@ public class EventServiceImp implements EventService {
         return eventRepository.findAllByNameAndDate(name, dateTime).isPresent();
     }
 
-    /** Este método es el servicio de crear un nuevo evento.
+    /**
+     * This method is the service of a create  new event
      *
-     * @param crearEventoDTO Objeto DTO que contiene la información para crear el evento.
-     * @return id del evento
-     * @throws NameAndDateAlreadyExistsException
+     * @param crearEventoDTO
+     * @return eventID
+     * @throws Exception
      */
     @Override
     public String createEvent(createDTOEvent crearEventoDTO) throws NameAndDateAlreadyExistsException {
@@ -63,11 +71,12 @@ public class EventServiceImp implements EventService {
         return createdEvent.getId();
     }
 
-    /** Este método es el servicio de editar un evento.
+    /**
+     * This method is the service of edit a event
      *
-     * @param editarEventoDTO Objeto DTO que contiene los datos actualizados del evento.
+     * @param editarEventoDTO
      * @return
-     * @throws EventNotFoundException
+     * @throws Exception
      */
 
     @Override
@@ -99,11 +108,12 @@ public class EventServiceImp implements EventService {
         return "El evento ha sido actualizado correctamente";
     }
 
-    /**  Este método es el servicio de eliminar un evento.
+    /**
+     * This method is the service of delete a event
      *
-     * @param idEvent ID del evento que se desea eliminar.
+     * @param idEvent
      * @return
-     * @throws EventNotFoundException
+     * @throws Exception
      */
     @Override
     public String deleteEvent(String idEvent) throws EventNotFoundException {
@@ -119,11 +129,13 @@ public class EventServiceImp implements EventService {
         return "El evento con id " + idEvent + " fue eliminado correctamente.";
     }
 
-    /** Este método es el servicio de obtención de eventos.
+
+    /**
+     * This method is the service of obtain events
      *
-     * @param id ID del evento.
+     * @param id
      * @return
-     * @throws EventNotFoundException
+     * @throws Exception
      */
     public dtoEventInformation obtainEventInformation(String id) throws EventNotFoundException {
         Optional<Event> optionalEvent = eventRepository.findById(id);
@@ -143,9 +155,10 @@ public class EventServiceImp implements EventService {
         );
     }
 
-    /** Este método es el servicio de enumerar los eventos.
+    /**
+     * This method is the service of listing the events.
      *
-     * @return Lista de ItemEventDTO que contiene información resumida de los eventos.
+     * @return Events
      */
     @Override
     public List<ItemEventDTO> listEvents() {
@@ -171,12 +184,6 @@ public class EventServiceImp implements EventService {
     }
 
 
-    /** Obtener un evento por su ID
-     *
-     * @param idEvent ID del evento.
-     * @return El evento encontrado.
-     * @throws Exception
-     */
     @Override
     public Event obtenerEvento(String idEvent) throws Exception {
         // Verifica que el idEvent no sea nulo o vacío
@@ -196,10 +203,15 @@ public class EventServiceImp implements EventService {
         return eventoOptional.get();
     }
 
-    /**  Metodo para calcular el total de tickets vendios.
+
+
+
+
+    /**
+     * Metodo para calcular el total de tickets vendios.
      *
-     * @param idEvent ID del evento.
-     * @return El total calculado del evento.
+     * @param idEvent
+     * @return
      * @throws EventNotFoundException
      */
     @Override
@@ -225,11 +237,6 @@ public class EventServiceImp implements EventService {
         return total;
     }
 
-    /**  Filtrar eventos según ciertos criterios
-     *
-     * @param filter Objeto dtoEventFilter que contiene los criterios de filtrado (ej. fecha, categoría, etc.).
-     * @return Lista de eventos que cumplen con el filtro aplicado.
-     */
     @Override
     public List<Event> eventFilter(dtoEventFilter filter) {
         Query query = new Query();

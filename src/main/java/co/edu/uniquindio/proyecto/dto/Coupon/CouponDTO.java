@@ -1,6 +1,7 @@
 package co.edu.uniquindio.proyecto.dto.Coupon;
 
 import co.edu.uniquindio.proyecto.Enum.CouponStatus;
+import co.edu.uniquindio.proyecto.Enum.EventStatus;
 import co.edu.uniquindio.proyecto.Enum.TypeCoupon;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

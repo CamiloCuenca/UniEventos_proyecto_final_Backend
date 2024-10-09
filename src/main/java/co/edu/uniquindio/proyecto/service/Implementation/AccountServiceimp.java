@@ -37,10 +37,15 @@ import java.util.*;
 public class AccountServiceimp implements AccountService {
 
     private final AccountRepository cuentaRepo;
+
     private final PasswordEncoder passwordEncoder;
+
     private final JWTUtils jwtUtils;
+
     private final AccountRepository accountRepository;
-    private final CouponService couponService;
+
+    private  final CouponService couponService;
+
     private final EmailService emailService;
 
     /**
@@ -168,7 +173,7 @@ public class AccountServiceimp implements AccountService {
         Account createdAccount = cuentaRepo.save(newAccount);
 
         // Enviar el codigo de validacion por correo
-        emailService.sendCodevalidation(createdAccount.getEmail(), validationCode);
+        emailService.sendCodevalidation(createdAccount.getEmail(),validationCode);
 
 
         return createdAccount.getAccountId();
@@ -191,7 +196,7 @@ public class AccountServiceimp implements AccountService {
      * @throws Exception
      */
     @Override
-    public String editAccount(editAccountDTO cuenta, String id) throws AccountNtFoundException {
+    public String editAccount(editAccountDTO cuenta , String id) throws AccountNtFoundException {
         Optional<Account> optionalAccount = cuentaRepo.findById(id);
 
         if (optionalAccount.isEmpty()) {
@@ -304,7 +309,7 @@ public class AccountServiceimp implements AccountService {
         cuentaRepo.save(account);
 
         // Enviar por email el codigo de recuperaciòn
-        emailService.sendRecoveryCode(account.getEmail(), passwordValidationCode);
+        emailService.sendRecoveryCode(account.getEmail(),passwordValidationCode);
 
         return "Código de recuperación enviado al correo " + account.getEmail();
     }
@@ -391,11 +396,11 @@ public class AccountServiceimp implements AccountService {
 
 
         // Crear el cupón usando el servicio de cupones
-        CouponDTO couponDTO = generateWelcomeCoupon();
+        CouponDTO couponDTO =  generateWelcomeCoupon();
         couponService.createCoupon(couponDTO);
 
         // Enviar por email el cupon de bienvenida
-        emailService.sendWelcomeCoupon(account.getEmail(), couponDTO.code());
+        emailService.sendWelcomeCoupon(account.getEmail(),couponDTO.code());
 
         // Activar la cuenta y eliminar el código de validación
         account.setRegistrationValidationCode(null);
@@ -406,13 +411,14 @@ public class AccountServiceimp implements AccountService {
     }
 
 
+
+
     /**
-     * Mètodo para generar el cupon de bienvenida de un 15% de descuento
-     *
+     *  Mètodo para generar el cupon de bienvenida de un 15% de descuento
      * @return cupon de bienvenida
      */
     public CouponDTO generateWelcomeCoupon() throws Exception {
-        // Creamos el cupon de 15% de descueto
+       // Creamos el cupon de 15% de descueto
         CouponDTO couponDTO = new CouponDTO(
                 "Cupón de Bienvenida",              // Nombre del cupón
                 CouponService.generateRandomCouponCode(),         // Código único de cupón
