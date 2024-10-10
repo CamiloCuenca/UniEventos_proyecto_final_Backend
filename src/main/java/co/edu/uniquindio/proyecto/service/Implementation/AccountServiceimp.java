@@ -9,6 +9,7 @@ import co.edu.uniquindio.proyecto.dto.Account.*;
 import co.edu.uniquindio.proyecto.dto.Coupon.CouponDTO;
 import co.edu.uniquindio.proyecto.dto.EmailDTO;
 import co.edu.uniquindio.proyecto.dto.JWT.TokenDTO;
+import co.edu.uniquindio.proyecto.exception.Coupons.CouponCreationException;
 import co.edu.uniquindio.proyecto.exception.account.*;
 import co.edu.uniquindio.proyecto.model.Accounts.Account;
 import co.edu.uniquindio.proyecto.model.Accounts.User;
@@ -175,7 +176,7 @@ public class AccountServiceimp implements AccountService {
         newAccount.setStatus(AccountStatus.INACTIVE);
 
         // Generar un código de validación y asociarlo a la cuenta.
-        String validationCode = generateValidationCode();
+        String validationCode = UUID.randomUUID().toString().replace("-", "").substring(0, 8);
         ValidationCode validationCodeObj = new ValidationCode(validationCode);
         newAccount.setRegistrationValidationCode(validationCodeObj);
 
@@ -187,15 +188,6 @@ public class AccountServiceimp implements AccountService {
 
         // Retornar el ID de la cuenta creada.
         return createdAccount.getAccountId();
-    }
-
-    /**
-     * Metodo encargado de generar un codigo de validacion.
-     *
-     * @return
-     */
-    private String generateValidationCode() {
-        return UUID.randomUUID().toString().substring(0, 8); // Código de 8 caracteres
     }
 
     /**
@@ -356,7 +348,7 @@ public class AccountServiceimp implements AccountService {
         Account account = optionalAccount.get();
 
         // Generar un código de validación para la recuperación de contraseña.
-        String passwordValidationCode = generateValidationCode();
+        String passwordValidationCode = UUID.randomUUID().toString().replace("-", "").substring(0, 8);
         ValidationCodePassword validationCodePassword = new ValidationCodePassword(passwordValidationCode);
 
         // Asignar el código de validación a la cuenta.
@@ -484,19 +476,24 @@ public class AccountServiceimp implements AccountService {
      *
      * @return cupon de bienvenida
      */
-    public CouponDTO generateWelcomeCoupon() throws Exception {
-        // Creamos el cupón de 15% de descuento
-        CouponDTO couponDTO = new CouponDTO(
-                "Cupón de Bienvenida",              // Nombre del cupón
-                CouponServiceImp.generateRandomCouponCode(),         // Código único de cupón
-                "15",                               // Descuento del 15%
-                LocalDateTime.now().plusDays(30),   // Fecha de expiración (30 días a partir de ahora)
-                CouponStatus.AVAILABLE,             // Estado disponible
-                TypeCoupon.ONLY,                     // Tipo de cupón: uso único
-                null,                                 // ID del evento: (en este caso no es requerido)
-                LocalDateTime.now()                 // Fecha de inicio: hoy
-        );
-        return couponDTO;
+    public CouponDTO generateWelcomeCoupon() throws CouponCreationException {
+        try {
+            // Creamos el cupón de 15% de descuento
+            CouponDTO couponDTO = new CouponDTO(
+                    "Cupón de Bienvenida",              // Nombre del cupón
+                    UUID.randomUUID().toString().replace("-", "").substring(0, 8), // Código único de cupón
+                    "15",                               // Descuento del 15%
+                    LocalDateTime.now().plusDays(30),   // Fecha de expiración (30 días a partir de ahora)
+                    CouponStatus.AVAILABLE,             // Estado disponible
+                    TypeCoupon.ONLY,                    // Tipo de cupón: uso único
+                    null,                               // ID del evento: (no es requerido para bienvenida)
+                    LocalDateTime.now()                 // Fecha de inicio: hoy
+            );
+            return couponDTO;
+        } catch (Exception e) {
+            // Manejar la excepción y lanzar una excepción más específica si es necesario
+            throw new CouponCreationException("Error al generar el cupón de bienvenida");
+        }
     }
 
 

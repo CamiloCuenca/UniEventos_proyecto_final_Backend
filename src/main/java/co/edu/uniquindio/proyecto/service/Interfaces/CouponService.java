@@ -4,7 +4,6 @@ import co.edu.uniquindio.proyecto.dto.Coupon.CouponDTO;
 import co.edu.uniquindio.proyecto.model.Coupons.Coupon;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface CouponService {
 

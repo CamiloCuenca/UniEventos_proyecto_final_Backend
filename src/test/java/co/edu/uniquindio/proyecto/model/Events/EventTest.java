@@ -65,10 +65,10 @@ class EventTest {
     public void UpdateEvent() throws Exception {
         // Crear DTO para editar un evento existente con nuevos datos
         editDTOEvent editarEventoDTO = new editDTOEvent(
-                "66eb44b425a3ee6359359a2f",       // ID del evento a actualizar
+                "67075fc7a1bb3c5b01065f5c",       // ID del evento a actualizar
                 "image2.jpg",                     // Nueva imagen del evento
                 "Updated Event",                  // Nombre actualizado del evento
-                EventStatus.INACTIVE,             // Estado actualizado del evento
+                EventStatus.ACTIVE,             // Estado actualizado del evento
                 "Updated description",            // Descripción actualizada
                 "updated_image_localities.jpg",   // Imagen actualizada de localidades
                 EventType.CONCERT,                // Tipo de evento (concierto)
@@ -90,7 +90,7 @@ class EventTest {
     @Test
     public void DeleteEvent() throws Exception {
         // ID del evento que se asume ya existe en la base de datos
-        String eventId = "66f5c5a0de22e82833106d92";
+        String eventId = "67075fc7a1bb3c5b01065f5c";
 
         // Llamar al método del servicio para eliminar el evento
         String result = eventService.deleteEvent(eventId);
@@ -104,7 +104,7 @@ class EventTest {
     @Test
     public void obtainEventInformation() throws Exception {
         // ID del evento que se asume ya existe en la base de datos
-        String eventId = "66edcc02b4652945128d2942";
+        String eventId = "66f5c5a0de22e82833106d92";
 
         // Llamar al método de servicio para obtener la información del evento
         dtoEventInformation informacionEventoDTO = eventService.obtainEventInformation(eventId);
@@ -122,7 +122,7 @@ class EventTest {
 
     @Test
     public void calculateTotalTestPrice() throws Exception{
-        String idEvent = "66fe4a3d6e8bef16ed873d70";
+        String idEvent = "66f5c5a0de22e82833106d92";
         eventService.calculateTotal(idEvent);
     }
 

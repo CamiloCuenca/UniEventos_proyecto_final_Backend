@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.model.Accounts;
 
+
 import co.edu.uniquindio.proyecto.dto.Account.*;
 import co.edu.uniquindio.proyecto.dto.JWT.TokenDTO;
 import co.edu.uniquindio.proyecto.repository.AccountRepository;
@@ -10,12 +11,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.security.auth.login.AccountNotFoundException;
-import javax.swing.*;
+
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 class AccountServiceTest {
@@ -38,12 +38,12 @@ class AccountServiceTest {
     @Test
     public void createAccountTest() {
         createAccountDTO createAccountDTO = new createAccountDTO(
-                "1004667809", // Identificación
-                "Juan Carlos Aguilar", // Nombre
+                "12345666112", // Identificación
+                "Brandon Monte", // Nombre
                 "3245478325", // Número de teléfono
                 "Crr 12 # 12-2", // Dirección
-                "JuanCarlAg@hotmail.com", // Correo   (para que funcione el envio de correo electronico se debe colocar un email real)
-                "122100" // Contraseña
+                "prueba1@hotmail.com", // Correo   (para que funcione el envio de correo electronico se debe colocar un email real)
+                "Br@ndonCa123" // Contraseña
         );
 
         // Se espera que no se lance ninguna excepción al crear la cuenta
@@ -61,16 +61,16 @@ class AccountServiceTest {
      */
     @Test
     public void activateAccountTest() throws Exception {
-        String correo = "golfay123@hotmail.com";
-        String code = "8097048f";
+        String correo = "prueba1@hotmail.com";
+        String code = "e76aea19";
         accountService.activateAccount(correo, code);
 
     }
 
     @Test
     public void loginAccountTest() {
-        String email = "golfay123@hotmail.com";
-        String password = "12345";  // Contraseña válida
+        String email = "prueba1@hotmail.com";
+        String password = "Br@ndonCa123";  // Contraseña válida
 
         LoginDTO createLoginDTO = new LoginDTO(email, password);
 
@@ -90,7 +90,7 @@ class AccountServiceTest {
      */
     @Test
     public void updateTestAccount() {
-        String idCuenta = "66f79539c15bdf6a1c74cb2d"; // ID de la cuenta existente
+        String idCuenta = "6706f47ba806a00dadbc61c6"; // ID de la cuenta existente
         editAccountDTO editAccountDTO = new editAccountDTO(
 
                 "brandon", // Nombre actualizado
@@ -118,7 +118,7 @@ class AccountServiceTest {
      */
     @Test
     public void obtainAccountInformatio() throws Exception {
-        String idCuenta = "66eb290b65664d4c873bc362"; // ID de cuenta válida en la base de datos
+        String idCuenta = "6706f47ba806a00dadbc61c6"; // ID de cuenta válida en la base de datos
 
         // Obtiene la información de la cuenta y verifica que no sea nula
         dtoAccountInformation cuentaInfo = accountService.obtainAccountInformation(idCuenta);
@@ -188,7 +188,7 @@ class AccountServiceTest {
     @Test
     void testSendPasswordRecoveryCode_success() throws Exception {
         // Datos de prueba
-        String email = "ba5808864@gmail.com";
+        String email = "prueba1@hotmail.com";
 
         // Ejecutar el método
         String result = accountService.sendPasswordRecoveryCode(email);
@@ -204,8 +204,8 @@ class AccountServiceTest {
      */
     @Test
     void testChangePassword_success() throws Exception {
-        String correo = "ba5808864@gmail.com";
-        String code = "774445fe";
+        String correo = "prueba1@hotmail.com";
+        String code = "642841d7";
         String newPassword = "M@mahermosa123";
         String confirmatePassword = "M@mahermosa123";
         changePasswordDTO changePasswordDTO = new changePasswordDTO(newPassword, confirmatePassword,code);

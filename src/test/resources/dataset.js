@@ -393,16 +393,6 @@ db.Order.insertMany([
 // Coupon
 db.Coupon.insertMany([
     {
-        "_id": ObjectId("6705714b2f45aa6768d7d410"),
-        "expirationDate": ISODate("2024-11-06T18:54:12.598Z"),
-        "status": "AVAILABLE",
-        "type": "ONLY",
-        "name": "Cupón de Bienvenida",
-        "discount": "15",
-        "startDate": ISODate("2024-10-07T18:54:12.599Z"),
-        "_class": "co.edu.uniquindio.proyecto.model.Coupons.Coupon"
-    },
-    {
         "_id": ObjectId("6705714b2f45aa6768d7d411"),
         "expirationDate": ISODate("2024-11-07T17:52:10.795Z"),
         "code": "178932EE",
@@ -416,44 +406,50 @@ db.Coupon.insertMany([
     },
     {
         "_id": ObjectId("6705714b2f45aa6768d7d412"),
-        "expirationDate": ISODate("2024-12-01T18:00:00.000Z"),
+        "expirationDate": ISODate("2024-12-01T10:00:00.000Z"),
+        "code": "A1B2C3D4",
         "status": "AVAILABLE",
         "type": "ONLY",
-        "name": "Descuento de Temporada",
+        "name": "Descuento Navidad",
         "discount": "20",
-        "startDate": ISODate("2024-10-15T08:00:00.000Z"),
+        "eventId": ObjectId("66f5c5a0de22e82833106d94"),
+        "startDate": ISODate("2024-11-15T10:00:00.000Z"),
         "_class": "co.edu.uniquindio.proyecto.model.Coupons.Coupon"
     },
     {
         "_id": ObjectId("6705714b2f45aa6768d7d413"),
-        "expirationDate": ISODate("2024-11-30T23:59:59.000Z"),
+        "expirationDate": ISODate("2025-01-01T23:59:59.000Z"),
+        "code": "F4E5D6C7",
         "status": "NOT_AVAILABLE",
         "type": "MULTIPLE",
-        "name": "Cupon Evento Especial",
-        "discount": "25",
-        "eventId": ObjectId("66f5c5a0de22e82833106d93"),
-        "startDate": ISODate("2024-10-01T10:00:00.000Z"),
+        "name": "Año Nuevo",
+        "discount": "15",
+        "eventId": ObjectId("66f5c5a0de22e82833106d95"),
+        "startDate": ISODate("2024-12-25T00:00:00.000Z"),
         "_class": "co.edu.uniquindio.proyecto.model.Coupons.Coupon"
     },
     {
         "_id": ObjectId("6705714b2f45aa6768d7d414"),
-        "expirationDate": ISODate("2024-12-15T20:00:00.000Z"),
+        "expirationDate": ISODate("2024-10-31T23:59:59.000Z"),
+        "code": "H3L4O5P6",
         "status": "AVAILABLE",
         "type": "ONLY",
-        "name": "Descuento Navideño",
-        "discount": "30",
-        "startDate": ISODate("2024-11-01T08:00:00.000Z"),
+        "name": "Halloween",
+        "discount": "25",
+        "eventId": ObjectId("66f5c5a0de22e82833106d96"),
+        "startDate": ISODate("2024-10-20T00:00:00.000Z"),
         "_class": "co.edu.uniquindio.proyecto.model.Coupons.Coupon"
     },
     {
         "_id": ObjectId("6705714b2f45aa6768d7d415"),
-        "expirationDate": ISODate("2024-11-25T17:52:10.795Z"),
+        "expirationDate": ISODate("2024-11-20T23:59:59.000Z"),
+        "code": "Z9Y8X7W6",
         "status": "NOT_AVAILABLE",
         "type": "MULTIPLE",
-        "name": "Cupon para Feria de Emprendimiento",
-        "discount": "10",
-        "eventId": ObjectId("66f5c5a0de22e82833106d94"),
-        "startDate": ISODate("2024-11-01T09:00:00.000Z"),
+        "name": "Black Friday",
+        "discount": "30",
+        "eventId": ObjectId("66f5c5a0de22e82833106d97"),
+        "startDate": ISODate("2024-11-15T00:00:00.000Z"),
         "_class": "co.edu.uniquindio.proyecto.model.Coupons.Coupon"
     }
 ]);

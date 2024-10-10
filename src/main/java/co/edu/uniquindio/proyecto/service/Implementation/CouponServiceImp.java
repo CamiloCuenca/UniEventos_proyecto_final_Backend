@@ -15,7 +15,6 @@ import co.edu.uniquindio.proyecto.repository.OrderRepository;
 import co.edu.uniquindio.proyecto.service.Interfaces.CouponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.threeten.bp.LocalDate;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,12 +40,12 @@ public class CouponServiceImp implements CouponService {
     @Override
     public String createCoupon(CouponDTO couponDTO) throws CouponAlreadyExistsException, ExpiredCouponException, DateInvalideCouponException, CouponInvalideForEventExcepcion {
         // Verificar si el código del cupón ya existe en la base de datos
-        Coupon existingCoupon = couponRepository.findByCode(couponDTO.code());
-        if (existingCoupon != null) {
-            // Si existe, lanzar una excepción indicando que ya existe un cupón con ese código
-            throw new CouponAlreadyExistsException("Ya existe un cupón con el código: " + couponDTO.code());
+        if (couponDTO.code() != null) {
+            Coupon existingCoupon = couponRepository.findByCode(couponDTO.code());
+            if (existingCoupon != null) {
+                throw new CouponAlreadyExistsException("Ya existe un cupón con el código: " + couponDTO.code());
+            }
         }
-
         // Comprobar si la fecha de expiración es válida
         if (couponDTO.expirationDate() != null && couponDTO.expirationDate().isBefore(LocalDateTime.now())) {
             // Si la fecha de expiración es anterior a la fecha actual, lanzar una excepción
@@ -74,14 +73,7 @@ public class CouponServiceImp implements CouponService {
             }
         }
 
-        // Crear una nueva instancia de Coupon
-        Coupon newCoupon = new Coupon();
-        newCoupon.setName(couponDTO.name());  // Asignar el nombre del cupón
-        newCoupon.setCode(generateRandomCouponCode());  // Generar un código único para el cupón
-        newCoupon.setDiscount(couponDTO.discount());  // Asignar el porcentaje de descuento
-        newCoupon.setExpirationDate(couponDTO.expirationDate());  // Asignar la fecha de expiración
-        newCoupon.setStatus(couponDTO.status());  // Asignar el estado del cupón
-        newCoupon.setType(couponDTO.type());  // Asignar el tipo de cupón
+        Coupon newCoupon = createCartItem(couponDTO);
 
         // Asignar el ID del evento si se especificó en el DTO
         if (couponDTO.eventId() != null) {
@@ -120,6 +112,16 @@ public class CouponServiceImp implements CouponService {
         return true;
     }
 
+    private Coupon createCartItem(CouponDTO couponDto) {
+       return Coupon.builder()
+               .name(couponDto.name())
+               .code(UUID.randomUUID().toString().replace("-", "").substring(0, 8))
+               .discount(couponDto.discount())
+               .expirationDate(couponDto.expirationDate())
+               .status(couponDto.status())
+               .type(couponDto.type())
+               .build();
+    }
 
     /**
      * Metodo para aplicar el cupon
@@ -182,14 +184,16 @@ public class CouponServiceImp implements CouponService {
         return discount;
     }
 
-    /** metodo que retorna una lista de los cupones activos
+    /**
+     * metodo que retorna una lista de los cupones activos
      *
      * @return lista de cupones activos
      */
     @Override
     public List<Coupon> getAvailableCoupons() {
-        return couponRepository.findAvailableCoupons();
+        return couponRepository.findAllByStatus(CouponStatus.AVAILABLE);
     }
+
 
     /**
      * Metodo para desactivar el cupon.
@@ -283,13 +287,5 @@ public class CouponServiceImp implements CouponService {
         return discountAmount;
     }
 
-
-    /** Método auxiliar para generar un código de cupón aleatorio
-     *
-     * @return codigo generado aleatoriamente
-     */
-    public static String generateRandomCouponCode() {
-        return UUID.randomUUID().toString().substring(0, 8).toUpperCase();  // Código aleatorio de 8 caracteres
-    }
 
 }

@@ -128,7 +128,7 @@ public class CartServiceImp implements CartService {
     private CartDetail createCartItem(CartDetailDTO cartDetailDTO, Event event, Locality locality) {
         // Crea un nuevo objeto CartDetail utilizando el patrón Builder.
         return CartDetail.builder()
-                .itemId(UUID.randomUUID().toString()) // Asigna un ID único al ítem utilizando UUID
+                .itemId(UUID.randomUUID().toString().replace("-", "").substring(0, 8)) // Asigna un ID único al ítem utilizando UUID
                 .eventId(cartDetailDTO.eventId()) // Establece el ID del evento a partir del DTO
                 .eventName(event.getName()) // Establece el nombre del evento desde el objeto Event
                 .localityName(Localities.valueOf(String.valueOf(cartDetailDTO.localityName()))) // Convierte el nombre de la localidad desde el DTO al tipo Localities
