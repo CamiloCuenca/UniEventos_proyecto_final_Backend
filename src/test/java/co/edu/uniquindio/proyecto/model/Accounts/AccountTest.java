@@ -155,10 +155,10 @@ class AccountServiceTest {
      */
     @Test
     public void deleteAccountTEst() throws Exception {
-        String idCuenta = "66eb290b65664d4c873bc362"; // ID de la cuenta a eliminar
-
+        String idCuenta = "66f8dbbb4b350424b236bddb";// ID de la cuenta a eliminar
+        PasswordDTO password = new PasswordDTO("passwordMariaRodriguez");
         // Cambia el estado de la cuenta a ELIMINADO sin lanzar excepciones
-        assertDoesNotThrow(() -> accountService.deleteAccount(idCuenta));
+        assertDoesNotThrow(() -> accountService.deleteAccount(idCuenta,password));
 
         // Verifica que la cuenta sigue existiendo pero con el estado ELIMINADO
         dtoAccountInformation cuenta = accountService.obtainAccountInformation(idCuenta);

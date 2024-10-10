@@ -84,7 +84,7 @@ public class AdminController {
     }
 
     // Obtener todos los cupones disponibles (activos)
-    @GetMapping("/disponibles")
+    @GetMapping("/cupones/disponibles")
     public ResponseEntity<MessageDTO<List<Coupon>>> getAvailableCoupons() {
         List<Coupon> coupons = couponService.getAvailableCoupons();
         return ResponseEntity.ok(new MessageDTO<>(false, coupons));
@@ -95,6 +95,12 @@ public class AdminController {
     public ResponseEntity<MessageDTO<String>> updateCoupon(@PathVariable String couponId, @Valid @RequestBody CouponDTO couponDTO) throws Exception {
         couponService.updateCoupon(couponId, couponDTO);
         return ResponseEntity.ok(new MessageDTO<>(false, "Cupón actualizado exitosamente."));
+    }
+
+    @PostMapping("/cupon/activar-cupon/{id}")
+    public ResponseEntity<MessageDTO<String>> activateCoupon(@PathVariable String id) throws Exception {
+        couponService.activateCoupon(id);
+        return ResponseEntity.ok(new MessageDTO<>(true, "Se activo el cupon satisfactoriamente"));
     }
 
 
