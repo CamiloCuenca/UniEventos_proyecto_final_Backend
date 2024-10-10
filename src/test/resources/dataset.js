@@ -4,7 +4,7 @@ db = connect('mongodb://localhost:27017/proyecto');
 db.Account.insertMany([
     {
         _id: ObjectId("66f8db70c1ce3939dbcbe1e0"),
-        email: "juanperez@example.com",
+        email: "camilocuenca1810@gmail.com",
         registrationValidationCode: {
             creationDate: new Date(),
             code: "b5d9ce1f"

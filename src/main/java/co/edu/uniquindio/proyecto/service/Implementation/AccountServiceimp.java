@@ -476,6 +476,7 @@ public class AccountServiceimp implements AccountService {
      *
      * @return cupon de bienvenida
      */
+
     public CouponDTO generateWelcomeCoupon() throws CouponCreationException {
         try {
             // Creamos el cupón de 15% de descuento
@@ -493,8 +494,9 @@ public class AccountServiceimp implements AccountService {
         } catch (Exception e) {
             // Manejar la excepción y lanzar una excepción más específica si es necesario
             throw new CouponCreationException("Error al generar el cupón de bienvenida");
-        }
-    }
+        }}
+
+    
 
 
 }

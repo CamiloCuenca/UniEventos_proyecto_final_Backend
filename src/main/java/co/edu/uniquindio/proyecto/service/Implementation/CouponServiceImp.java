@@ -288,4 +288,13 @@ public class CouponServiceImp implements CouponService {
     }
 
 
+
+    /** Método auxiliar para generar un código de cupón aleatorio
+     *
+     * @return codigo generado aleatoriamente
+     */
+    public static String generateRandomCouponCode() {
+        return UUID.randomUUID().toString().substring(0, 8).toUpperCase();  // Código aleatorio de 8 caracteres
+    }
+
 }

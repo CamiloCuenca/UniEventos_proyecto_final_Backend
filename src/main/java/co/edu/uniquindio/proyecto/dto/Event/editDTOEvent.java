@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record editDTOEvent(
+
         @NotBlank(message = "El ID no puede estar vacío") String id,
 
         @NotBlank(message = "La imagen de portada no puede estar vacía") String coverImage,
@@ -34,5 +35,6 @@ public record editDTOEvent(
         @NotNull(message = "La cantidad no puede ser nula") @Positive(message = "La cantidad debe ser un número positivo") int amount,
 
         @NotNull(message = "La lista de localidades no puede ser nula") @Size(min = 1, message = "Debe haber al menos una localidad") List<Locality> localities
+
 ) {
 }
