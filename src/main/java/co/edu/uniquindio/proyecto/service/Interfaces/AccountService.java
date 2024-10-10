@@ -33,7 +33,7 @@ public interface AccountService {
      * @return Un mensaje de confirmación de la eliminación.
      * @throws Exception Si ocurre un error durante la eliminación de la cuenta.
      */
-    String deleteAccount(String id) throws Exception;
+    String deleteAccount(String id,PasswordDTO passwordDTO) throws Exception;
 
     /**
      * Obtiene la información completa de una cuenta.

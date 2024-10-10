@@ -2,8 +2,8 @@ package co.edu.uniquindio.proyecto.service.Implementation;
 
 import co.edu.uniquindio.proyecto.Enum.CouponStatus;
 import co.edu.uniquindio.proyecto.Enum.PaymentState;
-import co.edu.uniquindio.proyecto.Enum.PaymentType;
 import co.edu.uniquindio.proyecto.Enum.TypeCoupon;
+import co.edu.uniquindio.proyecto.dto.Account.LoginDTO;
 import co.edu.uniquindio.proyecto.dto.Coupon.CouponDTO;
 import co.edu.uniquindio.proyecto.dto.EmailDTO;
 import co.edu.uniquindio.proyecto.dto.Order.OrderDTO;
@@ -31,13 +31,13 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
 import com.mercadopago.client.payment.PaymentClient;
 import com.mercadopago.resources.payment.Payment;
 
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 import javax.security.auth.login.AccountNotFoundException;
@@ -61,6 +61,7 @@ public class OrderServiceImp implements OrderService {
     private final QRCodeService qrCodeService;
     private final ImagesService imagesService;
     private final EventService eventService;
+    private final PasswordEncoder passwordEncoder;
 
 
     /**
@@ -451,6 +452,7 @@ public class OrderServiceImp implements OrderService {
         // Retornar las órdenes que cumplen con el filtro
         return mongoTemplate.find(query, Order.class);
     }
+
 
 
     /**

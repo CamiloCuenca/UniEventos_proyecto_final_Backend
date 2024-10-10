@@ -251,8 +251,8 @@ public class AccountServiceimp implements AccountService {
 
         // Crear y retornar un objeto dtoAccountInformation con los detalles de la cuenta.
         return new dtoAccountInformation(
-                account.getAccountId(), // ID de la cuenta
-                account.getUser().getIdNumber(), // Número de identificación del usuario
+                account.getUser().getIdNumber(),// ID de la cuenta
+                account.getUser().getName(), // Número de identificación del usuario
                 account.getUser().getPhoneNumber(), // Número de teléfono del usuario
                 account.getUser().getAddress(), // Dirección del usuario
                 account.getEmail() // Email de la cuenta
@@ -275,7 +275,7 @@ public class AccountServiceimp implements AccountService {
                 throw new NoAccountsFoundException();
             }
 
-            // Crear una lista para almacenar los DTOs de cuentas.
+
             List<dtoAccountItem> items = new ArrayList<>();
 
             // Iterar sobre cada cuenta y mapear los datos a objetos dtoAccountItem.
@@ -283,8 +283,9 @@ public class AccountServiceimp implements AccountService {
                 items.add(new dtoAccountItem(
                         account.getAccountId(), // ID de la cuenta
                         account.getUser().getName(), // Nombre del usuario
-                        account.getEmail(), // Email de la cuenta
-                        account.getUser().getPhoneNumber() // Número de teléfono del usuario
+                        account.getUser().getPhoneNumber(), // Número de teléfono del usuario
+                        account.getEmail() // Email de la cuenta
+
                 ));
             }
 
@@ -304,7 +305,7 @@ public class AccountServiceimp implements AccountService {
      * @throws Exception
      */
     @Override
-    public String deleteAccount(String id) throws AccountNotFoundException {
+    public String deleteAccount(String id , PasswordDTO password) throws AccountNotFoundException {
         // Buscar la cuenta del usuario que se quiere eliminar en la base de datos.
         Optional<Account> optionalCuenta = cuentaRepo.findById(id);
 
@@ -314,16 +315,21 @@ public class AccountServiceimp implements AccountService {
         }
 
         // Obtener la cuenta encontrada.
-        Account cuenta = optionalCuenta.get();
+        Account account = optionalCuenta.get();
 
-        // Cambiar el estado de la cuenta a ELIMINATED en lugar de borrarla físicamente.
-        cuenta.setStatus(AccountStatus.ELIMINATED);
+        // Verificar si la contraseña proporcionada coincide con la contraseña almacenada utilizando el passwordEncoder.
+        if (!passwordEncoder.matches(password.password(), account.getPassword())) {
+            throw new InvalidPasswordException(); // Lanzar excepción si la contraseña es incorrecta.
+        }
+
+            // Cambiar el estado de la cuenta a ELIMINATED en lugar de borrarla físicamente.
+            account.setStatus(AccountStatus.ELIMINATED);
 
         // Guardar la cuenta actualizada en la base de datos.
-        cuentaRepo.save(cuenta);
+        cuentaRepo.save(account);
 
         // Retornar el ID de la cuenta eliminada.
-        return cuenta.getAccountId();
+        return account.getAccountId();
     }
 
 

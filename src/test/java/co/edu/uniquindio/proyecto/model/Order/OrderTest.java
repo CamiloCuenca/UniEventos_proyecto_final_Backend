@@ -171,5 +171,21 @@ public class OrderTest {
         System.out.println(orderService.paymentFilterByState(filter));
     }
 
+    @Test
+    public void testPaymentFilterByStateCliente() throws Exception {
+        // Arrange
+        dtoOrderFilter filter = new dtoOrderFilter(PaymentState.in_process); // Crea tu filtro aquí
+        String idAccount = "66f8db70c1ce3939dbcbe1e0"; // ID de cuenta de prueba
+
+        // Act
+        List<Order> result = orderService.paymentFilterByStateCliente(filter, idAccount);
+
+        System.out.println(result);
+        // Assert
+        assertNotNull(result);
+
+    }
+
+
 
 }

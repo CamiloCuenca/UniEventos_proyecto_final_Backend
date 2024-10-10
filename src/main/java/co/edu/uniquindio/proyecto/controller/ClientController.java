@@ -1,14 +1,14 @@
 package co.edu.uniquindio.proyecto.controller;
 
 import co.edu.uniquindio.proyecto.Enum.PaymentState;
-import co.edu.uniquindio.proyecto.dto.Account.changePasswordDTO;
-import co.edu.uniquindio.proyecto.dto.Account.dtoAccountInformation;
-import co.edu.uniquindio.proyecto.dto.Account.editAccountDTO;
+import co.edu.uniquindio.proyecto.dto.Account.*;
 import co.edu.uniquindio.proyecto.dto.Carts.CartDetailDTO;
+import co.edu.uniquindio.proyecto.dto.Carts.CartItemSummaryDTO;
 import co.edu.uniquindio.proyecto.dto.Carts.UpdateCartItemDTO;
 import co.edu.uniquindio.proyecto.dto.JWT.MessageDTO;
 import co.edu.uniquindio.proyecto.dto.Order.dtoOrderFilter;
 import co.edu.uniquindio.proyecto.exception.Cart.CartNotFoundException;
+import co.edu.uniquindio.proyecto.model.Carts.CartDetail;
 import co.edu.uniquindio.proyecto.model.PurchaseOrder.Order;
 import co.edu.uniquindio.proyecto.service.Interfaces.*;
 import com.mercadopago.resources.preference.Preference;
@@ -34,8 +34,10 @@ public class ClientController {
 
     // Account
     @GetMapping("/cuenta/obtener-info/{id}")
-    public dtoAccountInformation obtainAccountInformation(@PathVariable String id) throws Exception {
-        return accountService.obtainAccountInformation(id);
+    public ResponseEntity<MessageDTO<String>> obtainAccountInformation(@PathVariable String id) throws Exception {
+        accountService.obtainAccountInformation(id);
+        return ResponseEntity.ok(new MessageDTO<>(false, "Cuenta eliminada exitosamente"));
+
     }
 
     @PutMapping("/cuenta/editar-perfil/{id}")
@@ -45,8 +47,8 @@ public class ClientController {
     }
 
     @DeleteMapping("/cuenta/eliminar/{id}")
-    public ResponseEntity<MessageDTO<String>> deleteAccount(@PathVariable String id) throws Exception{
-        accountService.deleteAccount(id);
+    public ResponseEntity<MessageDTO<String>> deleteAccount(@PathVariable String id,@Valid @RequestBody PasswordDTO password) throws Exception{
+        accountService.deleteAccount(id,password);
         return ResponseEntity.ok(new MessageDTO<>(false, "Cuenta eliminada exitosamente"));
     }
 
@@ -116,16 +118,16 @@ public class ClientController {
         }
     }
 
-    @GetMapping("/carrito/obtener-items-carrito/{id}")
-    public ResponseEntity<MessageDTO<String>> getCartItems(@PathVariable String accountId) throws Exception {
-        cartService.getCartItems(accountId);
-        return ResponseEntity.ok().body(new MessageDTO<>(false,"Se obtubieron todos los itmes del carrito exitosamente"));
+    @GetMapping("/carrito/obtener-items-carrito/{accountId}")
+    public ResponseEntity<MessageDTO<List<CartDetail>>> getCartItems(@PathVariable String accountId) throws Exception {
+        List<CartDetail> items = cartService.getCartItems(accountId);
+        return ResponseEntity.ok().body(new MessageDTO<>(false,items));
     }
 
-    @GetMapping("/carrito/resumen-items/{id}")
-    public ResponseEntity<MessageDTO<String>> getCartItemSummary(@PathVariable String accountId) throws Exception {
-        cartService.getCartItemSummary(accountId);
-        return ResponseEntity.ok().body(new MessageDTO<>(false,"Se obtuvo el resumen de los items exitosamente"));
+    @GetMapping("/carrito/resumen-items/{accountId}")
+    public ResponseEntity<MessageDTO<List<CartItemSummaryDTO>>> getCartItemSummary(@PathVariable String accountId) throws Exception {
+       List<CartItemSummaryDTO> items =  cartService.getCartItemSummary(accountId);
+        return ResponseEntity.ok().body(new MessageDTO<>(false,items));
     }
 
 
@@ -143,11 +145,7 @@ public class ClientController {
         return ResponseEntity.ok(new MessageDTO<>(false, discount));
     }
 
-    @PostMapping("/cupon/activar-cupon/{id}")
-    public ResponseEntity<MessageDTO<String>> activateCoupon(@PathVariable String id) throws Exception {
-        couponService.activateCoupon(id);
-        return ResponseEntity.ok(new MessageDTO<>(true, "Se activo el cupon satisfactoriamente"));
-    }
+
 
 
     //Order
@@ -160,6 +158,8 @@ public class ClientController {
         // Llamar al servicio con el DTO y retornar los resultados
         return orderService.paymentFilterByState(filter1);
     }
+
+
 
 
 

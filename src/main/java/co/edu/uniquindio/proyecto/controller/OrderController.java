@@ -34,34 +34,35 @@ public class OrderController {
         return ResponseEntity.ok().body(new MessageDTO<>(false," Se creo la orden de compra de manera exitosa"));
     }
 
-    @PostMapping("/actualizar-orden")
+    @PutMapping ("/actualizar-orden/{orderId}")
     public ResponseEntity<MessageDTO<String>> updateOrder(@RequestBody OrderDTO order, @PathVariable String orderId)throws Exception {
         orderService.updateOrder(orderId, order);
         return ResponseEntity.ok().body(new MessageDTO<>(false,"Se actualizo la orden de manera satisfactoria"));
     }
 
-    @DeleteMapping("/eliminar-orden")
+    @DeleteMapping("/eliminar-orden/{orderId}")
     public ResponseEntity<MessageDTO<String>> deleteOrder(@PathVariable String orderId)throws Exception {
         orderService.deleteOrder(orderId);
         return ResponseEntity.ok().body(new MessageDTO<>(false,"Se elimino la orden de manera satisfactoria"));
     }
 
-    @GetMapping("/obtener-orden-usuario")
-    public ResponseEntity<MessageDTO<String>> obtenerOrdenUsuario(String accountId) throws Exception {
-        orderService.getOrdersByUser(accountId);
-        return ResponseEntity.ok().body(new MessageDTO<>(false,"se obtuvieron las ordenes del usuario exitosamente"));
+
+    @GetMapping("/obtener-orden-usuario/{accountId}")
+    public ResponseEntity<MessageDTO<List<Order>>> obtenerOrdenUsuario( @PathVariable String accountId) throws Exception {
+        List<Order> orders = orderService.getOrdersByUser(accountId);
+        return ResponseEntity.ok().body(new MessageDTO<>(false,orders));
     }
 
     @GetMapping("/obtener-ordenes")
-    public ResponseEntity<MessageDTO<String>> obtenerOrdenes() throws Exception {
-        orderService.getAllOrders();
-        return ResponseEntity.ok().body(new MessageDTO<>(false,"se obtuvieron todas las ordenes exitosamente"));
+    public ResponseEntity<MessageDTO<List<Order>>> obtenerOrdenes() throws Exception {
+        List<Order> orders =orderService.getAllOrders();
+        return ResponseEntity.ok().body(new MessageDTO<>(false,orders));
     }
 
-    @GetMapping("(/obtener-orden")
-    public ResponseEntity<MessageDTO<String>> obtenerOrden(@RequestParam String orderId) throws Exception {
-        orderService.obtenerOrden(orderId);
-        return ResponseEntity.ok().body(new MessageDTO<>(false,"se obtuvo la orden exitosamente"));
+    @GetMapping("/obtener-orden/{orderId}")
+    public ResponseEntity<MessageDTO<Order>> obtenerOrden(@PathVariable String orderId) throws Exception {
+        Order order = orderService.obtenerOrden(orderId);
+        return ResponseEntity.ok().body(new MessageDTO<>(false,order));
     }
 
     @PostMapping("/realizar-pago")

@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.service.Interfaces;
 
+import co.edu.uniquindio.proyecto.dto.Account.LoginDTO;
 import co.edu.uniquindio.proyecto.dto.Order.OrderDTO;
 import co.edu.uniquindio.proyecto.dto.Order.dtoOrderFilter;
 import co.edu.uniquindio.proyecto.model.PurchaseOrder.Order;
@@ -87,4 +88,5 @@ public interface OrderService {
      * @throws Exception Si ocurre un error durante el filtrado de órdenes.
      */
     List<Order> paymentFilterByState(dtoOrderFilter orderFilter) throws Exception;
+
 }

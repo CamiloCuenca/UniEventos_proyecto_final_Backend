@@ -38,7 +38,7 @@ public class CouponTest {
         LocalDateTime expirationDate = LocalDateTime.now().plusDays(30); // La fecha de expiración es en 30 días
         CouponDTO couponDTO = new CouponDTO(
                 "Novedad",     // Nombre del cupón
-                "",                 // Código del cupón
+                "12345",                 // Código del cupón
                 "10",                    // Descuento del cupón
                 expirationDate,          // Fecha de expiración
                 CouponStatus.NOT_AVAILABLE, // Estado del cupón
