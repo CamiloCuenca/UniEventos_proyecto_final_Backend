@@ -72,15 +72,19 @@ public class EmailServiceImp implements EmailService {
     @Override
     public void sendCodevalidation(String email, String validationCode) throws Exception {
 
-        String plainTextMessage = "Estimado usuario,\n\n" +
-                "Gracias por registrarse en nuestra plataforma. Para activar su cuenta, por favor utilice el siguiente código de activación:\n\n" +
-                "Código de activación: " + validationCode + "\n\n" +
-                "Este código es válido por 15 minutos.\n\n" +
-                "Si usted no solicitó este registro, por favor ignore este correo.\n\n" +
-                "Atentamente,\n" +
-                "El equipo de UniEventos";
 
-        sendMail(new EmailDTO(email, "\"Activación de cuenta\"", plainTextMessage));
+        String htmlMessage = "<html><body>" +
+                "<p>Estimado usuario,</p>" +
+                "<p>Gracias por registrarse en nuestra plataforma. Para activar su cuenta, por favor utilice el siguiente código de activación:</p>" +
+                "<h3>Código de activación: " + validationCode + "</h3>" +
+                "<p>Este código es válido por 15 minutos.</p>" +
+                "<p>Si usted no solicitó este registro, por favor ignore este correo.</p>" +
+                "<p>Atentamente,<br/>El equipo de UniEventos</p>" +
+                "</body></html>";
+
+
+
+        sendMail(new EmailDTO(email, "\"Activación de cuenta\"", htmlMessage));
 
     }
 
@@ -95,16 +99,18 @@ public class EmailServiceImp implements EmailService {
     @Async
     public void sendRecoveryCode(String email, String passwordValidationCode) throws Exception {
         // Crear el mensaje a enviar por correo
-        String plainTextMessage = "Estimado usuario,\n\n" +
-                "Ha solicitado recuperar su contraseña. Utilice el siguiente código de recuperación para restablecer su contraseña:\n\n" +
-                "Código de recuperación: " + passwordValidationCode + "\n\n" +
-                "Este código es válido por 15 minutos.\n\n" +
-                "Si usted no solicitó esta recuperación, por favor ignore este correo.\n\n" +
-                "Atentamente,\n" +
-                "El equipo de UniEventos";
+        String htmlMessage = "<html><body>" +
+                "<p>Estimado usuario,</p>" +
+                "<p>Ha solicitado recuperar su contraseña. Utilice el siguiente código de recuperación para restablecer su contraseña:</p>" +
+                "<h3>Código de recuperación: " + passwordValidationCode + "</h3>" +
+                "<p>Este código es válido por 15 minutos.</p>" +
+                "<p>Si usted no solicitó esta recuperación, por favor ignore este correo.</p>" +
+                "<p>Atentamente,<br/>El equipo de UniEventos</p>" +
+                "</body></html>";
+
 
         // Enviar el correo electrónico con el código de recuperación
-        sendMail(new EmailDTO(email, "Recuperación de contraseña", plainTextMessage));
+        sendMail(new EmailDTO(email, "Recuperación de contraseña", htmlMessage));
     }
 
     /** Envía un cupón de bienvenida por correo electrónico.
@@ -117,16 +123,18 @@ public class EmailServiceImp implements EmailService {
     @Override
     public void sendWelcomeCoupon(String email, String couponCode) throws Exception {
         // Preparar el cuerpo del correo que incluye el código del cupón
-        String plainTextMessage = "Estimado usuario,\n\n" +
-                "Gracias por registrarse en nuestra plataforma. Para celebrar su registro, le ofrecemos un cupón de bienvenida con un 15% de descuento en su próxima compra:\n\n" +
-                "Código de cupón: " + couponCode + "\n\n" +
-                "Este cupón es válido por 30 días y solo puede ser utilizado una vez.\n\n" +
-                "Si tiene alguna duda, por favor contáctenos.\n\n" +
-                "Atentamente,\n" +
-                "El equipo de UniEventos";
+        String htmlMessage = "<html><body>" +
+                "<p>Estimado usuario,</p>" +
+                "<p>Gracias por registrarse en nuestra plataforma. Para celebrar su registro, le ofrecemos un cupón de bienvenida con un 15% de descuento en su próxima compra:</p>" +
+                "<h3>Código de cupón: " + couponCode + "</h3>" +
+                "<p>Este cupón es válido por 30 días y solo puede ser utilizado una vez.</p>" +
+                "<p>Si tiene alguna duda, por favor contáctenos.</p>" +
+                "<p>Atentamente,<br/>El equipo de UniEventos</p>" +
+                "</body></html>";
+
 
         // Enviar el correo con el código de cupón
-       sendMail(new EmailDTO(email, "\"Cupón de Bienvenida\"", plainTextMessage));
+       sendMail(new EmailDTO(email, "\"Cupón de Bienvenida\"", htmlMessage));
     }
 
 

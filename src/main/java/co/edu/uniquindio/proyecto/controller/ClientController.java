@@ -33,7 +33,6 @@ public class ClientController {
     private final OrderService orderService;
 
     // Account
-
     @GetMapping("/cuenta/obtener-info/{id}")
     public dtoAccountInformation obtainAccountInformation(@PathVariable String id) throws Exception {
         return accountService.obtainAccountInformation(id);
@@ -132,6 +131,14 @@ public class ClientController {
         return ResponseEntity.ok(new MessageDTO<>(false, discount));
     }
 
+    @PostMapping("/cupon/activar-cupon/{id}")
+    public ResponseEntity<MessageDTO<String>> activateCoupon(@PathVariable String id) throws Exception {
+        couponService.activateCoupon(id);
+        return ResponseEntity.ok(new MessageDTO<>(true, "Se activo el cupon satisfactoriamente"));
+    }
+
+
+    //Order
 
     @GetMapping("/filter")
     public List<Order> filterOrdersByPaymentState(@RequestParam(required = false) PaymentState state) throws Exception {
