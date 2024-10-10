@@ -6,42 +6,18 @@ import co.edu.uniquindio.proyecto.Enum.Localities;
 import co.edu.uniquindio.proyecto.controller.EventController;
 import co.edu.uniquindio.proyecto.dto.Event.createDTOEvent;
 import co.edu.uniquindio.proyecto.dto.Event.editDTOEvent;
-import co.edu.uniquindio.proyecto.dto.Event.dtoEventFilter;
 import co.edu.uniquindio.proyecto.dto.Event.dtoEventInformation;
 import co.edu.uniquindio.proyecto.repository.EventRepository;
 import co.edu.uniquindio.proyecto.service.Implementation.EventServiceImp;
-import co.edu.uniquindio.proyecto.service.Interfaces.EventService;
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import co.edu.uniquindio.proyecto.model.Events.Event;
-import co.edu.uniquindio.proyecto.Enum.EventType;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.stereotype.Repository;
-
-
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+
 
 @SpringBootTest
 class EventTest {
@@ -89,10 +65,10 @@ class EventTest {
     public void UpdateEvent() throws Exception {
         // Crear DTO para editar un evento existente con nuevos datos
         editDTOEvent editarEventoDTO = new editDTOEvent(
-                "66eb44b425a3ee6359359a2f",       // ID del evento a actualizar
+                "67075fc7a1bb3c5b01065f5c",       // ID del evento a actualizar
                 "image2.jpg",                     // Nueva imagen del evento
                 "Updated Event",                  // Nombre actualizado del evento
-                EventStatus.INACTIVE,             // Estado actualizado del evento
+                EventStatus.ACTIVE,             // Estado actualizado del evento
                 "Updated description",            // Descripción actualizada
                 "updated_image_localities.jpg",   // Imagen actualizada de localidades
                 EventType.CONCERT,                // Tipo de evento (concierto)
@@ -114,7 +90,7 @@ class EventTest {
     @Test
     public void DeleteEvent() throws Exception {
         // ID del evento que se asume ya existe en la base de datos
-        String eventId = "66f5c5a0de22e82833106d92";
+        String eventId = "67075fc7a1bb3c5b01065f5c";
 
         // Llamar al método del servicio para eliminar el evento
         String result = eventService.deleteEvent(eventId);
@@ -128,7 +104,7 @@ class EventTest {
     @Test
     public void obtainEventInformation() throws Exception {
         // ID del evento que se asume ya existe en la base de datos
-        String eventId = "66edcc02b4652945128d2942";
+        String eventId = "66f5c5a0de22e82833106d92";
 
         // Llamar al método de servicio para obtener la información del evento
         dtoEventInformation informacionEventoDTO = eventService.obtainEventInformation(eventId);
@@ -146,7 +122,7 @@ class EventTest {
 
     @Test
     public void calculateTotalTestPrice() throws Exception{
-        String idEvent = "66fe4a3d6e8bef16ed873d70";
+        String idEvent = "66f5c5a0de22e82833106d92";
         eventService.calculateTotal(idEvent);
     }
 

@@ -1,19 +1,13 @@
 package co.edu.uniquindio.proyecto.service.Implementation;
 
-import co.edu.uniquindio.proyecto.Enum.AccountStatus;
 import co.edu.uniquindio.proyecto.Enum.Localities;
-import co.edu.uniquindio.proyecto.dto.Carts.CartCartSummaryDTO;
 import co.edu.uniquindio.proyecto.dto.Carts.CartDetailDTO;
 import co.edu.uniquindio.proyecto.dto.Carts.CartItemSummaryDTO;
 import co.edu.uniquindio.proyecto.dto.Carts.UpdateCartItemDTO;
-import co.edu.uniquindio.proyecto.exception.Cart.CartNotFoundException;
-import co.edu.uniquindio.proyecto.exception.Cart.ErrorCreateForCartException;
-import co.edu.uniquindio.proyecto.exception.Cart.EventoAlreadyForLocalityException;
-import co.edu.uniquindio.proyecto.exception.Cart.NoItemFoundException;
-import co.edu.uniquindio.proyecto.exception.account.ActiveAccountException;
+import co.edu.uniquindio.proyecto.exception.Cart.*;
 import co.edu.uniquindio.proyecto.exception.event.EventNotFoundException;
 import co.edu.uniquindio.proyecto.exception.event.LocalityNotFoundException;
-import co.edu.uniquindio.proyecto.model.Accounts.Account;
+
 import co.edu.uniquindio.proyecto.model.Carts.Cart;
 import co.edu.uniquindio.proyecto.model.Carts.CartDetail;
 import co.edu.uniquindio.proyecto.model.Events.Event;
@@ -27,7 +21,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -58,16 +52,12 @@ public class CartServiceImp implements CartService {
     /**
      * Metodo encargado de agregar item al carro, en caso de que el usuario no tenga uno lo crea autimaticamente con los items
      *
-     * @param accountId
-     * @param cartDetailDTO
+     * @param accountId     ID de la cuenta del usuario
+     * @param cartDetailDTO DTO destinado para la creacion de los detailDTO
      * @throws Exception
      */
     @Override
-    public void addItemToCart(String accountId, CartDetailDTO cartDetailDTO) throws Exception {
-        // Validación del ID de la cuenta
-        if (accountId == null || accountId.isEmpty()) {
-            throw new IllegalArgumentException("El ID de la cuenta no puede ser nulo o vacío");
-        }
+    public void addItemToCart(String accountId, CartDetailDTO cartDetailDTO) {
         // Buscar o crear el carrito
         Cart cart = getOrCreateCart(accountId);
 
@@ -88,7 +78,7 @@ public class CartServiceImp implements CartService {
         recalculateCartTotalAndSave(cart);
     }
 
-    // Bloque de metodos usados para Agregar Items al carrito.
+    // Bloque de métodos usados para Agregar Items al carrito.
     private Cart getOrCreateCart(String accountId) throws ErrorCreateForCartException {
         return cartRepository.findByIdAccount(accountId)
                 .orElseGet(() -> {
@@ -101,44 +91,64 @@ public class CartServiceImp implements CartService {
     }
 
     private Event findEventById(String eventId) throws EventNotFoundException {
+        // Busca un evento por su ID en el repositorio
         return eventRepository.findById(eventId)
+                // Si no se encuentra el evento, lanza una excepción personalizada
                 .orElseThrow(() -> new EventNotFoundException("No se encontró el evento con el ID: " + eventId));
     }
 
     private Locality findLocalityInEvent(Event event, Localities localityName) throws LocalityNotFoundException {
+        // Filtra las localidades del evento para encontrar la que coincide con el nombre proporcionado
         return event.getLocalities().stream()
+                // Filtra las localidades que tienen el mismo nombre que 'localityName'
                 .filter(loc -> loc.getName().equals(localityName))
+                // Intenta obtener la primera localidad que coincida
                 .findFirst()
+                // Si no se encuentra ninguna, lanza una excepción personalizada
                 .orElseThrow(() -> new LocalityNotFoundException("No se encontró la localidad: " + localityName));
     }
 
     private void checkIfItemExistsInCart(Cart cart, Event event, String localityName) {
+        // Validar parámetros
+        if (cart == null || event == null || localityName == null || localityName.isEmpty()) {
+            throw new IllegalArgumentException("Los parámetros no pueden ser nulos o vacíos.");
+        }
+
+        // Verifica si ya existe un ítem en el carrito para el evento y la localidad especificados
         boolean itemExists = cart.getItems().stream()
+                // Comprueba si algún ítem en el carrito coincide con el ID del evento y el nombre de la localidad
                 .anyMatch(item -> item.getEventId().equals(event.getId()) && item.getLocalityName().equals(localityName));
+
+        // Si se encuentra un ítem que coincide, lanza una excepción personalizada
         if (itemExists) {
             throw new EventoAlreadyForLocalityException("El evento ya está en el carrito para la localidad especificada.");
         }
     }
 
     private CartDetail createCartItem(CartDetailDTO cartDetailDTO, Event event, Locality locality) {
+        // Crea un nuevo objeto CartDetail utilizando el patrón Builder.
         return CartDetail.builder()
-                .itemId(UUID.randomUUID().toString()) // Asigna un ID único al ítem
-                .eventId(cartDetailDTO.eventId())
-                .eventName(event.getName())
-                .localityName(Localities.valueOf(String.valueOf(cartDetailDTO.localityName())))
-                .price(locality.getPrice())
-                .quantity(cartDetailDTO.quantity()) // Establecer la cantidad
-                .subtotal(locality.getPrice() * cartDetailDTO.quantity()) // Calcular subtotal
-                .build();
+                .itemId(UUID.randomUUID().toString().replace("-", "").substring(0, 8)) // Asigna un ID único al ítem utilizando UUID
+                .eventId(cartDetailDTO.eventId()) // Establece el ID del evento a partir del DTO
+                .eventName(event.getName()) // Establece el nombre del evento desde el objeto Event
+                .localityName(Localities.valueOf(String.valueOf(cartDetailDTO.localityName()))) // Convierte el nombre de la localidad desde el DTO al tipo Localities
+                .price(locality.getPrice()) // Establece el precio de la localidad
+                .quantity(cartDetailDTO.quantity()) // Establece la cantidad especificada en el DTO
+                .subtotal(locality.getPrice() * cartDetailDTO.quantity()) // Calcula el subtotal multiplicando el precio por la cantidad
+                .build(); // Construye y devuelve el objeto CartDetail
     }
 
     private void addItemToCart(Cart cart, CartDetail newItem) {
-        cart.getItems().add(newItem);
+        // Agrega el nuevo ítem al carrito utilizando la lista de ítems del carrito
+        cart.getItems().add(newItem); // Se añade el ítem proporcionado al carrito
     }
 
     private void recalculateCartTotalAndSave(Cart cart) {
-        cart.calculateTotal();
-        cartRepository.save(cart);
+        // Recalcula el total del carrito, actualizando su estado interno
+        cart.calculateTotal(); // Llama al método calculateTotal para que el carrito recalculé el total
+
+        // Guarda el carrito actualizado en el repositorio
+        cartRepository.save(cart); // Persiste el carrito en la base de datos
     }
 
     // Fin del bloque.
@@ -193,13 +203,13 @@ public class CartServiceImp implements CartService {
                     .orElseThrow(() -> new LocalityNotFoundException("Nueva localidad no encontrada: " + updateCartItemDTO.localityName()));
 
             // Actualizar localidad y precio
-            item.setLocalityName(newLocality.getName());
-            item.setPrice(newLocality.getPrice());
+            item.setLocalityName(newLocality.getName()); // Asigna la nueva localidad
+            item.setPrice(newLocality.getPrice());       // Asigna el nuevo precio según la localidad
         }
 
         // Actualizar la cantidad y el subtotal
-        item.setQuantity(updateCartItemDTO.quantity());
-        item.setSubtotal(item.getPrice() * item.getQuantity());
+        item.setQuantity(updateCartItemDTO.quantity()); // Establece la nueva cantidad del ítem
+        item.setSubtotal(item.getPrice() * item.getQuantity()); // Calcula y actualiza el subtotal
     }
     //Fin del bloque
 
@@ -211,10 +221,17 @@ public class CartServiceImp implements CartService {
      */
     @Override
     public void clearCart(String accountId) throws CartNotFoundException {
+        // Buscar el carrito asociado a la cuenta utilizando el ID de la cuenta
         Cart cart = cartRepository.findByIdAccount(accountId)
                 .orElseThrow(() -> new CartNotFoundException("No se encontró el carrito para la cuenta: " + accountId));
+
+        // Limpiar los ítems del carrito, estableciendo una nueva lista vacía
         cart.setItems(new ArrayList<>());
+
+        // Calcular el total del carrito después de limpiar los ítems
         cart.calculateTotal();
+
+        // Guardar el carrito actualizado en el repositorio
         cartRepository.save(cart);
     }
 
@@ -227,6 +244,7 @@ public class CartServiceImp implements CartService {
      */
     @Override
     public List<CartDetail> getCartItems(String accountId) throws CartNotFoundException {
+        // Buscar el carrito asociado a la cuenta utilizando el ID de la cuenta
         Cart cart = cartRepository.findByIdAccount(accountId)
                 .orElseThrow(() -> new CartNotFoundException("No se encontró el carrito para la cuenta: " + accountId));
 
@@ -235,6 +253,8 @@ public class CartServiceImp implements CartService {
 
         // Imprimir los detalles de cada ítem usando toString()
         cartItems.forEach(item -> System.out.println(item.toString()));
+
+        // Devolver la lista de ítems del carrito
         return cartItems;
     }
 
@@ -264,7 +284,7 @@ public class CartServiceImp implements CartService {
     }
 
     @Override
-    public void validateCartBeforePayment(String accountId) throws Exception {
+    public void validateCartBeforePayment(String accountId) throws insufficientAvailabilityException {
         // Buscar el carrito del usuario
         Cart cart = getCartByAccountId(accountId);
 
@@ -275,7 +295,7 @@ public class CartServiceImp implements CartService {
 
             // Comprobar la disponibilidad de boletos
             if (locality.getMaximumCapacity() - locality.getTicketsSold() < item.getQuantity()) {
-                throw new Exception("No hay suficientes boletos disponibles para el evento: " + item.getEventName());
+                throw new insufficientAvailabilityException("No hay suficientes boletos disponibles para el evento: " + item.getEventName());
             }
         }
         // Si llegamos aquí, el carrito es válido

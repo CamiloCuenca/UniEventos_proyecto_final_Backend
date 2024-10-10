@@ -34,9 +34,9 @@ public class CartTest {
      */
     @Test
     public void addItemToCartTest() throws Exception {
-        String accountId = "67057761165dfd74d97b6c40"; // ID de prueba
-        String idEvent1 = "66f5c5a0de22e82833106d96";
-        String idEvent2 = "66f5c5a0de22e82833106d94";
+        String accountId = "6706f47ba806a00dadbc61c6"; // ID de prueba
+        String idEvent1 = "66f5c5a0de22e82833106d92";
+        String idEvent2 = "66f5c5a0de22e82833106d93";
 
 
         CartDetailDTO item1 = new CartDetailDTO("", idEvent1, Localities.VIP, 5);
@@ -56,9 +56,9 @@ public class CartTest {
      */
     @Test
     public void upgradeItemToCartTest() throws Exception {
-        String accountId = "66f8db70c1ce3939dbcbe1e0";
-        String itemId = "c524ca22-aded-4584-8f68-bd5f014051bf";
-        UpdateCartItemDTO updateCartItemDTO = new UpdateCartItemDTO(5, Localities.VIP);
+        String accountId = "6706f47ba806a00dadbc61c6";
+        String itemId = "6c40b96c-d12f-4f22-b72f-aa84541b9b89";
+        UpdateCartItemDTO updateCartItemDTO = new UpdateCartItemDTO(10, Localities.VIP);
         cartService.updateCartItem(accountId, itemId, updateCartItemDTO);
 
     }
@@ -71,8 +71,8 @@ public class CartTest {
      */
     @Test
     public void removeItemFromCart() throws Exception {
-        String idAccount = "67002c50a09f9570a45ef428";
-        String idEvent = "66fe4a4ef46d70182c90b56d";
+        String idAccount = "6706f47ba806a00dadbc61c6";
+        String idEvent = "66f5c5a0de22e82833106d92";
         cartService.removeItemFromCart(idAccount, idEvent);
     }
 
@@ -95,19 +95,19 @@ public class CartTest {
      */
     @Test
     public void getCartItemsTest() throws Exception {
-        String idAccount = "66fe49c4f50c1b290ba159d8";
+        String idAccount = "6706f47ba806a00dadbc61c6";
         cartService.getCartItems(idAccount);
     }
 
     @Test
     public void validateCartBeforePaymentTest() throws Exception {
-        String idAccount = "66f8db70c1ce3939dbcbe1e0";
+        String idAccount = "6706f47ba806a00dadbc61c6";
         cartService.validateCartBeforePayment(idAccount);
     }
 
     @Test
     public void getCartItemSummaryTest() throws Exception {
-        String idAccount = "66f8db70c1ce3939dbcbe1e0";
+        String idAccount = "6706f47ba806a00dadbc61c6";
         cartService.getCartItemSummary(idAccount);
     }
 

@@ -36,7 +36,7 @@ public class OrderTest {
     @Test
     public void createOrderTest() throws Exception {
         // Obtener el evento desde la base de datos para asegurar que los datos estén actualizados
-        ObjectId eventId = new ObjectId("66f5c5a0de22e82833106d93");
+        ObjectId eventId = new ObjectId("66f5c5a0de22e82833106d92");
 
         // Buscar el evento por su ID en la base de datos
         Optional<Event> eventOptional = eventRepository.findById(eventId.toHexString());

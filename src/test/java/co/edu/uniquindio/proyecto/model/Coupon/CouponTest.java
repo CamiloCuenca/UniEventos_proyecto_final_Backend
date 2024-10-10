@@ -26,18 +26,17 @@ public class CouponTest {
     // Se crea un objeto CouponDTO con los datos del cupón y se llama al método createCoupon del servicio
     @Test
     public void createCouponTest() throws Exception {
-
         // Llamar al servicio para crear el cupón
         // Crear un nuevo objeto CouponDTO con nombre, código, descuento, fecha de expiración, estado y tipo
         LocalDateTime expirationDate = LocalDateTime.now().plusDays(30); // La fecha de expiración es en 30 días
         CouponDTO couponDTO = new CouponDTO(
-                "Emprendimiento",     // Nombre del cupón
-                null,                 // Código del cupón
+                "Novedad",     // Nombre del cupón
+                "",                 // Código del cupón
                 "10",                    // Descuento del cupón
                 expirationDate,          // Fecha de expiración
                 CouponStatus.NOT_AVAILABLE, // Estado del cupón
                 TypeCoupon.MULTIPLE,     // Tipo de cupón
-                "66f5c5a0de22e82833106d94",                    // El cupon no está asociado a un evento específico
+                "66f5c5a0de22e82833106d92",                    // El cupon no está asociado a un evento específico
                 expirationDate           // Se usa expirationDate como endDate
         );
 
@@ -73,7 +72,7 @@ public class CouponTest {
     @Test
     public void validateCouponTest() throws Exception {
         // Llamar al servicio para validar el cupón con el código proporcionado
-        String code = "ROCK2024"; // Código del cupón a validar
+        String code = "6da86916"; // Código del cupón a validar
         // Llamar al servicio para validar el cupón con el código proporcionado
         couponService.validateCoupon(code);
     }
@@ -96,7 +95,7 @@ public class CouponTest {
     // Se desactiva un cupón por su ID utilizando el servicio
     @Test
     public void deactivateCouponTest() throws Exception {
-        String couponId = "66e8865bdbc7b554d5bbc780"; // ID del cupón a desactivar
+        String couponId = "6705714b2f45aa6768d7d412"; // ID del cupón a desactivar
         // Llamar al servicio para desactivar el cupón
         couponService.deactivateCoupon(couponId);
     }
@@ -105,7 +104,7 @@ public class CouponTest {
     // Se activa un cupón por su ID utilizando el servicio
     @Test
     public void activateCouponTest() throws Exception {
-        String couponId = "66e8865bdbc7b554d5bbc780"; // ID del cupón a activar
+        String couponId = "6705714b2f45aa6768d7d412"; // ID del cupón a activar
         // Llamar al servicio para activar el cupón
         couponService.activateCoupon(couponId);
     }
