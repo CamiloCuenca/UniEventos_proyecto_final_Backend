@@ -78,3 +78,4 @@ public interface EventService {
      */
     List<Event> eventFilter(dtoEventFilter filter);
 }
+

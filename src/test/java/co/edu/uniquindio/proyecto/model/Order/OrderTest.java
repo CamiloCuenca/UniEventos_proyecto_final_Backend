@@ -3,6 +3,7 @@ package co.edu.uniquindio.proyecto.model.Order;
 import co.edu.uniquindio.proyecto.Enum.Localities;
 import co.edu.uniquindio.proyecto.dto.Order.OrderDTO;
 import co.edu.uniquindio.proyecto.dto.Order.PaymentDTO;
+import co.edu.uniquindio.proyecto.dto.Order.dtoOrderFilter;
 import co.edu.uniquindio.proyecto.model.Events.Event;
 import co.edu.uniquindio.proyecto.model.Events.Locality;
 import co.edu.uniquindio.proyecto.model.PurchaseOrder.Order;
@@ -95,7 +96,6 @@ public class OrderTest {
     }
 
 
-
     @Test
     public void updateOrderTest() throws Exception {
         String orderId = "66faf1817118613d158799f1";
@@ -140,6 +140,35 @@ public class OrderTest {
         assertEquals(updatedOrderDTO.total(), updatedOrder.getTotal());
         assertEquals(updatedOrderDTO.items().size(), updatedOrder.getItems().size());
         assertEquals(updatedOrderDTO.payment().transactionValue(), updatedOrder.getPayment().getTransactionValue());
+    }
+
+    @Test
+    public void deleteOrderTest() throws Exception {
+        String orderId = "67020240653239785780116c";
+        orderService.deleteOrder(orderId);
+    }
+
+    @Test
+    public void getOrdersByUserTest() throws Exception {
+        String accountId = "66f8db70c1ce3939dbcbe1e0";
+        System.out.println(orderService.getOrdersByUser(accountId));
+    }
+
+    @Test
+    public void getAllOrdersTest() throws Exception {
+        System.out.println(orderService.getAllOrders());
+    }
+
+    @Test
+    public void obtenerOrdenTest() throws Exception {
+        String idOrden = "67020240653239785780116d";
+        System.out.println(orderService.obtenerOrden(idOrden).toString());
+    }
+
+    @Test
+    public void paymentFilterByStateTest() throws Exception {
+        dtoOrderFilter filter = new dtoOrderFilter(PaymentState.in_process);
+        System.out.println(orderService.paymentFilterByState(filter));
     }
 
 

@@ -30,6 +30,7 @@ public interface CartService {
 
     /**
      * Crea un nuevo carrito de compras para el usuario.
+     * (Este servicio se utiliza dentro del servicio de agregar un item ala carrito)
      *
      * @param accountId El ID de la cuenta del usuario.
      * @return Un objeto Cart que representa el nuevo carrito creado.

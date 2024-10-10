@@ -109,11 +109,23 @@ public class ClientController {
     public ResponseEntity<MessageDTO<String>> removeItemFromCart(@PathVariable String accountId,@PathVariable String eventId) throws Exception {
         try {
             cartService.removeItemFromCart(accountId, eventId);
-            return ResponseEntity.ok(new MessageDTO<>(true, "!se retiro correctamente el item!"));
+            return ResponseEntity.ok(new MessageDTO<>(false, "!se retiro correctamente el item!"));
         } catch (CartNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new MessageDTO<>(false, e.getMessage()));
+                    .body(new MessageDTO<>(true, e.getMessage()));
         }
+    }
+
+    @GetMapping("/carrito/obtener-items-carrito/{id}")
+    public ResponseEntity<MessageDTO<String>> getCartItems(@PathVariable String accountId) throws Exception {
+        cartService.getCartItems(accountId);
+        return ResponseEntity.ok().body(new MessageDTO<>(false,"Se obtubieron todos los itmes del carrito exitosamente"));
+    }
+
+    @GetMapping("/carrito/resumen-items/{id}")
+    public ResponseEntity<MessageDTO<String>> getCartItemSummary(@PathVariable String accountId) throws Exception {
+        cartService.getCartItemSummary(accountId);
+        return ResponseEntity.ok().body(new MessageDTO<>(false,"Se obtuvo el resumen de los items exitosamente"));
     }
 
 
