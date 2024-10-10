@@ -5,6 +5,7 @@ import co.edu.uniquindio.proyecto.Enum.EventType;
 import co.edu.uniquindio.proyecto.Enum.Localities;
 import co.edu.uniquindio.proyecto.controller.EventController;
 import co.edu.uniquindio.proyecto.dto.Event.createDTOEvent;
+import co.edu.uniquindio.proyecto.dto.Event.dtoEventFilter;
 import co.edu.uniquindio.proyecto.dto.Event.editDTOEvent;
 import co.edu.uniquindio.proyecto.dto.Event.dtoEventInformation;
 import co.edu.uniquindio.proyecto.repository.EventRepository;
@@ -16,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -121,9 +124,29 @@ class EventTest {
     }
 
     @Test
+    public void obtenerEventoTest() throws Exception {
+        String idEvent ="66f5c5a0de22e82833106d92";
+        eventService.obtenerEvento(idEvent);
+    }
+
+    @Test
     public void calculateTotalTestPrice() throws Exception{
         String idEvent = "66f5c5a0de22e82833106d92";
         eventService.calculateTotal(idEvent);
+    }
+
+    @Test
+    public void eventFilter(){
+// Crear un filtro que solo coincida con eventos de tipo "CONCERT" en "Armenia"
+        dtoEventFilter filter = new dtoEventFilter(
+                "Concierto de Rock",
+                EventType.CONCERT,
+                "Armenia",
+                LocalDateTime.now().plusDays(10)
+        );
+
+        // Llamar al método eventFilter para filtrar los eventos
+         eventService.eventFilter(filter);
     }
 
 }

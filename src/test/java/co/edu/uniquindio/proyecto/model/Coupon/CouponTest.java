@@ -5,6 +5,7 @@ import co.edu.uniquindio.proyecto.Enum.EventStatus;
 import co.edu.uniquindio.proyecto.Enum.TypeCoupon;
 import co.edu.uniquindio.proyecto.dto.Coupon.CouponDTO;
 import co.edu.uniquindio.proyecto.model.Coupons.Coupon;
+import co.edu.uniquindio.proyecto.repository.CouponRepository;
 import co.edu.uniquindio.proyecto.service.Interfaces.CouponService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 public class CouponTest {
@@ -21,6 +26,8 @@ public class CouponTest {
     // Inyección del servicio de cupones para realizar las pruebas
     @Autowired
     private CouponService couponService;
+    @Autowired
+    private CouponRepository couponRepository;
 
     // Prueba para crear un cupón
     // Se crea un objeto CouponDTO con los datos del cupón y se llama al método createCoupon del servicio
@@ -108,4 +115,26 @@ public class CouponTest {
         // Llamar al servicio para activar el cupón
         couponService.activateCoupon(couponId);
     }
+
+    @Test
+    public void updateCouponTest() throws Exception {
+        String couponId = "6705714b2f45aa6768d7d410";
+        // Crear un DTO con la información actualizada del cupón
+        CouponDTO updatedCouponDTO = new CouponDTO(
+                "Updated Coupon",
+                "123456",
+                "20%",
+                LocalDateTime.now().plusDays(10),
+                CouponStatus.NOT_AVAILABLE,
+                TypeCoupon.ONLY,
+                null,
+                LocalDateTime.now()
+        );
+
+        // Llamar al método para actualizar el cupón
+        couponService.updateCoupon(couponId, updatedCouponDTO);
+
+    }
+
+
 }

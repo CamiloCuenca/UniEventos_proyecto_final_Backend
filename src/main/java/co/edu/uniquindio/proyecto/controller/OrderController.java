@@ -4,6 +4,7 @@ import co.edu.uniquindio.proyecto.Enum.EventType;
 import co.edu.uniquindio.proyecto.Enum.PaymentState;
 import co.edu.uniquindio.proyecto.dto.Event.dtoEventFilter;
 import co.edu.uniquindio.proyecto.dto.JWT.MessageDTO;
+import co.edu.uniquindio.proyecto.dto.Order.OrderDTO;
 import co.edu.uniquindio.proyecto.dto.Order.dtoOrderFilter;
 import co.edu.uniquindio.proyecto.model.Events.Event;
 import co.edu.uniquindio.proyecto.model.PurchaseOrder.Order;
@@ -26,6 +27,42 @@ import java.util.Map;
 public class OrderController {
 
     private final OrderService orderService;
+
+    @PostMapping("/crear-orden")
+    public ResponseEntity<MessageDTO<String>> createOrder(@RequestBody OrderDTO order)throws Exception {
+        orderService.createOrder(order);
+        return ResponseEntity.ok().body(new MessageDTO<>(false," Se creo la orden de compra de manera exitosa"));
+    }
+
+    @PostMapping("/actualizar-orden")
+    public ResponseEntity<MessageDTO<String>> updateOrder(@RequestBody OrderDTO order, @PathVariable String orderId)throws Exception {
+        orderService.updateOrder(orderId, order);
+        return ResponseEntity.ok().body(new MessageDTO<>(false,"Se actualizo la orden de manera satisfactoria"));
+    }
+
+    @DeleteMapping("/eliminar-orden")
+    public ResponseEntity<MessageDTO<String>> deleteOrder(@PathVariable String orderId)throws Exception {
+        orderService.deleteOrder(orderId);
+        return ResponseEntity.ok().body(new MessageDTO<>(false,"Se elimino la orden de manera satisfactoria"));
+    }
+
+    @GetMapping("/obtener-orden-usuario")
+    public ResponseEntity<MessageDTO<String>> obtenerOrdenUsuario(String accountId) throws Exception {
+        orderService.getOrdersByUser(accountId);
+        return ResponseEntity.ok().body(new MessageDTO<>(false,"se obtuvieron las ordenes del usuario exitosamente"));
+    }
+
+    @GetMapping("/obtener-ordenes")
+    public ResponseEntity<MessageDTO<String>> obtenerOrdenes() throws Exception {
+        orderService.getAllOrders();
+        return ResponseEntity.ok().body(new MessageDTO<>(false,"se obtuvieron todas las ordenes exitosamente"));
+    }
+
+    @GetMapping("(/obtener-orden")
+    public ResponseEntity<MessageDTO<String>> obtenerOrden(@RequestParam String orderId) throws Exception {
+        orderService.obtenerOrden(orderId);
+        return ResponseEntity.ok().body(new MessageDTO<>(false,"se obtuvo la orden exitosamente"));
+    }
 
     @PostMapping("/realizar-pago")
     public ResponseEntity<MessageDTO<Preference>> realizarPagoProfe(@RequestParam("idOrden") String idOrden) throws Exception{
