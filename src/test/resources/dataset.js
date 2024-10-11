@@ -88,7 +88,7 @@ db.Account.insertMany([
         rol: "ADMINISTRATOR",
         registrationDate: new Date(),
         password: "$2a$10$lDWLG6Zc6jkxo/ZPYyTxW.bC0yePHF8gRPyBbynYknktkIfxwM6uy", // Contraseña sin encriptar: passwordAnaMartinez
-        status: "INACTIVE",
+        status: "ACTIVE",
         user: {
             _id: "1005774029",
             name: "Ana Martinez",
