@@ -63,7 +63,7 @@ public class ReportService {
      *
      * @return
      */
-    public byte[] generateSalesReportPDF() {
+    public byte[] generateSalesReportPDF() throws Exception {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
         try {

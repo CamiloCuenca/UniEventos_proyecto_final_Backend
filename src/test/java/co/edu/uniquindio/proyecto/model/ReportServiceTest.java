@@ -36,7 +36,7 @@ public class ReportServiceTest {
     }
 
     @Test
-    public void testGenerateSalesReportPDF() {
+    public void testGenerateSalesReportPDF() throws Exception {
         // Generar el PDF
         reportService.generateSalesReportPDF();
 

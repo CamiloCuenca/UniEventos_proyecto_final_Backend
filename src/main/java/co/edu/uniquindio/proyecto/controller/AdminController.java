@@ -9,6 +9,7 @@ import co.edu.uniquindio.proyecto.dto.JWT.MessageDTO;
 import co.edu.uniquindio.proyecto.dto.Order.dtoOrderFilter;
 import co.edu.uniquindio.proyecto.model.Coupons.Coupon;
 import co.edu.uniquindio.proyecto.model.PurchaseOrder.Order;
+import co.edu.uniquindio.proyecto.service.Implementation.ReportService;
 import co.edu.uniquindio.proyecto.service.Interfaces.AccountService;
 import co.edu.uniquindio.proyecto.service.Interfaces.CouponService;
 import co.edu.uniquindio.proyecto.service.Interfaces.EventService;
@@ -30,6 +31,7 @@ public class AdminController {
     private final EventService eventService;
     private final CouponService couponService;
     private final OrderService orderService;
+    private final ReportService reportService;
 
     // Account
 
@@ -112,5 +114,13 @@ public class AdminController {
         // Llamar al servicio con el DTO y retornar los resultados
         return orderService.paymentFilterByState(filter1);
     }
+
+    // Reporte
+    @PostMapping("/reporte")
+    public ResponseEntity<MessageDTO<String>> generateSalesReportPDF() throws Exception{
+        reportService.generateSalesReportPDF();
+        return ResponseEntity.ok(new MessageDTO<>(true, "Reporte generado exitosamente. (revisa tu escritorio)"));
+    }
+
 
 }
