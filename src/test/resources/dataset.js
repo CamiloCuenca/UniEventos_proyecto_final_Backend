@@ -395,7 +395,7 @@ db.Coupon.insertMany([
     {
         "_id": ObjectId("6705714b2f45aa6768d7d411"),
         "expirationDate": ISODate("2024-11-07T17:52:10.795Z"),
-        "code": "178932EE",
+        "code": "B9F8A1D3", // Código generado
         "status": "NOT_AVAILABLE",
         "type": "MULTIPLE",
         "name": "Emprendimiento",
@@ -407,7 +407,7 @@ db.Coupon.insertMany([
     {
         "_id": ObjectId("6705714b2f45aa6768d7d412"),
         "expirationDate": ISODate("2024-12-01T10:00:00.000Z"),
-        "code": "A1B2C3D4",
+        "code": "D5A3C2F1", // Código generado
         "status": "AVAILABLE",
         "type": "ONLY",
         "name": "Descuento Navidad",
@@ -419,7 +419,7 @@ db.Coupon.insertMany([
     {
         "_id": ObjectId("6705714b2f45aa6768d7d413"),
         "expirationDate": ISODate("2025-01-01T23:59:59.000Z"),
-        "code": "F4E5D6C7",
+        "code": "E8A6F2C7", // Código generado
         "status": "NOT_AVAILABLE",
         "type": "MULTIPLE",
         "name": "Año Nuevo",
@@ -431,7 +431,7 @@ db.Coupon.insertMany([
     {
         "_id": ObjectId("6705714b2f45aa6768d7d414"),
         "expirationDate": ISODate("2024-10-31T23:59:59.000Z"),
-        "code": "H3L4O5P6",
+        "code": "B6D3A5F1", // Código generado
         "status": "AVAILABLE",
         "type": "ONLY",
         "name": "Halloween",
@@ -443,7 +443,7 @@ db.Coupon.insertMany([
     {
         "_id": ObjectId("6705714b2f45aa6768d7d415"),
         "expirationDate": ISODate("2024-11-20T23:59:59.000Z"),
-        "code": "Z9Y8X7W6",
+        "code": "F3C2E4B1", // Código generado
         "status": "NOT_AVAILABLE",
         "type": "MULTIPLE",
         "name": "Black Friday",
@@ -462,7 +462,7 @@ db.Cart.insertMany([
         "items": [
             {
                 "eventId": ObjectId("66f5c5a0de22e82833106d93"),
-                "itemId": "302c4038-c602-4136-9a0c-561ed473ec26",
+                "itemId": "302c4038", // Cambiado a UUID
                 "eventName": "Concierto Rock 2024",
                 "localityName": "VIP",
                 "price": 100,
@@ -471,7 +471,7 @@ db.Cart.insertMany([
             },
             {
                 "eventId": ObjectId("66f5c5a0de22e82833106d94"),
-                "itemId": "98a97479-827a-42a7-9fa2-0a51baedc209",
+                "itemId": "98a97479", // Cambiado a UUID
                 "eventName": "Feria de Emprendimiento",
                 "localityName": "VIP",
                 "price": 60,
@@ -488,7 +488,7 @@ db.Cart.insertMany([
         "items": [
             {
                 "eventId": ObjectId("66f5c5a0de22e82833106d93"),
-                "itemId": "63f210ab-c7d7-4027-a12e-c765751a99a3",
+                "itemId": "63f210ab", // Cambiado a UUID
                 "eventName": "Concierto Rock 2024",
                 "localityName": "VIP",
                 "price": 100,
@@ -497,7 +497,7 @@ db.Cart.insertMany([
             },
             {
                 "eventId": ObjectId("66f5c5a0de22e82833106d95"),
-                "itemId": "a208355d-7f27-4929-b6a9-25e1b2abd9df",
+                "itemId": "a208355d", // Cambiado a UUID
                 "eventName": "Festival de Cine 2024",
                 "localityName": "VIP",
                 "price": 75,
@@ -514,7 +514,7 @@ db.Cart.insertMany([
         "items": [
             {
                 "eventId": ObjectId("66f5c5a0de22e82833106d96"),
-                "itemId": "054011e7-5a12-49d0-8ab7-6eed5e2ae037",
+                "itemId": "054011e7", // Cambiado a UUID
                 "eventName": "Congreso de Tecnología 2024",
                 "localityName": "VIP",
                 "price": 200,
@@ -523,7 +523,7 @@ db.Cart.insertMany([
             },
             {
                 "eventId": ObjectId("66f5c5a0de22e82833106d95"),
-                "itemId": "6199fddd-25a4-49e8-a48e-3db76671fff9",
+                "itemId": "6199fddd", // Cambiado a UUID
                 "eventName": "Festival de Cine 2024",
                 "localityName": "VIP",
                 "price": 75,
@@ -540,7 +540,7 @@ db.Cart.insertMany([
         "items": [
             {
                 "eventId": ObjectId("66f5c5a0de22e82833106d96"),
-                "itemId": "e69228ef-24db-40a1-b35a-08b2fcb76a53",
+                "itemId": "e69228ef", // Cambiado a UUID
                 "eventName": "Congreso de Tecnología 2024",
                 "localityName": "VIP",
                 "price": 200,
@@ -549,7 +549,7 @@ db.Cart.insertMany([
             },
             {
                 "eventId": ObjectId("66f5c5a0de22e82833106d94"),
-                "itemId": "ca035817-29e0-453d-804e-28a26ef38e3c",
+                "itemId": "ca035817", // Cambiado a UUID
                 "eventName": "Feria de Emprendimiento",
                 "localityName": "VIP",
                 "price": 60,
@@ -566,7 +566,7 @@ db.Cart.insertMany([
         "items": [
             {
                 "eventId": ObjectId("66f5c5a0de22e82833106d96"),
-                "itemId": "bb0dbeb7-1ad8-42fe-bd3c-1b001afc3e18",
+                "itemId": "bb0dbeb7", // Cambiado a UUID
                 "eventName": "Congreso de Tecnología 2024",
                 "localityName": "VIP",
                 "price": 200,
@@ -575,7 +575,7 @@ db.Cart.insertMany([
             },
             {
                 "eventId": ObjectId("66f5c5a0de22e82833106d94"),
-                "itemId": "6df0c2ed-e16a-444a-a2f8-1a0e7aa85ff1",
+                "itemId": "6df0c2ed", // Cambiado a UUID
                 "eventName": "Feria de Emprendimiento",
                 "localityName": "VIP",
                 "price": 60,
