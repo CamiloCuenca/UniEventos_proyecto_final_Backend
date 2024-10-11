@@ -77,5 +77,6 @@ public interface EventService {
      * @return Lista de eventos que cumplen con el filtro aplicado.
      */
     List<Event> eventFilter(dtoEventFilter filter);
+
 }
 
