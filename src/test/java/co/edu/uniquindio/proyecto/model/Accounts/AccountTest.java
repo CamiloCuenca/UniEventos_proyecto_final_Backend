@@ -38,11 +38,11 @@ class AccountServiceTest {
     @Test
     public void createAccountTest() {
         createAccountDTO createAccountDTO = new createAccountDTO(
-                "12345666112", // Identificación
+                "12331", // Identificación
                 "Brandon Monte", // Nombre
                 "3245478325", // Número de teléfono
                 "Crr 12 # 12-2", // Dirección
-                "prueba1@hotmail.com", // Correo   (para que funcione el envio de correo electronico se debe colocar un email real)
+                "bran123@hotmail.com", // Correo   (para que funcione el envio de correo electronico se debe colocar un email real)
                 "Br@ndonCa123" // Contraseña
         );
 
@@ -61,15 +61,15 @@ class AccountServiceTest {
      */
     @Test
     public void activateAccountTest() throws Exception {
-        String correo = "camilocuenca1810@gmail.com";
-        String code = "b5d9ce1f";
+        String correo = "bran123@hotmail.com";
+        String code = "772c0318";
         accountService.activateAccount(correo, code);
 
     }
 
     @Test
     public void loginAccountTest() {
-        String email = "prueba1@hotmail.com";
+        String email = "bran123@hotmail.com";
         String password = "Br@ndonCa123";  // Contraseña válida
 
         LoginDTO createLoginDTO = new LoginDTO(email, password);

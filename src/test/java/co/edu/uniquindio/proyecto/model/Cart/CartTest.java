@@ -34,7 +34,7 @@ public class CartTest {
      */
     @Test
     public void addItemToCartTest() throws Exception {
-        String accountId = "6706f47ba806a00dadbc61c6"; // ID de prueba
+        String accountId = "67087785418f0a4ecedaddfd"; // ID de prueba
         String idEvent1 = "66f5c5a0de22e82833106d92";
         String idEvent2 = "66f5c5a0de22e82833106d93";
 
