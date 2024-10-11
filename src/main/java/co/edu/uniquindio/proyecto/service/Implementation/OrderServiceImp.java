@@ -301,53 +301,51 @@ public class OrderServiceImp implements OrderService {
     @Override
     public Preference realizarPago(String idOrden) throws Exception {
 
-
         // Obtener la orden guardada en la base de datos y los ítems de la orden
         Order ordenGuardada = obtenerOrden(idOrden);
         List<PreferenceItemRequest> itemsPasarela = new ArrayList<>();
 
-
-        // Recorrer los items de la orden y crea los ítems de la pasarela
+        // Recorrer los items de la orden y crear los ítems de la pasarela
         for (OrderDetail item : ordenGuardada.getItems()) {
-
 
             // Obtener el evento y la localidad del ítem
             Event evento = eventService.obtenerEvento(item.getIdEvent().toString());
             Locality localidad = evento.obtenerLocalidad(item.getLocalityName());
 
+            // Calcular los boletos disponibles
+            int boletosDisponibles = localidad.getMaximumCapacity() - localidad.getTicketsSold();
 
-            // Crear el item de la pasarela
-            PreferenceItemRequest itemRequest =
-                    PreferenceItemRequest.builder()
-                            .id(evento.getId())
-                            .title(evento.getName())
-                            .pictureUrl(evento.getCoverImage())
-                            .categoryId(evento.getType().name())
-                            .quantity(item.getAmount())
-                            .currencyId("COP")
-                            .unitPrice(BigDecimal.valueOf(localidad.getPrice()))
-                            .build();
+            // Verificar si la cantidad solicitada supera la capacidad disponible
+            if (item.getAmount() > boletosDisponibles) {
+                throw new Exception("No hay suficientes boletos disponibles para la localidad: "
+                        + localidad.getName() + ". Boletos disponibles: " + boletosDisponibles);
+            }
 
+            // Crear el ítem de la pasarela
+            PreferenceItemRequest itemRequest = PreferenceItemRequest.builder()
+                    .id(evento.getId())
+                    .title(evento.getName())
+                    .pictureUrl(evento.getCoverImage())
+                    .categoryId(evento.getType().name())
+                    .quantity(item.getAmount())
+                    .currencyId("COP")
+                    .unitPrice(BigDecimal.valueOf(localidad.getPrice()))
+                    .build();
 
             itemsPasarela.add(itemRequest);
-            System.out.println("Precio unitario de la localidad: " + localidad.getPrice());
-
         }
-
 
         // Configurar las credenciales de MercadoPago
         MercadoPagoConfig.setAccessToken("APP_USR-1074363858207208-100622-1c36028d107a18a9507c21ceadc5069e-2021909487");
 
-
-        // Configurar las urls de retorno de la pasarela (Frontend)
+        // Configurar las URLs de retorno de la pasarela (Frontend)
         PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
                 .success("URL PAGO EXITOSO")
                 .failure("URL PAGO FALLIDO")
                 .pending("URL PAGO PENDIENTE")
                 .build();
 
-
-        // Construir la preferencia de la pasarela con los ítems, metadatos y urls de retorno
+        // Construir la preferencia de la pasarela con los ítems, metadatos y URLs de retorno
         PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                 .backUrls(backUrls)
                 .items(itemsPasarela)
@@ -355,18 +353,47 @@ public class OrderServiceImp implements OrderService {
                 .notificationUrl("https://3c0c-2800-e2-7180-1775-00-2.ngrok-free.app/api/orden/notificacion-pago")
                 .build();
 
-
         // Crear la preferencia en la pasarela de MercadoPago
         PreferenceClient client = new PreferenceClient();
         Preference preference = client.create(preferenceRequest);
-
 
         // Guardar el código de la pasarela en la orden
         ordenGuardada.setCodigoPasarela(preference.getId());
         orderRepository.save(ordenGuardada);
 
+        // Aquí asumimos que el pago fue exitoso y se confirma en la notificación de la pasarela
+        for (OrderDetail item : ordenGuardada.getItems()) {
+            Event evento = eventService.obtenerEvento(item.getIdEvent().toString());
+            Locality localidad = evento.obtenerLocalidad(item.getLocalityName());
+
+            // Aumentar el número de boletos vendidos solo si el pago es exitoso
+            localidad.setTicketsSold(localidad.getTicketsSold() + item.getAmount());
+
+            // Verificar si ya se ha alcanzado la capacidad máxima de la localidad
+            if (localidad.getTicketsSold() >= localidad.getMaximumCapacity()) {
+                System.out.println("¡La localidad '" + localidad.getName() + "' ha agotado sus boletos!");
+            }
+
+            // Actualizar el evento en la base de datos con los nuevos boletos vendidos
+            updateEvent(evento);
+        }
 
         return preference;
+    }
+
+    public void updateEvent(Event evento) {
+        // Buscar el evento por su ID en la base de datos para verificar su existencia
+        Optional<Event> optionalEvent = eventRepository.findById(evento.getId());
+
+        // Verificar si el evento existe
+        if (optionalEvent.isEmpty()) {
+            throw new EventNotFoundException(evento.getId()); // Lanza una excepción si el evento no existe
+        }
+
+        // Guardar el evento actualizado en la base de datos
+        eventRepository.save(evento);
+
+        System.out.println("El evento ha sido actualizado correctamente en la base de datos.");
     }
 
     /**
@@ -416,6 +443,7 @@ public class OrderServiceImp implements OrderService {
             e.printStackTrace();
         }
     }
+
 
     /**
      * Obtener una orden por su ID.
@@ -474,6 +502,8 @@ public class OrderServiceImp implements OrderService {
         pago.setTransactionValue(payment.getTransactionAmount().floatValue());
         return pago;
     }
+
+
 
 
 }

@@ -300,5 +300,4 @@ public class EventServiceImp implements EventService {
         return mongoTemplate.find(query, Event.class); // Ejecuta la consulta y retorna los eventos filtrados
     }
 
-
 }

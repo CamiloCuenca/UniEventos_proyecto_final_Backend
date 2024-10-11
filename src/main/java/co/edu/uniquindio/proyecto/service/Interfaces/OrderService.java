@@ -5,6 +5,7 @@ import co.edu.uniquindio.proyecto.dto.Order.OrderDTO;
 import co.edu.uniquindio.proyecto.dto.Order.dtoOrderFilter;
 import co.edu.uniquindio.proyecto.model.PurchaseOrder.Order;
 import com.mercadopago.resources.preference.Preference;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -62,6 +63,7 @@ public interface OrderService {
      * @return Objeto Preference que contiene los detalles de la preferencia de pago creada.
      * @throws Exception Si ocurre un error durante el proceso de pago.
      */
+    @Transactional
     Preference realizarPago(String idOrden) throws Exception;
 
     /**
