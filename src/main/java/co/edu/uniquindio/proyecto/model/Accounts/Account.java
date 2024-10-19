@@ -34,5 +34,6 @@ public class Account {
     private ValidationCodePassword passwordValidationCode;
     private User user;
     private Cart cart;
+    private int failedLoginAttempts;
 
 }

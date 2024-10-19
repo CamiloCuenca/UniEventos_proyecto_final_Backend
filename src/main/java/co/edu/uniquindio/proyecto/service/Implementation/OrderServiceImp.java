@@ -350,7 +350,7 @@ public class OrderServiceImp implements OrderService {
                 .backUrls(backUrls)
                 .items(itemsPasarela)
                 .metadata(Map.of("id_orden", ordenGuardada.getId()))
-                .notificationUrl("https://3c0c-2800-e2-7180-1775-00-2.ngrok-free.app/api/orden/notificacion-pago")
+                .notificationUrl("https://3d0a-2800-e2-7180-1775-463-594c-d6d-44a4.ngrok-free.app/api/orden/notificacion-pago")
                 .build();
 
         // Crear la preferencia en la pasarela de MercadoPago
