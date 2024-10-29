@@ -13,6 +13,7 @@ db.Account.insertMany([
         registrationDate: new Date(),
         password: "$2a$10$n7yiHoxleQtFldijM7z4ueqN0DNJzLR9v1nxbf/HH0zrPEuas1DCy", // Contraseña sin encriptar: passwordJuanPerez
         status: "INACTIVE",
+        failedLoginAttempts: 0, // Nuevo campo añadido para el control de intentos fallidos.
         user: {
             _id: "1005774025",
             name: "Juan Perez",
@@ -32,6 +33,7 @@ db.Account.insertMany([
         registrationDate: new Date(),
         password: "$2a$10$cfwPyfVpzf/wcHH11yU/SOCG5hL874EmKJKyNlynxslMBtZNuJ6Wu", // Contraseña sin encriptar: passwordMariaRodriguez
         status: "INACTIVE",
+        failedLoginAttempts: 0, // Nuevo campo añadido para el control de intentos fallidos.
         user: {
             _id: "1005774026",
             name: "Maria Rodriguez",
@@ -51,6 +53,7 @@ db.Account.insertMany([
         registrationDate: new Date(),
         password: "$2a$10$on3iaIhr9W5shk1fbtA9X.lP5qDg/ELveC7zBeWCPsYJvFKZ/FiDG", // Contraseña sin encriptar: passwordCarlosGomez
         status: "INACTIVE",
+        failedLoginAttempts: 0, // Nuevo campo añadido para el control de intentos fallidos.
         user: {
             _id: "1005774027",
             name: "Carlos Gomez",
@@ -70,6 +73,7 @@ db.Account.insertMany([
         registrationDate: new Date(),
         password: "$2a$10$loCyyJkz7w/khWvxcgkKDeaMbZ91itumuL.spnAZIfl3Brj98BzuC", // Contraseña sin encriptar: passwordLuisaFernandez
         status: "INACTIVE",
+        failedLoginAttempts: 0, // Nuevo campo añadido para el control de intentos fallidos.
         user: {
             _id: "1005774028",
             name: "Luisa Fernandez",
@@ -89,6 +93,7 @@ db.Account.insertMany([
         registrationDate: new Date(),
         password: "$2a$10$lDWLG6Zc6jkxo/ZPYyTxW.bC0yePHF8gRPyBbynYknktkIfxwM6uy", // Contraseña sin encriptar: passwordAnaMartinez
         status: "ACTIVE",
+        failedLoginAttempts: 0, // Nuevo campo añadido para el control de intentos fallidos.
         user: {
             _id: "1005774029",
             name: "Ana Martinez",
@@ -96,7 +101,8 @@ db.Account.insertMany([
             address: "Av 9 # 5-40"
         },
         _class: "co.edu.uniquindio.proyecto.model.Accounts.Account"
-    },{
+    },
+    {
         _id: ObjectId("67057761165dfd74d97b6c40"),
         email: "JuanCarlAg@hotmail.com",
         registrationValidationCode: {
@@ -107,6 +113,7 @@ db.Account.insertMany([
         registrationDate: new Date("2024-10-08T18:18:09.192Z"),
         password: "$2a$10$Ne/VoZ/b8kPOSMRYoCHJ2ONeJY5ZDEn9c1OXYMvCxRbye.JA/S1mm", // Contraseña sin encriptar: passwordJuanCarlosAguilar
         status: "INACTIVE",
+        failedLoginAttempts: 0, // Nuevo campo añadido para el control de intentos fallidos.
         user: {
             _id: "1004667809",
             name: "Juan Carlos Aguilar",
@@ -116,6 +123,7 @@ db.Account.insertMany([
         _class: "co.edu.uniquindio.proyecto.model.Accounts.Account"
     }
 ]);
+
 
 // Event
 db.Event.insertMany([

@@ -120,10 +120,22 @@ public class AccountServiceimp implements AccountService {
             throw new ActiveAccountException("La cuenta no se encuentra Activada. Por favor, actívala para ingresar!");
         }
 
+        if (account.getFailedLoginAttempts() >= 3) {
+            account.setStatus(AccountStatus.INACTIVE); // Cambiar el estado de la cuenta a INACTIVA.
+            cuentaRepo.save(account); // Guardar el estado actualizado en la base de datos.
+            throw new ActiveAccountException("La cuenta ha sido bloqueada por múltiples intentos fallidos de inicio de sesión.");
+        }
+
         // Verificar si la contraseña proporcionada coincide con la contraseña almacenada utilizando el passwordEncoder.
         if (!passwordEncoder.matches(loginDTO.password(), account.getPassword())) {
+            // Incrementar el contador de intentos fallidos si la contraseña es incorrecta.
+            account.setFailedLoginAttempts(account.getFailedLoginAttempts() + 1);
+            cuentaRepo.save(account); // Guardar el número de intentos fallidos en la base de datos.
             throw new InvalidPasswordException(); // Lanzar excepción si la contraseña es incorrecta.
         }
+
+        account.setFailedLoginAttempts(0);
+        cuentaRepo.save(account); // Guardar el estado actualizado en la base de datos.
 
         // Construir los claims necesarios para generar el token JWT, pasando la cuenta encontrada.
         Map<String, Object> map = construirClaims(account);
@@ -470,6 +482,7 @@ public class AccountServiceimp implements AccountService {
         // Activar la cuenta, eliminando el código de validación y actualizando el estado de la cuenta
         account.setRegistrationValidationCode(null);
         account.setStatus(AccountStatus.ACTIVE);
+        account.setFailedLoginAttempts(0);
         cuentaRepo.save(account);
 
         // Retornar mensaje de éxito
