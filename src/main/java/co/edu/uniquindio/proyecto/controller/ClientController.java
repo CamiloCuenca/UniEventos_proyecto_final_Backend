@@ -36,7 +36,7 @@ public class ClientController {
     @GetMapping("/cuenta/obtener-info/{id}")
     public ResponseEntity<MessageDTO<String>> obtainAccountInformation(@PathVariable String id) throws Exception {
         accountService.obtainAccountInformation(id);
-        return ResponseEntity.ok(new MessageDTO<>(false, "Cuenta eliminada exitosamente"));
+        return ResponseEntity.ok(new MessageDTO<>(false, "Cuenta obtenida correctamente"));
 
     }
 

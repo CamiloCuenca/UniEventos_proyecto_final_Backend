@@ -305,7 +305,7 @@ public class AccountServiceimp implements AccountService {
      * @throws Exception
      */
     @Override
-    public String deleteAccount(String id , PasswordDTO password) throws AccountNotFoundException {
+    public String deleteAccount(String id, PasswordDTO password) throws AccountNotFoundException {
         // Buscar la cuenta del usuario que se quiere eliminar en la base de datos.
         Optional<Account> optionalCuenta = cuentaRepo.findById(id);
 
@@ -322,8 +322,8 @@ public class AccountServiceimp implements AccountService {
             throw new InvalidPasswordException(); // Lanzar excepción si la contraseña es incorrecta.
         }
 
-            // Cambiar el estado de la cuenta a ELIMINATED en lugar de borrarla físicamente.
-            account.setStatus(AccountStatus.ELIMINATED);
+        // Cambiar el estado de la cuenta a ELIMINATED en lugar de borrarla físicamente.
+        account.setStatus(AccountStatus.ELIMINATED);
 
         // Guardar la cuenta actualizada en la base de datos.
         cuentaRepo.save(account);
@@ -500,9 +500,8 @@ public class AccountServiceimp implements AccountService {
         } catch (Exception e) {
             // Manejar la excepción y lanzar una excepción más específica si es necesario
             throw new CouponCreationException("Error al generar el cupón de bienvenida");
-        }}
-
-    
+        }
+    }
 
 
 }
