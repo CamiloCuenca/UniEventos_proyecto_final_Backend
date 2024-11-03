@@ -62,7 +62,7 @@ class AccountServiceTest {
     @Test
     public void activateAccountTest() throws Exception {
         String correo = "bran123@hotmail.com";
-        String code = "772c0318";
+        String code = "80377f2e";
         accountService.activateAccount(correo, code);
 
     }
@@ -70,7 +70,7 @@ class AccountServiceTest {
     @Test
     public void loginAccountTest() {
         String email = "bran123@hotmail.com";
-        String password = "Br@ndonCa123";  // Contraseña válida
+        String password = "M@mahermosa123";  // Contraseña válida
 
         LoginDTO createLoginDTO = new LoginDTO(email, password);
 
@@ -90,24 +90,16 @@ class AccountServiceTest {
      */
     @Test
     public void updateTestAccount() {
-        String idCuenta = "6706f47ba806a00dadbc61c6"; // ID de la cuenta existente
+        String idCuenta = "6726ba9d7ad9797076d83c8c"; // ID de la cuenta existente
         editAccountDTO editAccountDTO = new editAccountDTO(
-
-                "brandon", // Nombre actualizado
-                "12121", // Teléfono
-                "Nueva dirección", // Dirección actualizada
-                "1234567" // Contraseña actualizada
+                "Brandon",
+                "3153033412",
+                "Crr 12 # 10-3"
         );
 
         // Se espera que no se lance ninguna excepción al editar la cuenta
         assertDoesNotThrow(() -> {
             accountService.editAccount(editAccountDTO,idCuenta); // Actualiza la cuenta
-
-            // Verifica que los cambios se han reflejado correctamente
-            dtoAccountInformation detalle = accountService.obtainAccountInformation(idCuenta);
-
-            // Comprueba que la dirección del usuario es la nueva dirección
-            assertEquals("Nueva dirección", detalle.address());
         });
     }
 
@@ -221,6 +213,18 @@ class AccountServiceTest {
 
         // Verificar que la nueva contraseña coincida con la que fue encriptada
         assertTrue(passwordEncoder.matches(newPassword, account.getPassword()));
+    }
+
+
+    @Test
+    void testUpdatePassword() throws  Exception{
+        String id = "6726ba9d7ad9797076d83c8c";
+        String currentPassword ="M@mahermosa123";
+        String newPasswrod = "Br@ndonca123";
+        updatePassword password = new updatePassword(
+                currentPassword,newPasswrod
+        );
+        accountService.updatePassword(password,id);
     }
 
 

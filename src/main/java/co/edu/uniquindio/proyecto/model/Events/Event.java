@@ -21,7 +21,7 @@ public class Event {
     private String id;
     private String coverImage;
     private String name;
-    private EventStatus status; // ACTIVE, INACTIVE
+    private EventStatus status;
     private String description;
     private String imageLocalities;
     private EventType type;

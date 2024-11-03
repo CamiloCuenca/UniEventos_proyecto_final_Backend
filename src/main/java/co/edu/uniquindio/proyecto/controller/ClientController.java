@@ -36,13 +36,19 @@ public class ClientController {
     @GetMapping("/cuenta/obtener-info/{id}")
     public ResponseEntity<MessageDTO<String>> obtainAccountInformation(@PathVariable String id) throws Exception {
         accountService.obtainAccountInformation(id);
-        return ResponseEntity.ok(new MessageDTO<>(false, "Cuenta eliminada exitosamente"));
+        return ResponseEntity.ok(new MessageDTO<>(false, "Cuenta obtenida correctamente"));
 
     }
 
     @PutMapping("/cuenta/editar-perfil/{id}")
     public ResponseEntity<MessageDTO<String>> editAccount(@Valid @RequestBody editAccountDTO cuenta , @PathVariable String id) throws Exception{
         accountService.editAccount(cuenta,id);
+        return ResponseEntity.ok(new MessageDTO<>(false, "Cuenta editada exitosamente"));
+    }
+
+    @PutMapping("/cuenta/editar-password/{id}")
+    public ResponseEntity<MessageDTO<String>> updatePassword(@Valid @RequestBody updatePassword cuenta , @PathVariable String id) throws Exception{
+        accountService.updatePassword(cuenta,id);
         return ResponseEntity.ok(new MessageDTO<>(false, "Cuenta editada exitosamente"));
     }
 
