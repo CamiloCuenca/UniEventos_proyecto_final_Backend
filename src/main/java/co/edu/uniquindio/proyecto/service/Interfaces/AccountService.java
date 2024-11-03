@@ -44,6 +44,8 @@ public interface AccountService {
      */
     dtoAccountInformation obtainAccountInformation(String id) throws Exception;
 
+    String updatePassword(updatePassword updatePasswordDTO, String id) throws Exception;
+
     /**
      * Lista todas las cuentas existentes.
      *

@@ -46,6 +46,12 @@ public class ClientController {
         return ResponseEntity.ok(new MessageDTO<>(false, "Cuenta editada exitosamente"));
     }
 
+    @PutMapping("/cuenta/editar-password/{id}")
+    public ResponseEntity<MessageDTO<String>> updatePassword(@Valid @RequestBody updatePassword cuenta , @PathVariable String id) throws Exception{
+        accountService.updatePassword(cuenta,id);
+        return ResponseEntity.ok(new MessageDTO<>(false, "Cuenta editada exitosamente"));
+    }
+
     @DeleteMapping("/cuenta/eliminar/{id}")
     public ResponseEntity<MessageDTO<String>> deleteAccount(@PathVariable String id,@Valid @RequestBody PasswordDTO password) throws Exception{
         accountService.deleteAccount(id,password);

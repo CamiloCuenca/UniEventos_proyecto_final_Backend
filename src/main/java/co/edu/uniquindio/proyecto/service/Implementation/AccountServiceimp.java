@@ -89,7 +89,8 @@ public class AccountServiceimp implements AccountService {
         return Map.of(
                 "rol", account.getRol(),
                 "nombre", account.getUser().getName(),
-                "id", account.getAccountId()
+                "id", account.getAccountId(),
+                "email", account.getEmail()
         );
     }
 
@@ -210,37 +211,26 @@ public class AccountServiceimp implements AccountService {
      * @throws Exception
      */
     @Override
-    public String editAccount(editAccountDTO cuenta, String id) throws AccountNtFoundException {
-        // Buscar la cuenta en la base de datos utilizando el ID proporcionado.
+    public String editAccount(editAccountDTO cuenta, String id) throws AccountNotFoundException {
+        // Buscar la cuenta en la base de datos utilizando el ID proporcionado
         Optional<Account> optionalAccount = cuentaRepo.findById(id);
 
-        // Verificar si la cuenta existe; si no, lanzar una excepción personalizada.
+        // Verificar si la cuenta existe; si no, lanzar una excepción personalizada
         if (optionalAccount.isEmpty()) {
-            throw new AccountNtFoundException(id);
+            throw new AccountNotFoundException("No se encontró la cuenta con ID: " + id);
         }
 
-        // Obtener la cuenta encontrada.
+        // Obtener la cuenta encontrada y actualizar los datos básicos
         Account cuentaActualizada = optionalAccount.get();
-
-        // Actualizar los datos del usuario asociado a la cuenta.
         cuentaActualizada.getUser().setName(cuenta.username());
         cuentaActualizada.getUser().setPhoneNumber(cuenta.phoneNumber());
         cuentaActualizada.getUser().setAddress(cuenta.address());
 
-        // Verificar si se ha proporcionado una nueva contraseña.
-        String newPassword = cuenta.password();
-        if (newPassword != null && !newPassword.isEmpty()) {
-            // Encriptar y establecer la nueva contraseña.
-            cuentaActualizada.setPassword(encryptPassword(newPassword));
-        }
-
-        // Guardar los cambios en la base de datos.
+        // Guardar los cambios en la base de datos sin tocar la contraseña
         cuentaRepo.save(cuentaActualizada);
 
-        // Retornar el ID de la cuenta actualizada.
         return cuentaActualizada.getAccountId();
     }
-
     /**
      * Método obtainAccountInformation(): Recupera la información básica de la cuenta basada en su ID.
      *
@@ -269,6 +259,37 @@ public class AccountServiceimp implements AccountService {
                 account.getUser().getAddress(), // Dirección del usuario
                 account.getEmail() // Email de la cuenta
         );
+    }
+
+    @Override
+    public String updatePassword(updatePassword updatePasswordDTO, String id) throws AccountNotFoundException, InvalidCurrentPasswordException {
+        // Buscar la cuenta en la base de datos utilizando el email proporcionado
+        Optional<Account> optionalAccount = cuentaRepo.findById(id);
+
+        // Verificar si la cuenta existe
+        if (optionalAccount.isEmpty()) {
+            throw new AccountNotFoundException("No se encontró la cuenta");
+        }
+
+        Account account = optionalAccount.get();
+
+        // Verificar si la contraseña actual coincide con la almacenada
+        if (!passwordEncoder.matches(updatePasswordDTO.currentPassword(), account.getPassword())) {
+            throw new InvalidCurrentPasswordException("La contraseña actual es incorrecta.");
+        }
+
+        // Validar la nueva contraseña (longitud mínima, etc.)
+        String newPassword = updatePasswordDTO.newPassword();
+        if (newPassword.isEmpty() || newPassword.length() < 8) {
+            throw new InvalidCurrentPasswordException("La nueva contraseña debe tener al menos 8 caracteres.");
+        }
+
+        // Encriptar y actualizar la nueva contraseña
+        String encryptedPassword = passwordEncoder.encode(newPassword);
+        account.setPassword(encryptedPassword);
+        cuentaRepo.save(account);
+
+        return "La contraseña ha sido cambiada exitosamente.";
     }
 
     /**
@@ -434,6 +455,9 @@ public class AccountServiceimp implements AccountService {
         // Retornar un mensaje de éxito.
         return "La contraseña ha sido cambiada exitosamente.";
     }
+
+
+
 
     /**
      * Método activateAccount(): Activa la cuenta de un usuario utilizando el código de validación que se envía por correo al momento de crear la cuenta.
