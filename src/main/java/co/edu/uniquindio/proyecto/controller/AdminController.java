@@ -5,6 +5,7 @@ import co.edu.uniquindio.proyecto.dto.Account.dtoAccountItem;
 import co.edu.uniquindio.proyecto.dto.Coupon.CouponDTO;
 import co.edu.uniquindio.proyecto.dto.Event.createDTOEvent;
 import co.edu.uniquindio.proyecto.dto.Event.editDTOEvent;
+import co.edu.uniquindio.proyecto.dto.Event.eventosDTO;
 import co.edu.uniquindio.proyecto.dto.JWT.MessageDTO;
 import co.edu.uniquindio.proyecto.dto.Order.dtoOrderFilter;
 import co.edu.uniquindio.proyecto.model.Coupons.Coupon;
@@ -59,6 +60,12 @@ public class AdminController {
     public ResponseEntity<MessageDTO<String>> deleteEvent(@PathVariable String id) throws Exception {
         String message = eventService.deleteEvent(id);
         return ResponseEntity.ok(new MessageDTO<>(false, message));
+    }
+
+    @GetMapping("/obtener-eventos")
+    public ResponseEntity<MessageDTO<List<eventosDTO>>> listEventAdmin() throws Exception {
+        List<eventosDTO> events = eventService.allEvents();
+        return ResponseEntity.ok(new MessageDTO<>(false,events));
     }
 
 

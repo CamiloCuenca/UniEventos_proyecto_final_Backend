@@ -218,6 +218,46 @@ public class EventServiceImp implements EventService {
 
 
     @Override
+    public List<eventosDTO> allEvents() throws Exception {
+        try {
+            // Recuperar la lista de eventos del repositorio
+            List<Event> events = eventRepository.findAll();
+
+            // Verificar si no se encontraron eventos
+            if (events.isEmpty()) {
+                throw new NoEventsFoundException(); // Lanzar excepción si no hay eventos
+            }
+
+            // Crear una lista para almacenar los DTOs de los eventos
+            List<eventosDTO> items = new ArrayList<>();
+
+            // Recorrer la lista de eventos y crear DTOs para cada uno
+            for (Event event : events) {
+                items.add(new eventosDTO(
+                        event.getCoverImage(), // Imagen de portada del evento
+                        event.getName(),       // Nombre del evento
+                        event.getStatus(),
+                        event.getDescription(),
+                        event.getImageLocalities(),
+                        event.getType(),
+                        event.getDate(),
+                        event.getCity(),
+                        event.getAddress(),
+                        event.getAmount(),
+                        event.getLocalities()
+                ));
+            }
+
+            // Retornar la lista de DTOs
+            return items;
+        } catch (Exception e) {
+            // Capturar cualquier excepción y lanzar una excepción personalizada
+            throw new EventRetrievalException(e.getMessage());
+        }
+    }
+
+
+    @Override
     public Event obtenerEvento(String idEvent) throws Exception {
         // Verifica que el idEvent no sea nulo o vacío
         if (idEvent == null || idEvent.trim().isEmpty()) {
@@ -235,9 +275,6 @@ public class EventServiceImp implements EventService {
         // Retorna el evento encontrado
         return eventoOptional.get();
     }
-
-
-
 
 
     /**
@@ -299,5 +336,6 @@ public class EventServiceImp implements EventService {
 
         return mongoTemplate.find(query, Event.class); // Ejecuta la consulta y retorna los eventos filtrados
     }
+
 
 }
