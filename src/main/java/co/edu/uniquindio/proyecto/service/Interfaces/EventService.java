@@ -78,5 +78,8 @@ public interface EventService {
      */
     List<Event> eventFilter(dtoEventFilter filter);
 
+
+    List<eventosDTO> allEvents() throws Exception;
+
 }
 
