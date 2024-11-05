@@ -5,21 +5,21 @@ import co.edu.uniquindio.proyecto.dto.Account.*;
 import co.edu.uniquindio.proyecto.dto.Carts.CartDetailDTO;
 import co.edu.uniquindio.proyecto.dto.Carts.CartItemSummaryDTO;
 import co.edu.uniquindio.proyecto.dto.Carts.UpdateCartItemDTO;
+import co.edu.uniquindio.proyecto.dto.Event.editDTOEvent;
 import co.edu.uniquindio.proyecto.dto.JWT.MessageDTO;
 import co.edu.uniquindio.proyecto.dto.Order.dtoOrderFilter;
 import co.edu.uniquindio.proyecto.exception.Cart.CartNotFoundException;
 import co.edu.uniquindio.proyecto.model.Carts.CartDetail;
 import co.edu.uniquindio.proyecto.model.PurchaseOrder.Order;
 import co.edu.uniquindio.proyecto.service.Interfaces.*;
-import com.mercadopago.resources.preference.Preference;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.login.AccountNotFoundException;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,23 +27,23 @@ import java.util.Map;
 public class ClientController {
 
     private final AccountService accountService;
-    private final EventService eventService;
     private final CouponService couponService;
     private final CartService cartService;
     private final OrderService orderService;
 
-    // Account
-    @GetMapping("/cuenta/obtener-info/{id}")
-    public ResponseEntity<MessageDTO<String>> obtainAccountInformation(@PathVariable String id) throws Exception {
-        accountService.obtainAccountInformation(id);
-        return ResponseEntity.ok(new MessageDTO<>(false, "Cuenta obtenida correctamente"));
 
+    @GetMapping("/cuenta/obtener-info/{id}")
+    public ResponseEntity<MessageDTOC<dtoAccountInformation>> obtainAccountInformation(@PathVariable String id) throws Exception {
+        // Llamamos al servicio para obtener la información de la cuenta
+        MessageDTOC<dtoAccountInformation> response = accountService.obtainAccountInformation(id);
+        // Si no hay error, retornamos la información de la cuenta
+        return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/cuenta/editar-perfil/{id}")
-    public ResponseEntity<MessageDTO<String>> editAccount(@Valid @RequestBody editAccountDTO cuenta , @PathVariable String id) throws Exception{
-        accountService.editAccount(cuenta,id);
-        return ResponseEntity.ok(new MessageDTO<>(false, "Cuenta editada exitosamente"));
+    @PutMapping("cuenta/editar-perfil/{id}")
+    public ResponseEntity<MessageDTO<String>> editEvent(@Valid @RequestBody editAccountDTO editarAccount, @PathVariable String id) throws Exception {
+        String message = accountService.editAccount(editarAccount,id);
+        return ResponseEntity.ok(new MessageDTO<>(false, message));
     }
 
     @PutMapping("/cuenta/editar-password/{id}")

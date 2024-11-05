@@ -1,6 +1,7 @@
 package co.edu.uniquindio.proyecto.service.Interfaces;
 
 import co.edu.uniquindio.proyecto.dto.Account.*;
+import co.edu.uniquindio.proyecto.dto.JWT.MessageDTO;
 import co.edu.uniquindio.proyecto.dto.JWT.TokenDTO;
 
 import java.util.List;
@@ -42,7 +43,7 @@ public interface AccountService {
      * @return Un objeto dtoAccountInformation con los detalles de la cuenta.
      * @throws Exception Si la cuenta no se encuentra o hay un error durante la consulta.
      */
-    dtoAccountInformation obtainAccountInformation(String id) throws Exception;
+    MessageDTOC obtainAccountInformation(String id) throws Exception;
 
     String updatePassword(updatePassword updatePasswordDTO, String id) throws Exception;
 
