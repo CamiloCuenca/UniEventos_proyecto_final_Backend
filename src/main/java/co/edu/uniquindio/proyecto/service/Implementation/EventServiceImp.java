@@ -234,6 +234,7 @@ public class EventServiceImp implements EventService {
             // Recorrer la lista de eventos y crear DTOs para cada uno
             for (Event event : events) {
                 items.add(new eventosDTO(
+                        event.getId(),
                         event.getCoverImage(), // Imagen de portada del evento
                         event.getName(),       // Nombre del evento
                         event.getStatus(),

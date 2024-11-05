@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record eventosDTO(
+        @NotBlank(message = "El ID no puede estar vacío") String id,
+
         @NotBlank(message = "La imagen de portada no puede estar vacía") String coverImage,
 
         @NotBlank(message = "El nombre no puede estar vacío") @Size(max = 100, message = "El nombre no debe exceder los 100 caracteres") String name,
