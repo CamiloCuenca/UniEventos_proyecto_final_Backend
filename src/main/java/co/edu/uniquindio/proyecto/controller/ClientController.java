@@ -5,7 +5,6 @@ import co.edu.uniquindio.proyecto.dto.Account.*;
 import co.edu.uniquindio.proyecto.dto.Carts.CartDetailDTO;
 import co.edu.uniquindio.proyecto.dto.Carts.CartItemSummaryDTO;
 import co.edu.uniquindio.proyecto.dto.Carts.UpdateCartItemDTO;
-import co.edu.uniquindio.proyecto.dto.Event.editDTOEvent;
 import co.edu.uniquindio.proyecto.dto.JWT.MessageDTO;
 import co.edu.uniquindio.proyecto.dto.Order.dtoOrderFilter;
 import co.edu.uniquindio.proyecto.exception.Cart.CartNotFoundException;
@@ -18,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.security.auth.login.AccountNotFoundException;
 import java.util.List;
 
 @RestController
@@ -47,7 +45,7 @@ public class ClientController {
     }
 
     @PutMapping("/cuenta/editar-password/{id}")
-    public ResponseEntity<MessageDTO<String>> updatePassword(@Valid @RequestBody updatePassword cuenta , @PathVariable String id) throws Exception{
+    public ResponseEntity<MessageDTO<String>> updatePassword(@Valid @RequestBody updatePasswordDTO cuenta , @PathVariable String id) throws Exception{
         accountService.updatePassword(cuenta,id);
         return ResponseEntity.ok(new MessageDTO<>(false, "Cuenta editada exitosamente"));
     }

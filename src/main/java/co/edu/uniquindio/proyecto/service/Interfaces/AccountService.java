@@ -1,7 +1,6 @@
 package co.edu.uniquindio.proyecto.service.Interfaces;
 
 import co.edu.uniquindio.proyecto.dto.Account.*;
-import co.edu.uniquindio.proyecto.dto.JWT.MessageDTO;
 import co.edu.uniquindio.proyecto.dto.JWT.TokenDTO;
 
 import java.util.List;
@@ -45,7 +44,7 @@ public interface AccountService {
      */
     MessageDTOC obtainAccountInformation(String id) throws Exception;
 
-    String updatePassword(updatePassword updatePasswordDTO, String id) throws Exception;
+    String updatePassword(updatePasswordDTO updatePasswordDTO, String id) throws Exception;
 
     /**
      * Lista todas las cuentas existentes.

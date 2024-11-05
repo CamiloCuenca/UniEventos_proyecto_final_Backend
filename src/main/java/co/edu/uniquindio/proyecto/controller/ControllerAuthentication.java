@@ -1,11 +1,14 @@
 package co.edu.uniquindio.proyecto.controller;
 
+import ch.qos.logback.classic.Logger;
 import co.edu.uniquindio.proyecto.Enum.EventStatus;
 import co.edu.uniquindio.proyecto.Enum.EventType;
 import co.edu.uniquindio.proyecto.dto.Account.*;
 import co.edu.uniquindio.proyecto.dto.Event.*;
 import co.edu.uniquindio.proyecto.dto.JWT.TokenDTO;
 import co.edu.uniquindio.proyecto.dto.JWT.MessageDTO;
+import co.edu.uniquindio.proyecto.exception.account.CedulaAlreadyExistsException;
+import co.edu.uniquindio.proyecto.exception.account.EmailAlreadyExistsException;
 import co.edu.uniquindio.proyecto.model.Events.Event;
 import co.edu.uniquindio.proyecto.repository.EventRepository;
 import co.edu.uniquindio.proyecto.service.Interfaces.AccountService;
@@ -41,9 +44,21 @@ public class ControllerAuthentication {
     // Account
 
     @PostMapping("/cuenta/crear-cuenta")
-    public ResponseEntity<MessageDTO<String>> crearCuenta(@Valid @RequestBody createAccountDTO cuenta) throws Exception {
-        accountService.createAccount(cuenta);
-        return ResponseEntity.ok(new MessageDTO<>(false, "Cuenta creada exitosamente"));
+    public ResponseEntity<MessageDTO<String>> crearCuenta(@Valid @RequestBody createAccountDTO cuenta) {
+        try {
+            accountService.createAccount(cuenta);
+            return ResponseEntity.ok(new MessageDTO<>(false, "Cuenta creada exitosamente"));
+        } catch (EmailAlreadyExistsException e) {
+            // Manejar la excepción de correo ya existente
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new MessageDTO<>(true, "El correo electrónico ya está en uso."));
+        } catch (CedulaAlreadyExistsException e) {
+            // Manejar la excepción de cédula ya existente
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new MessageDTO<>(true, "El número de identificación ya está en uso."));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @PostMapping("/cuenta/activar-cuenta")

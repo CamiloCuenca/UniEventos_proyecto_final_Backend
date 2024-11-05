@@ -113,7 +113,7 @@ public class OrderServiceImp implements OrderService {
                 .build();
 
         // Verificar si la cuenta existe
-        if (cuentaRepo.findByIdnumber(orderDTO.idAccount()).isEmpty()) {
+        if (cuentaRepo.findById(orderDTO.idAccount()).isEmpty()) {
             throw new AccountNotFoundException("El ID de la cuenta no existe");
         }
 
