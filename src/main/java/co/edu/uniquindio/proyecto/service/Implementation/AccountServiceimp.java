@@ -7,7 +7,6 @@ import co.edu.uniquindio.proyecto.Enum.TypeCoupon;
 import co.edu.uniquindio.proyecto.config.JWTUtils;
 import co.edu.uniquindio.proyecto.dto.Account.*;
 import co.edu.uniquindio.proyecto.dto.Coupon.CouponDTO;
-import co.edu.uniquindio.proyecto.dto.EmailDTO;
 import co.edu.uniquindio.proyecto.dto.JWT.TokenDTO;
 import co.edu.uniquindio.proyecto.exception.Coupons.CouponCreationException;
 import co.edu.uniquindio.proyecto.exception.account.*;
@@ -16,13 +15,10 @@ import co.edu.uniquindio.proyecto.model.Accounts.User;
 import co.edu.uniquindio.proyecto.model.Accounts.ValidationCode;
 import co.edu.uniquindio.proyecto.model.Accounts.ValidationCodePassword;
 import co.edu.uniquindio.proyecto.repository.AccountRepository;
-import co.edu.uniquindio.proyecto.repository.CouponRepository;
 import co.edu.uniquindio.proyecto.service.Interfaces.AccountService;
 import co.edu.uniquindio.proyecto.service.Interfaces.CouponService;
 import co.edu.uniquindio.proyecto.service.Interfaces.EmailService;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -76,7 +72,7 @@ public class AccountServiceimp implements AccountService {
      * @return
      */
     private boolean idExists(String idNumber) {
-        return cuentaRepo.findByIdnumber(idNumber).isPresent();
+        return cuentaRepo.findByIdUNumber(idNumber).isPresent();
     }
 
     /**
@@ -220,11 +216,13 @@ public class AccountServiceimp implements AccountService {
             throw new AccountNotFoundException("No se encontró la cuenta con ID: " + id);
         }
 
-        // Obtener la cuenta encontrada y actualizar los datos básicos
+        // Obtener la cuenta encontrada
         Account cuentaActualizada = optionalAccount.get();
-        cuentaActualizada.getUser().setName(cuenta.username());
-        cuentaActualizada.getUser().setPhoneNumber(cuenta.phoneNumber());
-        cuentaActualizada.getUser().setAddress(cuenta.address());
+
+        // Actualizar los datos básicos utilizando el DTO
+        cuentaActualizada.getUser().setName(cuenta.name()); // Usar el método name() del DTO
+        cuentaActualizada.getUser().setPhoneNumber(cuenta.phoneNumber()); // Usar el método phoneNumber() del DTO
+        cuentaActualizada.getUser().setAddress(cuenta.address()); // Usar el método address() del DTO
 
         // Guardar los cambios en la base de datos sin tocar la contraseña
         cuentaRepo.save(cuentaActualizada);
@@ -239,31 +237,32 @@ public class AccountServiceimp implements AccountService {
      * @throws Exception
      */
     @Override
-    public dtoAccountInformation obtainAccountInformation(String id) throws AccountNotFoundException {
-        // Buscar la cuenta en la base de datos utilizando el ID proporcionado.
+    public MessageDTOC<dtoAccountInformation> obtainAccountInformation(String id) {
         Optional<Account> optionalCuenta = cuentaRepo.findById(id);
 
-        // Verificar si la cuenta existe; si no, lanzar una excepción personalizada.
+        // Manejo del caso en que la cuenta no existe
         if (optionalCuenta.isEmpty()) {
-            throw new AccountNotFoundException(id);
+            ErrorResponse errorResponse = new ErrorResponse("Cuenta no encontrada", 404);
+            return new MessageDTOC<>(true, null, errorResponse); // Asegúrate de que respuesta es null
         }
 
-        // Obtener la cuenta encontrada.
+        // Si la cuenta existe, obtenemos la información
         Account account = optionalCuenta.get();
-
-        // Crear y retornar un objeto dtoAccountInformation con los detalles de la cuenta.
-        return new dtoAccountInformation(
-                account.getUser().getIdNumber(),// ID de la cuenta
-                account.getUser().getName(), // Número de identificación del usuario
-                account.getUser().getPhoneNumber(), // Número de teléfono del usuario
-                account.getUser().getAddress(), // Dirección del usuario
-                account.getEmail() // Email de la cuenta
+        dtoAccountInformation accountInfo = new dtoAccountInformation(
+                account.getUser().getName(),
+                account.getUser().getPhoneNumber(),
+                account.getUser().getAddress()
         );
+
+        // Retornamos la respuesta exitosa
+        return new MessageDTOC<>(false, accountInfo, null); // No hay error
     }
 
+
     @Override
-    public String updatePassword(updatePassword updatePasswordDTO, String id) throws AccountNotFoundException, InvalidCurrentPasswordException {
-        // Buscar la cuenta en la base de datos utilizando el email proporcionado
+    public String updatePassword(updatePasswordDTO updatePasswordDTO, String id)
+            throws AccountNotFoundException, InvalidCurrentPasswordException, PasswordMismatchException {
+        // Buscar la cuenta en la base de datos utilizando el id proporcionado
         Optional<Account> optionalAccount = cuentaRepo.findById(id);
 
         // Verificar si la cuenta existe
@@ -280,8 +279,16 @@ public class AccountServiceimp implements AccountService {
 
         // Validar la nueva contraseña (longitud mínima, etc.)
         String newPassword = updatePasswordDTO.newPassword();
+        String confirmNewPassword = updatePasswordDTO.confirmationPassword(); // Obtener la confirmación
+
+        // Verificar que la nueva contraseña no esté vacía y tenga al menos 8 caracteres
         if (newPassword.isEmpty() || newPassword.length() < 8) {
             throw new InvalidCurrentPasswordException("La nueva contraseña debe tener al menos 8 caracteres.");
+        }
+
+        // Verificar que la nueva contraseña coincida con la confirmación
+        if (!newPassword.equals(confirmNewPassword)) {
+            throw new PasswordMismatchException("La nueva contraseña y la confirmación no coinciden.");
         }
 
         // Encriptar y actualizar la nueva contraseña

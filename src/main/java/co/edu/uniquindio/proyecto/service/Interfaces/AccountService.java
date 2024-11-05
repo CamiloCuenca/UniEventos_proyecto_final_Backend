@@ -42,9 +42,9 @@ public interface AccountService {
      * @return Un objeto dtoAccountInformation con los detalles de la cuenta.
      * @throws Exception Si la cuenta no se encuentra o hay un error durante la consulta.
      */
-    dtoAccountInformation obtainAccountInformation(String id) throws Exception;
+    MessageDTOC obtainAccountInformation(String id) throws Exception;
 
-    String updatePassword(updatePassword updatePasswordDTO, String id) throws Exception;
+    String updatePassword(updatePasswordDTO updatePasswordDTO, String id) throws Exception;
 
     /**
      * Lista todas las cuentas existentes.

@@ -14,8 +14,8 @@ import java.util.Optional;
 public interface AccountRepository extends MongoRepository<Account, String> {
     Optional<Account> findByEmail(String email);
 
-    @Query("{'_id': ?0}")
-    Optional<Account> findByIdnumber(String accountId);
+    @Query("{ 'user.idNumber': ?0 }")
+    Optional<Account> findByIdUNumber(String idNumber);
 
     long countByStatus(AccountStatus status);
 
