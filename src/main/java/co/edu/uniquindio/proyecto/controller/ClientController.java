@@ -8,6 +8,9 @@ import co.edu.uniquindio.proyecto.dto.Carts.UpdateCartItemDTO;
 import co.edu.uniquindio.proyecto.dto.JWT.MessageDTO;
 import co.edu.uniquindio.proyecto.dto.Order.dtoOrderFilter;
 import co.edu.uniquindio.proyecto.exception.Cart.CartNotFoundException;
+import co.edu.uniquindio.proyecto.exception.account.InvalidValidationCodeException;
+import co.edu.uniquindio.proyecto.exception.account.PasswordsDoNotMatchException;
+import co.edu.uniquindio.proyecto.exception.account.ValidationCodeExpiredException;
 import co.edu.uniquindio.proyecto.model.Carts.CartDetail;
 import co.edu.uniquindio.proyecto.model.PurchaseOrder.Order;
 import co.edu.uniquindio.proyecto.service.Interfaces.*;
@@ -62,10 +65,31 @@ public class ClientController {
         return ResponseEntity.ok(new MessageDTO<>(true, "Se envio el codigo exitosamente"));
     }
 
-    @PutMapping("/cuenta/cambiar-contrsena/{correo}")
-    public ResponseEntity<MessageDTO<String>> changePassword(@Valid @RequestBody changePasswordDTO changePasswordDTO, @PathVariable String correo) throws Exception{
-        accountService.changePassword(changePasswordDTO, correo);
-        return ResponseEntity.ok(new MessageDTO<>(true, "Se cambio la contraseña exitosamente"));
+
+    @PostMapping("/cuenta/validar-codigo")
+    public ResponseEntity<String> validarCodigo(@RequestBody CodeRecoverDTO codeRecoverDTO) {
+        try {
+            // Usar el código del DTO para la validación
+            boolean isValid = accountService.validarCodigoRecuperacion(codeRecoverDTO);
+            if (isValid) {
+                return ResponseEntity.ok("Código de recuperación válido.");
+            }
+        } catch (InvalidValidationCodeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Código de recuperación no válido.");
+        } catch (ValidationCodeExpiredException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El código de recuperación ha expirado.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al validar el código: " + e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Código de recuperación no válido.");
+    }
+
+
+    // Endpoint para cambiar la contraseña
+    @PutMapping("/cuenta/cambiar-password/{id}")
+    public ResponseEntity<MessageDTO<String>> cambiarPassword(@Valid @RequestBody changePasswordDTO cuenta , @PathVariable String id) throws Exception{
+        accountService.changePassword(cuenta,id);
+        return ResponseEntity.ok(new MessageDTO<>(false, "Cuenta editada exitosamente"));
     }
 
     //carrito
