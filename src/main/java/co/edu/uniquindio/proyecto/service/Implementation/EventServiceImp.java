@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.service.Implementation;
 
+import co.edu.uniquindio.proyecto.Enum.EventStatus;
 import co.edu.uniquindio.proyecto.Enum.EventType;
 import co.edu.uniquindio.proyecto.Enum.Localities;
 import co.edu.uniquindio.proyecto.dto.Event.*;
@@ -139,8 +140,10 @@ public class EventServiceImp implements EventService {
         Event deletedEvent = optionalEvent.get();
 
         // Eliminar el evento de la base de datos
-        eventRepository.delete(deletedEvent); // Nota: Se menciona que no se debe eliminar, sino cambiar a INACTIVO
+        //eventRepository.delete(deletedEvent);
+        deletedEvent.setStatus(EventStatus.INACTIVE);// Nota: Se menciono que no se debe eliminar, sino cambiar a INACTIVO
 
+        eventRepository.save(deletedEvent);
         // Retornar un mensaje de éxito
         return "El evento con id " + idEvent + " fue eliminado correctamente.";
     }
