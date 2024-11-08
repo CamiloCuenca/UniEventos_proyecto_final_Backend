@@ -53,7 +53,7 @@ public class ClientController {
         return ResponseEntity.ok(new MessageDTO<>(false, "Cuenta editada exitosamente"));
     }
 
-    @DeleteMapping("/cuenta/eliminar/{id}")
+    @PostMapping("/cuenta/eliminar/{id}")
     public ResponseEntity<MessageDTO<String>> deleteAccount(@PathVariable String id,@Valid @RequestBody PasswordDTO password) throws Exception{
         accountService.deleteAccount(id,password);
         return ResponseEntity.ok(new MessageDTO<>(false, "Cuenta eliminada exitosamente"));
