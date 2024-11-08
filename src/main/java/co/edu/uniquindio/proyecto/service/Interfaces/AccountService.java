@@ -70,7 +70,7 @@ public interface AccountService {
      * @return Un mensaje de confirmación indicando que la contraseña ha sido cambiada.
      * @throws Exception Si ocurre un error al cambiar la contraseña.
      */
-    String changePassword(changePasswordDTO changePasswordDTO, String id) throws Exception;
+    String changePassword(ChangePasswordDTO changePasswordDTO) throws Exception;
 
     /**
      * Inicia sesión en el sistema.
@@ -91,6 +91,4 @@ public interface AccountService {
      */
     String activateAccount(String correo, String code) throws Exception;
 
-
-    boolean validarCodigoRecuperacion(CodeRecoverDTO code) throws Exception;
 }

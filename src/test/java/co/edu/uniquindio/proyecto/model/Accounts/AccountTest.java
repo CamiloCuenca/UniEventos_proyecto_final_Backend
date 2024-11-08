@@ -208,7 +208,7 @@ class AccountServiceTest {
         String code = "642841d7";
         String newPassword = "M@mahermosa123";
         String confirmatePassword = "M@mahermosa123";
-        changePasswordDTO changePasswordDTO = new changePasswordDTO(newPassword, confirmatePassword,code);
+        ChangePasswordDTO changePasswordDTO = new ChangePasswordDTO(newPassword, confirmatePassword,code);
 
         // Llamar al método a probar
         accountService.changePassword(changePasswordDTO, correo);
