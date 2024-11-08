@@ -66,30 +66,28 @@ public class ClientController {
     }
 
 
-    @PostMapping("/cuenta/validar-codigo")
-    public ResponseEntity<String> validarCodigo(@RequestBody CodeRecoverDTO codeRecoverDTO) {
-        try {
-            // Usar el código del DTO para la validación
-            boolean isValid = accountService.validarCodigoRecuperacion(codeRecoverDTO);
-            if (isValid) {
-                return ResponseEntity.ok("Código de recuperación válido.");
-            }
-        } catch (InvalidValidationCodeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Código de recuperación no válido.");
-        } catch (ValidationCodeExpiredException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El código de recuperación ha expirado.");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al validar el código: " + e.getMessage());
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Código de recuperación no válido.");
-    }
+
 
 
     // Endpoint para cambiar la contraseña
-    @PutMapping("/cuenta/cambiar-password/{id}")
-    public ResponseEntity<MessageDTO<String>> cambiarPassword(@Valid @RequestBody changePasswordDTO cuenta , @PathVariable String id) throws Exception{
-        accountService.changePassword(cuenta,id);
-        return ResponseEntity.ok(new MessageDTO<>(false, "Cuenta editada exitosamente"));
+    @PutMapping("/cuenta/cambiar-password")
+    public ResponseEntity<MessageDTO<String>> cambiarPassword(@Valid @RequestBody ChangePasswordDTO changePasswordDTO) {
+        try {
+            String message = accountService.changePassword(changePasswordDTO);
+            return ResponseEntity.ok(new MessageDTO<>(false, message));
+        } catch (InvalidValidationCodeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new MessageDTO<>(true, "No se encontró la cuenta o el código de validación es inválido."));
+        } catch (ValidationCodeExpiredException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new MessageDTO<>(true, "El código de recuperación ha expirado o no es válido."));
+        } catch (PasswordsDoNotMatchException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new MessageDTO<>(true, "Las contraseñas no coinciden."));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MessageDTO<>(true, "Ocurrió un error inesperado. Intente nuevamente."));
+        }
     }
 
     //carrito

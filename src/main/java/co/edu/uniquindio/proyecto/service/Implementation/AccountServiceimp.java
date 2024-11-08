@@ -418,32 +418,12 @@ public class AccountServiceimp implements AccountService {
      * @throws Exception
      */
 
-    public boolean validarCodigoRecuperacion(CodeRecoverDTO codigo) throws Exception {
-        Optional<Account> optionalAccount = cuentaRepo.findByValidationCode(codigo.code());
-
-        if (optionalAccount.isEmpty()) {
-            throw new Exception("El código de recuperación no existe.");
-        }
-
-        ValidationCodePassword validationCodePassword = optionalAccount.get().getPasswordValidationCode();
-
-        if (validationCodePassword == null) {
-            throw new Exception("El código de recuperación no está asociado a ninguna cuenta.");
-        }
-
-        // Verificación de expiración
-        if (validationCodePassword.isExpired()) {
-            throw new ValidationCodeExpiredException();
-        }
-
-        return true; // El código es válido
-    }
 
 
     @Override
-    public String changePassword(changePasswordDTO changePasswordDTO, String id) throws Exception {
-        // Buscar la cuenta del usuario por ID
-        Optional<Account> optionalAccount = cuentaRepo.findById(id);
+    public String changePassword(ChangePasswordDTO changePasswordDTO) throws Exception {
+        // Buscar la cuenta del usuario por el código de validación
+        Optional<Account> optionalAccount = cuentaRepo.findByValidationCode(changePasswordDTO.code());
 
         if (optionalAccount.isEmpty()) {
             throw new InvalidValidationCodeException("No se encontró la cuenta.");
@@ -452,23 +432,23 @@ public class AccountServiceimp implements AccountService {
         Account account = optionalAccount.get();
         ValidationCodePassword validationCodePassword = account.getPasswordValidationCode();
 
-        // Verificar si el código de validación de la contraseña es nulo o ha expirado
+        // Verificar si el código de validación es nulo o ha expirado
         if (validationCodePassword == null || validationCodePassword.isExpired()) {
             throw new ValidationCodeExpiredException("El código de recuperación ha expirado o no es válido.");
         }
 
-        // Verificar que las contraseñas coinciden
+        // Verificar que las contraseñas coincidan
         if (!changePasswordDTO.newPassword().equals(changePasswordDTO.confirmationPassword())) {
             throw new PasswordsDoNotMatchException("Las contraseñas no coinciden.");
         }
 
-        // Encriptar la nueva contraseña
+        // Encriptar la nueva contraseña y actualizar la cuenta
         account.setPassword(passwordEncoder.encode(changePasswordDTO.newPassword()));
 
-        // Limpiar el código de validación después de cambiar la contraseña
+        // Limpiar el código de validación después de cambiar la contraseña exitosamente
         account.setPasswordValidationCode(null);
 
-        // Guardar la cuenta actualizada
+        // Guardar la cuenta actualizada en el repositorio
         cuentaRepo.save(account);
 
         return "La contraseña ha sido cambiada exitosamente.";
