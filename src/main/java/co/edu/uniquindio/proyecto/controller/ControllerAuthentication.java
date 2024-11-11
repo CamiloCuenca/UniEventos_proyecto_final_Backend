@@ -1,6 +1,5 @@
 package co.edu.uniquindio.proyecto.controller;
 
-import ch.qos.logback.classic.Logger;
 import co.edu.uniquindio.proyecto.Enum.EventStatus;
 import co.edu.uniquindio.proyecto.Enum.EventType;
 import co.edu.uniquindio.proyecto.dto.Account.*;
@@ -49,9 +48,9 @@ public class ControllerAuthentication {
             accountService.createAccount(cuenta);
             return ResponseEntity.ok(new MessageDTO<>(false, "Cuenta creada exitosamente"));
         } catch (EmailAlreadyExistsException e) {
-            // Manejar la excepción de correo ya existente
+            // Manejar la excepción de email ya existente
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new MessageDTO<>(true, "El correo electrónico ya está en uso."));
+                    .body(new MessageDTO<>(true, "El email electrónico ya está en uso."));
         } catch (CedulaAlreadyExistsException e) {
             // Manejar la excepción de cédula ya existente
             return ResponseEntity.status(HttpStatus.CONFLICT)
@@ -63,7 +62,7 @@ public class ControllerAuthentication {
 
     @PostMapping("/cuenta/activar-cuenta")
     public ResponseEntity<MessageDTO<String>> activateAccount(@Valid @RequestBody ActivateAccountDTO activateAccountDTO) throws Exception {
-        accountService.activateAccount(activateAccountDTO.getCorreo(), activateAccountDTO.getCode());
+        accountService.activateAccount(activateAccountDTO);
         return ResponseEntity.ok(new MessageDTO<>(false, "La cuenta se activó exitosamente"));
     }
 

@@ -5,8 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record LoginDTO(
-        @NotNull(message = "El correo electrónico no puede estar vacío.")
-        @Email(message = "El correo electrónico debe tener un formato válido.")
+        @NotNull(message = "El email electrónico no puede estar vacío.")
+        @Email(message = "El email electrónico debe tener un formato válido.")
         String email,
 
         @NotNull(message = "La contraseña no puede estar vacía.")

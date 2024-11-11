@@ -21,9 +21,9 @@ public record createAccountDTO(
         @Length(max = 100, message = "La dirección no puede exceder los 100 caracteres.")
         String address,
 
-        @NotBlank(message = "El correo electrónico no puede estar vacío.")
-        @Length(max = 50, message = "El correo electrónico no puede exceder los 50 caracteres.")
-        @Email(message = "El formato del correo electrónico es inválido.")
+        @NotBlank(message = "El email electrónico no puede estar vacío.")
+        @Length(max = 50, message = "El email electrónico no puede exceder los 50 caracteres.")
+        @Email(message = "El formato del email electrónico es inválido.")
         String email,
 
         @NotBlank(message = "La contraseña no puede estar vacía.")

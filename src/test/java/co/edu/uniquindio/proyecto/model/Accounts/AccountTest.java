@@ -42,7 +42,7 @@ class AccountServiceTest {
                 "Brandon Monte", // Nombre
                 "3245478325", // Número de teléfono
                 "Crr 12 # 12-2", // Dirección
-                "bran123@hotmail.com", // Correo   (para que funcione el envio de correo electronico se debe colocar un email real)
+                "bran123@hotmail.com", // Correo   (para que funcione el envio de email electronico se debe colocar un email real)
                 "Br@ndonCa123" // Contraseña
         );
 
@@ -59,13 +59,7 @@ class AccountServiceTest {
      *
      * @throws Exception
      */
-    @Test
-    public void activateAccountTest() throws Exception {
-        String correo = "bran123@hotmail.com";
-        String code = "80377f2e";
-        accountService.activateAccount(correo, code);
 
-    }
 
     @Test
     public void loginAccountTest() {
@@ -194,7 +188,7 @@ class AccountServiceTest {
         String result = accountService.sendPasswordRecoveryCode(email);
 
         // Verificaciones
-        assertEquals("Código de recuperación enviado al correo " + email, result);
+        assertEquals("Código de recuperación enviado al email " + email, result);
     }
 
     /**

@@ -54,9 +54,9 @@ public interface AccountService {
     List<dtoAccountItem> listAccounts();
 
     /**
-     * Envía un código de recuperación de contraseña al correo electrónico del usuario.
+     * Envía un código de recuperación de contraseña al email electrónico del usuario.
      *
-     * @param correo El correo electrónico del usuario al que se enviará el código de recuperación.
+     * @param correo El email electrónico del usuario al que se enviará el código de recuperación.
      * @return Un mensaje de confirmación indicando que el código ha sido enviado.
      * @throws Exception Si ocurre un error al intentar enviar el código de recuperación.
      */
@@ -66,7 +66,7 @@ public interface AccountService {
      * Cambia la contraseña de una cuenta de usuario.
      *
      * @param changePasswordDTO El objeto que contiene la nueva contraseña y otros datos necesarios.
-     * @param correo El correo electrónico del usuario que solicita el cambio.
+     * @param correo El email electrónico del usuario que solicita el cambio.
      * @return Un mensaje de confirmación indicando que la contraseña ha sido cambiada.
      * @throws Exception Si ocurre un error al cambiar la contraseña.
      */
@@ -75,7 +75,7 @@ public interface AccountService {
     /**
      * Inicia sesión en el sistema.
      *
-     * @param loginDTO El objeto LoginDTO que contiene el correo y la contraseña del usuario.
+     * @param loginDTO El objeto LoginDTO que contiene el email y la contraseña del usuario.
      * @return Un objeto TokenDTO que contiene el token de autenticación.
      * @throws Exception Si las credenciales son incorrectas o si hay un error durante el inicio de sesión.
      */
@@ -84,11 +84,13 @@ public interface AccountService {
     /**
      * Activa una cuenta de usuario.
      *
-     * @param correo El correo electrónico del usuario cuya cuenta se va a activar.
+     * @param correo El email electrónico del usuario cuya cuenta se va a activar.
      * @param code El código de activación necesario para activar la cuenta.
      * @return Un mensaje de confirmación indicando que la cuenta ha sido activada.
      * @throws Exception Si ocurre un error al activar la cuenta.
      */
-    String activateAccount(String correo, String code) throws Exception;
+    String activateAccount(ActivateAccountDTO activateAccountDTO) throws Exception;
+
+    String sendActiveCode(String email) throws  Exception;
 
 }
