@@ -15,36 +15,36 @@ public class EmailController {
 
     private final EmailService emailService;
 
-    // Enviar correo electrónico genérico
+    // Enviar email electrónico genérico
     @PostMapping("/send-email")
     public ResponseEntity<MessageDTO<String>> sendMail(@Valid @RequestBody EmailDTO emailDTO) {
         try {
             emailService.sendMail(emailDTO);
             return ResponseEntity.ok(new MessageDTO<>(false, "Correo enviado exitosamente."));
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(new MessageDTO<>(true, "Error al enviar el correo: " + e.getMessage()));
+            return ResponseEntity.status(500).body(new MessageDTO<>(true, "Error al enviar el email: " + e.getMessage()));
         }
     }
 
-    // Enviar código QR por correo electrónico
+    // Enviar código QR por email electrónico
     @PostMapping("/send-qr")
     public ResponseEntity<MessageDTO<String>> sendQrByEmail(@RequestParam String email, @RequestParam String qrImageUrl) {
         try {
             emailService.sendQrByEmail(email, qrImageUrl);
             return ResponseEntity.ok(new MessageDTO<>(false, "Correo con QR enviado exitosamente."));
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(new MessageDTO<>(true, "Error al enviar el correo con QR: " + e.getMessage()));
+            return ResponseEntity.status(500).body(new MessageDTO<>(true, "Error al enviar el email con QR: " + e.getMessage()));
         }
     }
 
-    // Enviar código de validación por correo electrónico
+    // Enviar código de validación por email electrónico
     @PostMapping("/send-validation-code")
     public ResponseEntity<MessageDTO<String>> sendCodeValidation(@RequestParam String email, @RequestParam String validationCode) {
         try {
             emailService.sendCodevalidation(email, validationCode);
             return ResponseEntity.ok(new MessageDTO<>(false, "Correo con código de validación enviado exitosamente."));
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(new MessageDTO<>(true, "Error al enviar el correo con código de validación: " + e.getMessage()));
+            return ResponseEntity.status(500).body(new MessageDTO<>(true, "Error al enviar el email con código de validación: " + e.getMessage()));
         }
     }
 
@@ -55,18 +55,18 @@ public class EmailController {
             emailService.sendRecoveryCode(email, recoveryCode);
             return ResponseEntity.ok(new MessageDTO<>(false, "Correo con código de recuperación enviado exitosamente."));
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(new MessageDTO<>(true, "Error al enviar el correo con código de recuperación: " + e.getMessage()));
+            return ResponseEntity.status(500).body(new MessageDTO<>(true, "Error al enviar el email con código de recuperación: " + e.getMessage()));
         }
     }
 
-    // Enviar cupón de bienvenida por correo electrónico
+    // Enviar cupón de bienvenida por email electrónico
     @PostMapping("/send-welcome-coupon")
     public ResponseEntity<MessageDTO<String>> sendWelcomeCoupon(@RequestParam String email, @RequestParam String couponCode) {
         try {
             emailService.sendWelcomeCoupon(email, couponCode);
             return ResponseEntity.ok(new MessageDTO<>(false, "Correo con cupón de bienvenida enviado exitosamente."));
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(new MessageDTO<>(true, "Error al enviar el correo con cupón de bienvenida: " + e.getMessage()));
+            return ResponseEntity.status(500).body(new MessageDTO<>(true, "Error al enviar el email con cupón de bienvenida: " + e.getMessage()));
         }
     }
 }

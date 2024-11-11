@@ -43,30 +43,33 @@ public class ClientController {
 
     @PutMapping("cuenta/editar-perfil/{id}")
     public ResponseEntity<MessageDTO<String>> editEvent(@Valid @RequestBody editAccountDTO editarAccount, @PathVariable String id) throws Exception {
-        String message = accountService.editAccount(editarAccount,id);
+        String message = accountService.editAccount(editarAccount, id);
         return ResponseEntity.ok(new MessageDTO<>(false, message));
     }
 
     @PutMapping("/cuenta/editar-password/{id}")
-    public ResponseEntity<MessageDTO<String>> updatePassword(@Valid @RequestBody updatePasswordDTO cuenta , @PathVariable String id) throws Exception{
-        accountService.updatePassword(cuenta,id);
+    public ResponseEntity<MessageDTO<String>> updatePassword(@Valid @RequestBody updatePasswordDTO cuenta, @PathVariable String id) throws Exception {
+        accountService.updatePassword(cuenta, id);
         return ResponseEntity.ok(new MessageDTO<>(false, "Cuenta editada exitosamente"));
     }
 
     @PostMapping("/cuenta/eliminar/{id}")
-    public ResponseEntity<MessageDTO<String>> deleteAccount(@PathVariable String id,@Valid @RequestBody PasswordDTO password) throws Exception{
-        accountService.deleteAccount(id,password);
+    public ResponseEntity<MessageDTO<String>> deleteAccount(@PathVariable String id, @Valid @RequestBody PasswordDTO password) throws Exception {
+        accountService.deleteAccount(id, password);
         return ResponseEntity.ok(new MessageDTO<>(false, "Cuenta eliminada exitosamente"));
     }
 
     @PostMapping("/email/enviar-codigo/{correo}")
-    public ResponseEntity<MessageDTO<String>>  sendPasswordRecoveryCode(@PathVariable String correo) throws Exception{
+    public ResponseEntity<MessageDTO<String>> sendPasswordRecoveryCode(@PathVariable String correo) throws Exception {
         accountService.sendPasswordRecoveryCode(correo);
         return ResponseEntity.ok(new MessageDTO<>(true, "Se envio el codigo exitosamente"));
     }
 
-
-
+    @PostMapping("/email/enviar-codigoActive/{correo}")
+    public ResponseEntity<MessageDTO<String>> sendActiveCode(@PathVariable String correo) throws Exception {
+        accountService.sendActiveCode(correo);
+        return ResponseEntity.ok(new MessageDTO<>(true, "Se envio el codigo exitosamente"));
+    }
 
 
     // Endpoint para cambiar la contraseña
@@ -107,6 +110,7 @@ public class ClientController {
                     .body(new MessageDTO<>(true, "Error al agregar el ítem: " + e.getMessage()));
         }
     }
+
     @PostMapping("/carrito/actualizar-item/{accountId}/{itemId}")
     public ResponseEntity<MessageDTO<String>> updateCartItem(
             @PathVariable String accountId,
@@ -123,6 +127,7 @@ public class ClientController {
                     .body(new MessageDTO<>(true, "Error al actualizar el ítem: " + e.getMessage()));
         }
     }
+
     @PostMapping("/carrito/limpiar-carrito/{accountId}")
     public ResponseEntity<MessageDTO<String>> clearCart(@PathVariable String accountId) throws Exception {
         try {
@@ -133,8 +138,9 @@ public class ClientController {
                     .body(new MessageDTO<>(false, e.getMessage()));
         }
     }
+
     @PostMapping("/carrito/eliminar-item/{accountId}/{eventId}")
-    public ResponseEntity<MessageDTO<String>> removeItemFromCart(@PathVariable String accountId,@PathVariable String eventId) throws Exception {
+    public ResponseEntity<MessageDTO<String>> removeItemFromCart(@PathVariable String accountId, @PathVariable String eventId) throws Exception {
         try {
             cartService.removeItemFromCart(accountId, eventId);
             return ResponseEntity.ok(new MessageDTO<>(false, "!se retiro correctamente el item!"));
@@ -147,20 +153,20 @@ public class ClientController {
     @GetMapping("/carrito/obtener-items-carrito/{accountId}")
     public ResponseEntity<MessageDTO<List<CartDetail>>> getCartItems(@PathVariable String accountId) throws Exception {
         List<CartDetail> items = cartService.getCartItems(accountId);
-        return ResponseEntity.ok().body(new MessageDTO<>(false,items));
+        return ResponseEntity.ok().body(new MessageDTO<>(false, items));
     }
 
     @GetMapping("/carrito/resumen-items/{accountId}")
     public ResponseEntity<MessageDTO<List<CartItemSummaryDTO>>> getCartItemSummary(@PathVariable String accountId) throws Exception {
-       List<CartItemSummaryDTO> items =  cartService.getCartItemSummary(accountId);
-        return ResponseEntity.ok().body(new MessageDTO<>(false,items));
+        List<CartItemSummaryDTO> items = cartService.getCartItemSummary(accountId);
+        return ResponseEntity.ok().body(new MessageDTO<>(false, items));
     }
 
 
     @PostMapping("/realizar-pago/{idOrden}")
-    public ResponseEntity<MessageDTO<String>> realizarPago(@PathVariable String idOrden)throws Exception {
+    public ResponseEntity<MessageDTO<String>> realizarPago(@PathVariable String idOrden) throws Exception {
         orderService.realizarPago(idOrden);
-        return ResponseEntity.ok(new MessageDTO<>(false,"pago exitoso"));
+        return ResponseEntity.ok(new MessageDTO<>(false, "pago exitoso"));
     }
     // Coupon
 
@@ -170,8 +176,6 @@ public class ClientController {
         double discount = couponService.applyCoupon(code, orderId);
         return ResponseEntity.ok(new MessageDTO<>(false, discount));
     }
-
-
 
 
     //Order
@@ -184,11 +188,6 @@ public class ClientController {
         // Llamar al servicio con el DTO y retornar los resultados
         return orderService.paymentFilterByState(filter1);
     }
-
-
-
-
-
 
 
 }

@@ -91,7 +91,7 @@ public class AccountServiceimp implements AccountService {
     }
 
     /**
-     * Método login(): Permite iniciar sesión utilizando las credenciales de correo y contraseña del usuario. Si la cuenta no está activa o la contraseña es incorrecta, lanza las excepciones correspondientes.
+     * Método login(): Permite iniciar sesión utilizando las credenciales de email y contraseña del usuario. Si la cuenta no está activa o la contraseña es incorrecta, lanza las excepciones correspondientes.
      * Utiliza JWT para generar un token basado en los detalles de la cuenta (rol, nombre, id).
      *
      * @param loginDTO DTO destinado para el login.
@@ -142,8 +142,8 @@ public class AccountServiceimp implements AccountService {
     }
 
     /**
-     * Método createAccount(): Crea una nueva cuenta, encripta la contraseña con BCryptPasswordEncoder, genera un código de validación, y envía un correo electrónico al usuario para activar la cuenta.
-     * Valida que el correo y el número de identificación no existan previamente en la base de datos.
+     * Método createAccount(): Crea una nueva cuenta, encripta la contraseña con BCryptPasswordEncoder, genera un código de validación, y envía un email electrónico al usuario para activar la cuenta.
+     * Valida que el email y el número de identificación no existan previamente en la base de datos.
      *
      * @param cuenta
      * @return
@@ -192,7 +192,7 @@ public class AccountServiceimp implements AccountService {
         // Guardar la nueva cuenta en el repositorio.
         Account createdAccount = cuentaRepo.save(newAccount);
 
-        // Enviar el código de validación por correo electrónico.
+        // Enviar el código de validación por email electrónico.
         emailService.sendCodevalidation(createdAccount.getEmail(), validationCode);
 
         // Retornar el ID de la cuenta creada.
@@ -229,6 +229,7 @@ public class AccountServiceimp implements AccountService {
 
         return cuentaActualizada.getAccountId();
     }
+
     /**
      * Método obtainAccountInformation(): Recupera la información básica de la cuenta basada en su ID.
      *
@@ -374,7 +375,7 @@ public class AccountServiceimp implements AccountService {
 
 
     /**
-     * Método sendPasswordRecoveryCode(): Genera un código de validación para recuperar la contraseña y lo envía al correo electrónico del usuario.
+     * Método sendPasswordRecoveryCode(): Genera un código de validación para recuperar la contraseña y lo envía al email electrónico del usuario.
      *
      * @param email
      * @return
@@ -407,8 +408,26 @@ public class AccountServiceimp implements AccountService {
         emailService.sendRecoveryCode(account.getEmail(), passwordValidationCode);
 
         // Retornar un mensaje indicando que el código fue enviado.
-        return "Código de recuperación enviado al correo " + account.getEmail();
+        return "Código de recuperación enviado al email " + account.getEmail();
     }
+
+
+    @Override
+    public String sendActiveCode(String email) throws Exception {
+        Optional<Account> optionalAccount = cuentaRepo.findByEmail(email);
+        if (optionalAccount.isEmpty()) {
+            throw new EmailNotFoundException(email);
+        }
+
+        Account account = optionalAccount.get();
+        String activeCode = UUID.randomUUID().toString().replace("-", "").substring(0, 8);
+        ValidationCode validationCode = new ValidationCode(activeCode);
+        account.setRegistrationValidationCode(validationCode);
+        cuentaRepo.save(account);
+        emailService.sendCodevalidation(account.getEmail(), activeCode);
+        return "Código de validacion de cuenta enviado al correo: " + account.getEmail();
+    }
+
 
     /**
      * Método changePassword(): Permite al usuario cambiar su contraseña tras verificar que el código de recuperación es válido y no ha expirado.
@@ -417,7 +436,6 @@ public class AccountServiceimp implements AccountService {
      * @return
      * @throws Exception
      */
-
 
 
     @Override
@@ -447,6 +465,7 @@ public class AccountServiceimp implements AccountService {
 
         // Limpiar el código de validación después de cambiar la contraseña exitosamente
         account.setPasswordValidationCode(null);
+        account.setStatus(AccountStatus.ACTIVE);
 
         // Guardar la cuenta actualizada en el repositorio
         cuentaRepo.save(account);
@@ -455,10 +474,8 @@ public class AccountServiceimp implements AccountService {
     }
 
 
-
-
     /**
-     * Método activateAccount(): Activa la cuenta de un usuario utilizando el código de validación que se envía por correo al momento de crear la cuenta.
+     * Método activateAccount(): Activa la cuenta de un usuario utilizando el código de validación que se envía por email al momento de crear la cuenta.
      *
      * @param correo
      * @param code
@@ -466,49 +483,41 @@ public class AccountServiceimp implements AccountService {
      * @throws Exception
      */
     @Override
-    public String activateAccount(String correo, String code) throws Exception {
-        // Buscar la cuenta por correo electrónico, lanzando una excepción si no se encuentra
-        Account account = cuentaRepo.findByEmail(correo)
-                .orElseThrow(() -> new EmailNotFoundException(correo));
+    public String activateAccount(ActivateAccountDTO activateAccountDTO) throws Exception {
+        // Buscar la cuenta por código de activación y lanzar excepción si no se encuentra
+        Account account = cuentaRepo.findByActiveCode(activateAccountDTO.code())
+                .orElseThrow(() -> new AccountNotFoundException(activateAccountDTO.code()));
 
-        // Verificar si la cuenta ya está activa; si es así, lanzar una excepción personalizada
+        // Verificar si la cuenta ya está activa
         if (account.getStatus().equals(AccountStatus.ACTIVE)) {
             throw new AccountAlreadyActiveException("La cuenta ya está activada.");
         }
 
-        // Obtener el código de validación asociado al registro de la cuenta
-        ValidationCode validationCode = account.getRegistrationValidationCode();
+        // Obtener y verificar el código de validación asociado a la cuenta
+        ValidationCode validationCode = Optional.ofNullable(account.getRegistrationValidationCode())
+                .orElseThrow(() -> new ValidationCodeExpiredException("El código de validación no existe."));
 
-        // Verificar si no existe el código de validación y lanzar una excepción
-        if (validationCode == null) {
-            throw new ValidationCodeExpiredException("El código de validación no existe.");
-        }
-
-        // Verificar si el código de validación ha expirado y lanzar una excepción
+        // Validar código y fecha de expiración
         if (validationCode.isExpired()) {
             throw new ValidationCodeExpiredException("El código de validación ha expirado.");
         }
-
-        // Verificar si el código proporcionado coincide con el código almacenado en la cuenta
-        if (!validationCode.getCode().equals(code)) {
+        if (!validationCode.getCode().equals(activateAccountDTO.code())) {
             throw new InvalidValidationCodeException("El código de validación es inválido.");
         }
 
-        // Crear un cupón de bienvenida usando el servicio de cupones
+        // Crear y enviar el cupón de bienvenida
         CouponDTO couponDTO = generateWelcomeCoupon();
         couponService.createCoupon(couponDTO);
+        emailService.sendWelcomeCoupon(activateAccountDTO.email(), couponDTO.code());
 
-        // Enviar el cupón de bienvenida por correo electrónico
-        emailService.sendWelcomeCoupon(account.getEmail(), couponDTO.code());
-
-        // Activar la cuenta, eliminando el código de validación y actualizando el estado de la cuenta
+        // Activar la cuenta
         account.setRegistrationValidationCode(null);
         account.setStatus(AccountStatus.ACTIVE);
         account.setFailedLoginAttempts(0);
         cuentaRepo.save(account);
 
         // Retornar mensaje de éxito
-        return "Cuenta activada exitosamente y cupón enviado por correo";
+        return "Cuenta activada exitosamente y cupón enviado por email";
     }
 
 

@@ -186,7 +186,7 @@ public class OrderServiceImp implements OrderService {
         // Crear el cupón usando el servicio de cupones
         String couponId = couponService.createCoupon(couponDTO);
 
-        // Preparar el cuerpo del correo que incluye el código del cupón
+        // Preparar el cuerpo del email que incluye el código del cupón
         String plainTextMessage = "Estimado usuario,\n\n" +
                 "Gracias por realizar su primera compra en nuestra plataforma. Para celebrar su compra, le ofrecemos un cupón con un 10% de descuento en su próxima compra:\n\n" +
                 "Código de cupón: " + couponDTO.code() + "\n\n" +
@@ -195,7 +195,7 @@ public class OrderServiceImp implements OrderService {
                 "Atentamente,\n" +
                 "El equipo de UniEventos";
 
-        // Enviar el correo con el código de cupón
+        // Enviar el email con el código de cupón
 
         emailService.sendMail(new EmailDTO(email, "\"Cupón de Bienvenida\"", plainTextMessage));
     }

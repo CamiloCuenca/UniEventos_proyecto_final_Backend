@@ -16,9 +16,9 @@ public class EmailServiceImp implements EmailService {
     private final String SMTP_USERNAME = "unieventosproyect@gmail.com";
     private final String SMTP_PASSWORD = "fyncswwbtqwubuja";
 
-    /**  Envía un correo electrónico.
+    /**  Envía un email electrónico.
      *
-     * @param emailDTO Data Transfer Object que contiene la información del correo electrónico a enviar.
+     * @param emailDTO Data Transfer Object que contiene la información del email electrónico a enviar.
      * @throws Exception
      */
     @Override
@@ -40,9 +40,9 @@ public class EmailServiceImp implements EmailService {
         }
     }
 
-    /** Envía un código QR por correo electrónico.
+    /** Envía un código QR por email electrónico.
      *
-     * @param email La dirección de correo electrónico a la que se enviará el QR.
+     * @param email La dirección de email electrónico a la que se enviará el QR.
      * @param qrUrl La URL de la imagen del código QR.
      */
     @Override
@@ -62,9 +62,9 @@ public class EmailServiceImp implements EmailService {
         }
     }
 
-    /** Envía un código de validación por correo electrónico.
+    /** Envía un código de validación por email electrónico.
      *
-     * @param email La dirección de correo electrónico a la que se enviará el código de validación.
+     * @param email La dirección de email electrónico a la que se enviará el código de validación.
      * @param validationCode El código de validación a enviar.
      * @throws Exception
      */
@@ -78,7 +78,7 @@ public class EmailServiceImp implements EmailService {
                 "<p>Gracias por registrarse en nuestra plataforma. Para activar su cuenta, por favor utilice el siguiente código de activación:</p>" +
                 "<h3>Código de activación: " + validationCode + "</h3>" +
                 "<p>Este código es válido por 15 minutos.</p>" +
-                "<p>Si usted no solicitó este registro, por favor ignore este correo.</p>" +
+                "<p>Si usted no solicitó este registro, por favor ignore este email.</p>" +
                 "<p>Atentamente,<br/>El equipo de UniEventos</p>" +
                 "</body></html>";
 
@@ -89,40 +89,40 @@ public class EmailServiceImp implements EmailService {
     }
 
 
-    /** Envía un código de recuperación de contraseña por correo electrónico.
+    /** Envía un código de recuperación de contraseña por email electrónico.
      *
-     * @param email La dirección de correo electrónico a la que se enviará el código de recuperación.
+     * @param email La dirección de email electrónico a la que se enviará el código de recuperación.
      * @param passwordValidationCode El código de validación de la contraseña a enviar.
      * @throws Exception
      */
     @Override
     @Async
     public void sendRecoveryCode(String email, String passwordValidationCode) throws Exception {
-        // Crear el mensaje a enviar por correo
+        // Crear el mensaje a enviar por email
         String htmlMessage = "<html><body>" +
                 "<p>Estimado usuario,</p>" +
                 "<p>Ha solicitado recuperar su contraseña. Utilice el siguiente código de recuperación para restablecer su contraseña:</p>" +
                 "<h3>Código de recuperación: " + passwordValidationCode + "</h3>" +
                 "<p>Este código es válido por 15 minutos.</p>" +
-                "<p>Si usted no solicitó esta recuperación, por favor ignore este correo.</p>" +
+                "<p>Si usted no solicitó esta recuperación, por favor ignore este email.</p>" +
                 "<p>Atentamente,<br/>El equipo de UniEventos</p>" +
                 "</body></html>";
 
 
-        // Enviar el correo electrónico con el código de recuperación
+        // Enviar el email electrónico con el código de recuperación
         sendMail(new EmailDTO(email, "Recuperación de contraseña", htmlMessage));
     }
 
-    /** Envía un cupón de bienvenida por correo electrónico.
+    /** Envía un cupón de bienvenida por email electrónico.
      *
-     * @param email La dirección de correo electrónico a la que se enviará el cupón.
+     * @param email La dirección de email electrónico a la que se enviará el cupón.
      * @param couponCode El código del cupón de bienvenida a enviar.
      * @throws Exception
      */
     @Async
     @Override
     public void sendWelcomeCoupon(String email, String couponCode) throws Exception {
-        // Preparar el cuerpo del correo que incluye el código del cupón
+        // Preparar el cuerpo del email que incluye el código del cupón
         String htmlMessage = "<html><body>" +
                 "<p>Estimado usuario,</p>" +
                 "<p>Gracias por registrarse en nuestra plataforma. Para celebrar su registro, le ofrecemos un cupón de bienvenida con un 15% de descuento en su próxima compra:</p>" +
@@ -133,7 +133,7 @@ public class EmailServiceImp implements EmailService {
                 "</body></html>";
 
 
-        // Enviar el correo con el código de cupón
+        // Enviar el email con el código de cupón
        sendMail(new EmailDTO(email, "\"Cupón de Bienvenida\"", htmlMessage));
     }
 

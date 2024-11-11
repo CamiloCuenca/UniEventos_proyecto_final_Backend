@@ -21,6 +21,9 @@ public interface AccountRepository extends MongoRepository<Account, String> {
     @Query("{ 'passwordValidationCode.code': ?0 }")
     Optional<Account> findByValidationCode(String validationCode);
 
+    @Query("{ 'registrationValidationCode.code': ?0 }")
+    Optional<Account> findByActiveCode(String validationCode);
+
     long countByStatus(AccountStatus status);
 
     @Query(value = "{ '_id' : ?0 }", fields = "{ 'email' : 1 }")
