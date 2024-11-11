@@ -86,7 +86,7 @@ public class AdminController {
     }
 
     // Desactivar o eliminar un cupón por su ID
-    @DeleteMapping("/desactivar-cupon/{couponId}")
+    @PostMapping("/cupon/desactivar-cupon/{couponId}")
     public ResponseEntity<MessageDTO<String>> deactivateCoupon(@PathVariable String couponId) throws Exception {
         couponService.deactivateCoupon(couponId);
         return ResponseEntity.ok(new MessageDTO<>(false, "Cupón desactivado exitosamente."));
@@ -99,17 +99,24 @@ public class AdminController {
         return ResponseEntity.ok(new MessageDTO<>(false, coupons));
     }
 
+    // Obtener todos los cupones disponibles (activos)
+    @GetMapping("/cupones/no-disponibles")
+    public ResponseEntity<MessageDTO<List<Coupon>>> getNotAvailableCoupons() {
+        List<Coupon> coupons = couponService.getNotAvailableCoupons();
+        return ResponseEntity.ok(new MessageDTO<>(false, coupons));
+    }
+
     // Actualizar información de un cupón
-    @PutMapping("/actualizar/{couponId}")
+    @PutMapping("/cupones/actualizar/{couponId}")
     public ResponseEntity<MessageDTO<String>> updateCoupon(@PathVariable String couponId, @Valid @RequestBody CouponDTO couponDTO) throws Exception {
         couponService.updateCoupon(couponId, couponDTO);
         return ResponseEntity.ok(new MessageDTO<>(false, "Cupón actualizado exitosamente."));
     }
 
-    @PostMapping("/cupon/activar-cupon/{id}")
-    public ResponseEntity<MessageDTO<String>> activateCoupon(@PathVariable String id) throws Exception {
-        couponService.activateCoupon(id);
-        return ResponseEntity.ok(new MessageDTO<>(true, "Se activo el cupon satisfactoriamente"));
+    @PostMapping("/cupon/activar-cupon/{couponId}")
+    public ResponseEntity<MessageDTO<String>> activateCoupon(@PathVariable String couponId) throws Exception {
+        couponService.activateCoupon(couponId);
+        return ResponseEntity.ok(new MessageDTO<>(false, "Se activo el cupon satisfactoriamente"));
     }
 
 
@@ -126,7 +133,7 @@ public class AdminController {
     @PostMapping("/reporte")
     public ResponseEntity<MessageDTO<String>> generateSalesReportPDF() throws Exception{
         reportService.generateSalesReportPDF();
-        return ResponseEntity.ok(new MessageDTO<>(true, "Reporte generado exitosamente. (revisa tu escritorio)"));
+        return ResponseEntity.ok(new MessageDTO<>(false, "Reporte generado exitosamente. (revisa tu escritorio)"));
     }
 
 

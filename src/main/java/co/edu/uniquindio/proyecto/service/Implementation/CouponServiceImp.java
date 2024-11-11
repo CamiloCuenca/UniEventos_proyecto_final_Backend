@@ -194,6 +194,16 @@ public class CouponServiceImp implements CouponService {
         return couponRepository.findAllByStatus(CouponStatus.AVAILABLE);
     }
 
+    /**
+     * metodo que retorna una lista de los cupones activos
+     *
+     * @return lista de cupones activos
+     */
+    @Override
+    public List<Coupon> getNotAvailableCoupons() {
+        return couponRepository.findAllByStatus(CouponStatus.NOT_AVAILABLE);
+    }
+
 
     /**
      * Metodo para desactivar el cupon.

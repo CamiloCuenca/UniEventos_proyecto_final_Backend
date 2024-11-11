@@ -76,4 +76,6 @@ public interface CouponService {
     static String generateRandomCouponCode() throws Exception {
         return null;
     }
+
+    public List<Coupon> getNotAvailableCoupons();
 }
