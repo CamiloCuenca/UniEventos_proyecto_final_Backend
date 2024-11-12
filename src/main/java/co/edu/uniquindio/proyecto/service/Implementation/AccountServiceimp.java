@@ -477,8 +477,6 @@ public class AccountServiceimp implements AccountService {
     /**
      * Método activateAccount(): Activa la cuenta de un usuario utilizando el código de validación que se envía por email al momento de crear la cuenta.
      *
-     * @param correo
-     * @param code
      * @return
      * @throws Exception
      */
