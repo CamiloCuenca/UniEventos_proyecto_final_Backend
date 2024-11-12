@@ -6,8 +6,7 @@ import co.edu.uniquindio.proyecto.dto.Account.*;
 import co.edu.uniquindio.proyecto.dto.Event.*;
 import co.edu.uniquindio.proyecto.dto.JWT.TokenDTO;
 import co.edu.uniquindio.proyecto.dto.JWT.MessageDTO;
-import co.edu.uniquindio.proyecto.exception.account.CedulaAlreadyExistsException;
-import co.edu.uniquindio.proyecto.exception.account.EmailAlreadyExistsException;
+import co.edu.uniquindio.proyecto.exception.account.*;
 import co.edu.uniquindio.proyecto.model.Events.Event;
 import co.edu.uniquindio.proyecto.repository.EventRepository;
 import co.edu.uniquindio.proyecto.service.Interfaces.AccountService;
@@ -67,10 +66,29 @@ public class ControllerAuthentication {
     }
 
 
+
     @PostMapping("/cuenta/iniciar-sesion")
-    public ResponseEntity<MessageDTO<TokenDTO>> iniciarSesion(@Valid @RequestBody LoginDTO loginDTO) throws Exception {
-        TokenDTO token = accountService.login(loginDTO);
-        return ResponseEntity.ok(new MessageDTO<>(false, token));
+    public ResponseEntity<MessageDTO<TokenDTO>> iniciarSesion(@Valid @RequestBody LoginDTO loginDTO) {
+        try {
+            TokenDTO token = accountService.login(loginDTO);
+            return ResponseEntity.ok(new MessageDTO<>(false, token));
+        } catch (ActiveAccountException e) {
+            // Devolver código de estado 423 (Locked) cuando la cuenta esté bloqueada
+            return ResponseEntity.status(HttpStatus.LOCKED)
+                    .body(new MessageDTO<>(true, null));
+        } catch (EmailNotFoundException e) {
+            // Devolver código de estado 404 si el email no es encontrado
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new MessageDTO<>(true, null));
+        } catch (InvalidPasswordException e) {
+            // Devolver código de estado 401 si la contraseña es incorrecta
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new MessageDTO<>(true, null));
+        } catch (Exception e) {
+            // Devolver código de estado 500 para errores generales
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MessageDTO<>(true,  null));
+        }
     }
 
     // Obtener información de un evento por su ID
