@@ -123,6 +123,7 @@ public class AccountServiceimp implements AccountService {
             throw new ActiveAccountException("La cuenta ha sido bloqueada por múltiples intentos fallidos de inicio de sesión.");
         }
 
+
         // Verificar si la contraseña proporcionada coincide con la contraseña almacenada utilizando el passwordEncoder.
         if (!passwordEncoder.matches(loginDTO.password(), account.getPassword())) {
             // Incrementar el contador de intentos fallidos si la contraseña es incorrecta.
@@ -132,6 +133,12 @@ public class AccountServiceimp implements AccountService {
         }
 
         account.setFailedLoginAttempts(0);
+
+        // Cambiar el estado de la cuenta a ACTIVA si está bloqueada y la contraseña es correcta.
+        if (account.getStatus() == AccountStatus.INACTIVE && account.getFailedLoginAttempts() < 3) {
+            account.setStatus(AccountStatus.ACTIVE);
+        }
+
         cuentaRepo.save(account); // Guardar el estado actualizado en la base de datos.
 
         // Construir los claims necesarios para generar el token JWT, pasando la cuenta encontrada.
@@ -465,6 +472,7 @@ public class AccountServiceimp implements AccountService {
 
         // Limpiar el código de validación después de cambiar la contraseña exitosamente
         account.setPasswordValidationCode(null);
+        account.setFailedLoginAttempts(0);
         account.setStatus(AccountStatus.ACTIVE);
 
         // Guardar la cuenta actualizada en el repositorio
