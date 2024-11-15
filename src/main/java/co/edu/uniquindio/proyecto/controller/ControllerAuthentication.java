@@ -146,9 +146,11 @@ public class ControllerAuthentication {
     public List<Event> filterEvents(@RequestParam(required = false) String name,
                                     @RequestParam(required = false) City city,
                                     @RequestParam(required = false) EventType type,
-                                    @RequestParam(required = false) LocalDateTime date) {
+                                    @RequestParam(required = false) LocalDateTime date,
+                                    @RequestParam(required = false) EventStatus status){
+
         // Crear el DTO con los parámetros recibidos
-        dtoEventFilter filter = new dtoEventFilter(name, type, city, date);
+        dtoEventFilter filter = new dtoEventFilter(name, type, status, city, date);
 
         // Imprimir los parámetros recibidos para depuración
         System.out.println("Parámetros recibidos - Name: " + filter.name() + ", City: " + filter.city() + ", Type: " + filter.type() + ", Date: " + filter.date());
