@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.controller;
 
+import co.edu.uniquindio.proyecto.Enum.City;
 import co.edu.uniquindio.proyecto.Enum.EventStatus;
 import co.edu.uniquindio.proyecto.Enum.EventType;
 import co.edu.uniquindio.proyecto.dto.Account.*;
@@ -143,7 +144,7 @@ public class ControllerAuthentication {
 
     @GetMapping("/evento/filter")
     public List<Event> filterEvents(@RequestParam(required = false) String name,
-                                    @RequestParam(required = false) String city,
+                                    @RequestParam(required = false) City city,
                                     @RequestParam(required = false) EventType type,
                                     @RequestParam(required = false) LocalDateTime date) {
         // Crear el DTO con los parámetros recibidos

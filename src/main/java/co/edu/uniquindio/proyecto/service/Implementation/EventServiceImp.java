@@ -204,8 +204,10 @@ public class EventServiceImp implements EventService {
             // Recorrer la lista de eventos y crear DTOs para cada uno
             for (Event event : events) {
                 items.add(new ItemEventDTO(
+                        event.getId(),
                         event.getCoverImage(), // Imagen de portada del evento
-                        event.getName(),       // Nombre del evento
+                        event.getName(),
+                        event.getCity(),// Nombre del evento
                         event.getDate(),       // Fecha del evento
                         event.getAddress()     // Dirección del evento
                 ));
@@ -314,31 +316,40 @@ public class EventServiceImp implements EventService {
 
     @Override
     public List<Event> eventFilter(dtoEventFilter filter) {
-        Query query = new Query(); // Crea un nuevo objeto Query para la consulta
-        List<Criteria> criteriaList = new ArrayList<>(); // Lista para almacenar los criterios de búsqueda
+        Query query = new Query();
+        List<Criteria> criteriaList = new ArrayList<>();
 
-        // Agregar criterios dinámicos según los filtros proporcionados
+        // Filtrar por nombre con normalización y regex
         if (filter.name() != null && !filter.name().isEmpty()) {
-            String normalizedName = filter.name().trim(); // Normaliza el nombre
-            criteriaList.add(Criteria.where("name").regex(".*" + normalizedName + ".*", "i")); // Agrega un criterio de expresión regular para el nombre
+            String normalizedName = filter.name().trim().toLowerCase(); // Normaliza el nombre
+            criteriaList.add(Criteria.where("name").regex(".*" + normalizedName + ".*", "i")); // Expresión regular para coincidencias parciales
         }
-        if (filter.city() != null && !filter.city().isEmpty()) {
-            String normalizedCity = filter.city().trim(); // Normaliza la ciudad
-            criteriaList.add(Criteria.where("city").regex(".*" + normalizedCity + ".*", "i")); // Agrega un criterio de expresión regular para la ciudad
+
+        // Filtrar por ciudad
+        if (filter.city() != null) {
+            criteriaList.add(Criteria.where("city").is(filter.city()));
         }
+
+        // Filtrar por tipo de evento
         if (filter.type() != null) {
-            criteriaList.add(Criteria.where("type").is(filter.type())); // Agrega un criterio de igualdad para el tipo
+            criteriaList.add(Criteria.where("type").is(filter.type()));
         }
+
+        // Filtrar por estado
+        if (filter.status() != null) {
+            criteriaList.add(Criteria.where("status").is(filter.status()));
+        }
+
+        // Filtrar por fecha
         if (filter.date() != null) {
-            criteriaList.add(Criteria.where("date").is(filter.date())); // Agrega un criterio de igualdad para la fecha
+            criteriaList.add(Criteria.where("date").is(filter.date()));
         }
 
-        // Si hay criterios, agrégarlos a la consulta
         if (!criteriaList.isEmpty()) {
-            query.addCriteria(new Criteria().andOperator(criteriaList.toArray(new Criteria[0]))); // Agrega todos los criterios a la consulta
+            query.addCriteria(new Criteria().andOperator(criteriaList.toArray(new Criteria[0])));
         }
 
-        return mongoTemplate.find(query, Event.class); // Ejecuta la consulta y retorna los eventos filtrados
+        return mongoTemplate.find(query, Event.class);
     }
 
 

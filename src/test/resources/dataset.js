@@ -126,6 +126,7 @@ db.Account.insertMany([
 
 
 // Event
+// Event
 db.Event.insertMany([
     {
         _id: ObjectId("66f5c5a0de22e82833106d92"),
@@ -136,7 +137,7 @@ db.Event.insertMany([
         imageLocalities: "updated_image_localities.jpg",
         type: "CONCERT",
         date: ISODate("2024-10-20T23:00:00.000Z"),
-        city: "Armenia",
+        city: "ARMENIA",
         address: "crr 20 # 1-23",
         amount: 200,
         localities: [
@@ -164,7 +165,7 @@ db.Event.insertMany([
         imageLocalities: "rock_localities.jpg",
         type: "CONCERT",
         date: ISODate("2024-11-15T20:00:00.000Z"),
-        city: "Bogotá",
+        city: "BOGOTA",
         address: "Av. Caracas #12-34",
         amount: 500,
         localities: [
@@ -192,7 +193,7 @@ db.Event.insertMany([
         imageLocalities: "fair_localities.jpg",
         type: "FAIR",
         date: ISODate("2024-12-01T10:00:00.000Z"),
-        city: "Medellín",
+        city: "MEDELLIN",
         address: "Plaza Mayor",
         amount: 300,
         localities: [
@@ -220,7 +221,7 @@ db.Event.insertMany([
         imageLocalities: "cinema_localities.jpg",
         type: "FESTIVAL",
         date: ISODate("2024-09-30T18:00:00.000Z"),
-        city: "Cali",
+        city: "CALI",
         address: "Teatro Municipal",
         amount: 700,
         localities: [
@@ -248,7 +249,7 @@ db.Event.insertMany([
         imageLocalities: "tech_localities.jpg",
         type: "CONFERENCE",
         date: ISODate("2024-11-05T09:00:00.000Z"),
-        city: "Barranquilla",
+        city: "BARRANQUILLA",
         address: "Centro de Convenciones",
         amount: 400,
         localities: [
