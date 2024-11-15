@@ -143,6 +143,8 @@ public class ControllerAuthentication {
     }
 
     @GetMapping("/evento/filter")
+
+
     public List<ItemEventDTO> filterEvents(@RequestParam(required = false) String name,
                                            @RequestParam(required = false) City city,
                                            @RequestParam(required = false) EventType type,

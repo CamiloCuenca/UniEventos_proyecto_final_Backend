@@ -29,7 +29,7 @@ public record editDTOEvent(
 
         @NotNull(message = "La fecha no puede ser nula") @Future(message = "La fecha debe ser en el futuro") LocalDateTime date,
 
-        @NotBlank(message = "La ciudad no puede estar vacía") @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "La ciudad solo puede contener letras y espacios") City city,
+        City city,
 
         @NotBlank(message = "La dirección no puede estar vacía") String address,
 
