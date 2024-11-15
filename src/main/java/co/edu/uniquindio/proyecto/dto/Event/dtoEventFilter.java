@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.dto.Event;
 
+import co.edu.uniquindio.proyecto.Enum.City;
 import co.edu.uniquindio.proyecto.Enum.EventStatus;
 import co.edu.uniquindio.proyecto.Enum.EventType;
 import jakarta.validation.constraints.FutureOrPresent;
@@ -20,9 +21,12 @@ public record dtoEventFilter(
         @NotNull(message = "El tipo de evento no puede ser nulo")
         EventType type,
 
+        @NotNull
+        EventStatus status,
+
         @NotBlank(message = "La ciudad no puede estar vacía")
         @Pattern(regexp = "^[a-zA-Z\\s\\-']+$", message = "La ciudad solo puede contener letras, espacios y guiones")
-        String city,
+        City city,
 
         @FutureOrPresent(message = "La fecha no puede ser en el pasado")
         LocalDateTime date

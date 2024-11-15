@@ -1,4 +1,5 @@
 package co.edu.uniquindio.proyecto.dto.Event;
+import co.edu.uniquindio.proyecto.Enum.City;
 import co.edu.uniquindio.proyecto.Enum.EventType;
 import co.edu.uniquindio.proyecto.model.Events.Locality;
 import jakarta.validation.constraints.NotBlank;
@@ -21,7 +22,7 @@ public record dtoEventInformation(
         LocalDateTime date, // Deja esto como opcional si no es necesario
 
         @NotBlank(message = "La ciudad no puede estar vacía")
-        @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "La ciudad solo puede contener letras y espacios") String city,
+        @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "La ciudad solo puede contener letras y espacios") City city,
 
         @NotBlank(message = "La lista de localidades no puede estar vacía") List<Locality> localities
 ) {

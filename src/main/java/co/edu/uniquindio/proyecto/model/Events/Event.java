@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.model.Events;
 
+import co.edu.uniquindio.proyecto.Enum.City;
 import co.edu.uniquindio.proyecto.Enum.EventStatus;
 import co.edu.uniquindio.proyecto.Enum.EventType;
 import co.edu.uniquindio.proyecto.Enum.Localities;
@@ -26,7 +27,7 @@ public class Event {
     private String imageLocalities;
     private EventType type;
     private LocalDateTime date;
-    private String city;
+    private City city;
     private String address;
     private int amount;
     private List<Locality> localities;
