@@ -76,7 +76,7 @@ public interface EventService {
      * @param filter Objeto dtoEventFilter que contiene los criterios de filtrado (ej. fecha, categoría, etc.).
      * @return Lista de eventos que cumplen con el filtro aplicado.
      */
-    List<Event> eventFilter(dtoEventFilter filter);
+    List<ItemEventDTO> eventFilter(dtoEventFilter filter);
 
 
     List<eventosDTO> allEvents() throws Exception;
