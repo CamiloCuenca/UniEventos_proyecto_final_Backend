@@ -108,7 +108,7 @@ public class OrderServiceImp implements OrderService {
                 .gatewayCode(orderDTO.gatewayCode())
                 .items(orderDTO.items())  // Los detalles de la orden vienen directamente desde el DTO
                 .payment(orderDTO.payment().toEntity())  // Convertir el PaymentDTO a Payment
-                .total(orderDTO.total())
+                .total(total)
                 .codeCoupon(orderDTO.codeCoupon() != null ? orderDTO.codeCoupon() : null)  // Manejar el ID del cupón opcionalmente
                 .build();
 
