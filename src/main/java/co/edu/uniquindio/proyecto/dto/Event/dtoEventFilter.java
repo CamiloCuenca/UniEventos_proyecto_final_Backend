@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 
 public record dtoEventFilter(
