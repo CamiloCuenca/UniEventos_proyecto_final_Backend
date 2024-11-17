@@ -95,19 +95,14 @@ public class OrderServiceImp implements OrderService {
             total += item.getPrice() * item.getAmount();
         }
 
-        // Validar que el total calculado coincida con el total proporcionado
-        if (total != orderDTO.total()) {
-            throw new InvalidOrderException("El total calculado no coincide con el total proporcionado");
-        }
+
 
         // Convertir el DTO a una entidad Order
         Order order = Order.builder()
                 .id(ObjectId.get().toString())  // Generar ID automáticamente
                 .idAccount(new ObjectId(orderDTO.idAccount()))
                 .date(orderDTO.date())
-                .gatewayCode(orderDTO.gatewayCode())
                 .items(orderDTO.items())  // Los detalles de la orden vienen directamente desde el DTO
-                .payment(orderDTO.payment().toEntity())  // Convertir el PaymentDTO a Payment
                 .total(total)
                 .codeCoupon(orderDTO.codeCoupon() != null ? orderDTO.codeCoupon() : null)  // Manejar el ID del cupón opcionalmente
                 .build();
@@ -220,10 +215,6 @@ public class OrderServiceImp implements OrderService {
             throw new IllegalArgumentException("El DTO de orden actualizado no puede ser nulo");
         }
 
-        // Validar campos de updatedOrderDTO
-        if (updatedOrderDTO.total() <= 0) {
-            throw new IllegalArgumentException("El total debe ser un valor positivo");
-        }
 
         // Verificar si la orden existe
         Optional<Order> existingOrder = orderRepository.findById(orderId);
@@ -232,9 +223,7 @@ public class OrderServiceImp implements OrderService {
         }
 
         Order order = existingOrder.get();
-        order.setTotal(updatedOrderDTO.total());
         order.setItems(updatedOrderDTO.items());
-        order.setPayment(updatedOrderDTO.payment().toEntity());  // Convertir el PaymentDTO a Payment
 
         // Aplicar el cupón si es que se proporcionó un nuevo cupón
         if (updatedOrderDTO.codeCoupon() != null) {
