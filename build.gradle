@@ -1,5 +1,5 @@
 plugins {
-    id 'java'
+    id "java"
     id 'org.springframework.boot' version '3.3.2'
     id 'io.spring.dependency-management' version '1.1.6'
 }
@@ -7,12 +7,6 @@ plugins {
 group = 'co.edu.uniquindio'
 version = '0.0.1-SNAPSHOT'
 
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
-}
 
 java {
     sourceCompatibility = '17'
@@ -52,7 +46,7 @@ dependencies {
     implementation 'com.itextpdf:itext7-core:7.2.2' // Verifica si hay una versión más reciente
     implementation 'com.google.zxing:core:3.4.1'
     implementation 'com.google.zxing:javase:3.4.1'
-    implementation 'com.mercadopago:sdk-java:2.1.27'
+    implementation 'com.mercadopago:sdk-java:2.1.29'
 }
 
 
