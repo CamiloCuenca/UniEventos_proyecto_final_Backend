@@ -7,11 +7,21 @@ plugins {
 group = 'co.edu.uniquindio'
 version = '0.0.1-SNAPSHOT'
 
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
 java {
     sourceCompatibility = '17'
     targetCompatibility = '17'
 }
 
+bootJar {
+    archiveFileName = 'mi-aplicacion.jar' // Opcional: nombre del archivo JAR de salida
+}
 
 configurations {
     compileOnly {
