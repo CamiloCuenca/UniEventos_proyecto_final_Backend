@@ -82,9 +82,6 @@ public class OrderTest {
                 "66f8db70c1ce3939dbcbe1e0",
                 LocalDateTime.now(),
                 "",
-                orderDetails,
-                paymentDTO,
-                total,  // Usar el total calculado
                 null
         );
 

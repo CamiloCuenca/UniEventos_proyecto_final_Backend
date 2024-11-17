@@ -64,13 +64,6 @@ public class OrderServiceImp implements OrderService {
     private final PasswordEncoder passwordEncoder;
 
 
-    /**
-     * Este mètodo crea un orden de compra segun los datos de orderDTO
-     *
-     * @param orderDTO Objeto OrderDTO que contiene los detalles de la nueva orden.
-     * @return orden creada
-     * @throws Exception
-     */
     @Override
     public Order createOrder(OrderDTO orderDTO) throws InvalidOrderException, AccountNotFoundException, EventNotFoundException, FirstOrderException, Exception {
         // Validar que el OrderDTO no sea nulo
@@ -92,10 +85,24 @@ public class OrderServiceImp implements OrderService {
             if (item.getAmount() <= 0) {
                 throw new InvalidOrderException("La cantidad del artículo debe ser positiva");
             }
-            total += item.getPrice() * item.getAmount();
+
+            // Obtener la información del evento (precio y nombre) según el idEvent
+            Optional<Event> eventOptional = eventRepository.findById(item.getIdEvent().toString());
+            if (eventOptional.isEmpty()) {
+                throw new EventNotFoundException("El ID del evento no existe");
+            }
+
+            Event event = eventOptional.get();
+
+            // Rellenar los detalles del OrderDetail
+            item.setEventName(event.getName());  // Suponiendo que tienes el nombre del evento en Event
+            item.setPrice(event.getLocalities().get(0).getPrice());  // Precio del evento
+            // Puedes determinar el precio según la localidad
+            item.setLocalityName(item.getLocalityName()); // Aquí el usuario seleccionará VIP o GENERAL
+
+            // Calcular el total para este artículo
+            total += item.getPrice() * item.getAmount();  // Multiplicar por la cantidad de entradas
         }
-
-
 
         // Convertir el DTO a una entidad Order
         Order order = Order.builder()
@@ -112,11 +119,6 @@ public class OrderServiceImp implements OrderService {
             throw new AccountNotFoundException("El ID de la cuenta no existe");
         }
 
-        // Verificar si el evento existe
-        if (eventRepository.findById(String.valueOf(orderDTO.items().get(0).getIdEvent())).isEmpty()) {
-            throw new EventNotFoundException("El ID del evento no existe");
-        }
-
         // Verificar si es la primera orden de la cuenta
         List<Order> ordersByAccount = orderRepository.findByAccountId(orderDTO.idAccount());
         if (ordersByAccount.isEmpty()) {
@@ -124,8 +126,7 @@ public class OrderServiceImp implements OrderService {
             System.out.println("¡Esta es la primera orden para la cuenta: " + orderDTO.idAccount() + "!");
             Optional<Account> optionalAccount = cuentaRepo.findById(orderDTO.idAccount());
             sendCupon(optionalAccount.get().getEmail());
-            // Lanzar excepción si es necesario (si hay lógica especial para la primera orden)
-            throw new FirstOrderException("Se ha creado la primera orden para la cuenta: " + orderDTO.idAccount());
+
         }
 
         // Guardar la orden en la base de datos
