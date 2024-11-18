@@ -1,4 +1,4 @@
-![logo-Claro.svg](logo-Claro.svg)
+![logo-Claro.svg](https://firebasestorage.googleapis.com/v0/b/unieventos-1c779.appspot.com/o/logoNuevo.svg?alt=media&token=87d39113-8201-46e0-8005-36be321f1e13)
 # UniEventos - Ticket Selling Platform
 
 ## Table of Contents
